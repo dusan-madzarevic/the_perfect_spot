@@ -4,10 +4,12 @@ import com.ftn.uns.ac.rs.theperfectmeal.model.User;
 
 
 rule "Registered user existance"
+	lock-on-active true
     when
-        $ru: User( )
+        $ru: User(firstName == 'Dusan')
+               
     then
+    	
     	System.out.println("User exists in memory");
-        //$ru.setAge(Age.AGE_18_20);
-        update($ru);
+    	modify($ru){setFirstName('Ivana')};
 end
