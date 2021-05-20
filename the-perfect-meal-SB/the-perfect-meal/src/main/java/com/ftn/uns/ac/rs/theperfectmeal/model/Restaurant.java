@@ -1,10 +1,14 @@
 package com.ftn.uns.ac.rs.theperfectmeal.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Restaurant {
@@ -14,39 +18,40 @@ public class Restaurant {
 	@Column(name = "restaurant_id")
 	private long id;
 	
-	@Column
+	@Column(nullable = false)
 	private String name;
 	
-	@Column
-	private double grade;
+	@OneToMany(cascade = {CascadeType.ALL}, mappedBy = "restaurant")
+	private List<RestaurantGrade> grades;
 	
-	@Column
+	@Column(nullable = false)
 	private String address;
 	
-	@Column(name = "date_of_last_grade")
+	@Column(name = "date_of_last_grade", nullable = false)
 	private long dateOfLastGrade;
 	
 	@Column(name="web_site")
 	private String webSite;
 	
+	@Column(nullable = false)
 	private String cousine;
 	
-	@Column(name="phone_number")
+	@Column(name="phone_number", nullable = false)
 	private String phoneNumber;
 	
-	@Column(name="working_hours")
+	@Column(name="working_hours", nullable = false)
 	private String workingHours;
 	
-	@Column(name="garden")
+	@Column(name="garden", nullable = false)
 	private boolean hasGarden;
 	
-	@Column(name="playground")
+	@Column(name="playground", nullable = false)
 	private boolean hasPlayground;
 	
-	@Column(name="car_park")
+	@Column(name="car_park", nullable = false)
 	private boolean hasCarPark;
 	
-	@Column(name="smoking_part")
+	@Column(name="smoking_part", nullable = false)
 	private boolean hasSmokingPart;
 	
 	@Column
@@ -56,13 +61,12 @@ public class Restaurant {
 		super();
 	}
 
-	public Restaurant(long id, String name, double grade, String address, long dateOfLastGrade, String webSite,
+	public Restaurant(long id, String name, String address, long dateOfLastGrade, String webSite,
 			String cousine, String phoneNumber, String workingHours, boolean hasGarden, boolean hasPlayground,
 			boolean hasCarPark, boolean hasSmokingPart, byte[] image) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.grade = grade;
 		this.address = address;
 		this.dateOfLastGrade = dateOfLastGrade;
 		this.webSite = webSite;
@@ -92,13 +96,6 @@ public class Restaurant {
 		this.name = name;
 	}
 
-	public double getGrade() {
-		return grade;
-	}
-
-	public void setGrade(double grade) {
-		this.grade = grade;
-	}
 
 	public String getAddress() {
 		return address;
