@@ -22,10 +22,10 @@ public class User {
 	@Column(name = "last_name")
 	private String lastName;
 	
-	@Column(name = "email")
+	@Column
 	private String email;
 	
-	@Column(name = "password")
+	@Column
 	private String password;
 
 	public User() {

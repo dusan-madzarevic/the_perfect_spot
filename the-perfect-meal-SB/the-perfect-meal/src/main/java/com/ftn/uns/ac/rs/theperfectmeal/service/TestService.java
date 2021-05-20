@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ftn.uns.ac.rs.theperfectmeal.model.User;
+import com.ftn.uns.ac.rs.theperfectmeal.repository.TestRepository;
 
 @Service
 public class TestService {
@@ -13,8 +14,12 @@ public class TestService {
 	@Autowired
 	private KieContainer kieContainer;
 	
+	@Autowired
+	private TestRepository repository;
+	
 	public User test(User registeredUser) {
 		KieSession kieSession = kieContainer.newKieSession();
+		repository.save(registeredUser);
 		kieSession.insert(registeredUser);
 		kieSession.fireAllRules();
 		kieSession.dispose();
