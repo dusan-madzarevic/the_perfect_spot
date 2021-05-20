@@ -1,0 +1,13 @@
+package sbnz.integracija;
+
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeRequirements;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
+
+
+rule "Recipe type"
+    when
+        $req: RecipeRequirements($t: type)
+        $re: Recipe($t == type)               
+    then
+    	System.out.println("Recipe is correct type");
+end

@@ -1,0 +1,64 @@
+<div class="wrapper d-flex align-items-stretch">
+    <div style="height: 100vh;">
+      <app-navigation-bar></app-navigation-bar>
+    </div>
+    <div class="m-3 w-100">
+      <h1 class="mb-4">Request recipe</h1>
+      <div class="ml-5 mr-5">
+        <form [formGroup]="recipeForm" (ngSubmit)="requestRecipes()">
+          <div class="form-group">
+            <label for="cookingSkill">Cooking skill</label>
+            <select [(ngModel)]="selectedSkill" class="form-control" name="cookingSkill" formControlName="cookingSkill" id="cookingSkill" rows="3" style="resize: none;" placeholder="Choose your cooking skill">
+              <option *ngFor="let c of cookingSkills" [ngValue]="c.id">{{c.level}}</option>
+            </select>
+            <div style="height: 20px;">
+              <div *ngIf="recipeForm.controls['cookingSkill'].invalid && recipeForm.controls['cookingSkill'].touched" class="ml-1 mt-0 mb-0">
+                <small *ngIf="recipeForm.controls['cookingSkill'].errors?.required" class="text-danger">*This field is mandatory</small>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="lowCalorie">Low calorie count?</label>
+            <input type="checkbox" class="form-control" formControlName="lowCalorie" name="lowCalorie" id="lowCalorie">
+            <div style="height: 20px;">
+              <div *ngIf="recipeForm.controls['lowCalorie'].invalid && recipeForm.controls['lowCalorie'].touched" class="ml-1 mt-0 mb-0">
+                <small *ngIf="recipeForm.controls['lowCalorie'].errors?.required" class="text-danger">*This field is mandatory</small>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="servings">Number of servings</label>
+            <input type="text" class="form-control" formControlName="servings" name="servings" id="servings">
+            <div style="height: 20px;">
+              <div *ngIf="recipeForm.controls['servings'].invalid && recipeForm.controls['servings'].touched" class="ml-1 mt-0 mb-0">
+                <small *ngIf="recipeForm.controls['servings'].errors?.required" class="text-danger">*This field is mandatory</small>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="limitedTime">Do you have limited time?</label>
+            <input type="checkbox" class="form-control" formControlName="limitedTime" name="limitedTime" id="limitedTime">
+            <div style="height: 20px;">
+              <div *ngIf="recipeForm.controls['limitedTime'].invalid && recipeForm.controls['limitedTime'].touched" class="ml-1 mt-0 mb-0">
+                <small *ngIf="recipeForm.controls['limitedTime'].errors?.required" class="text-danger">*This field is mandatory</small>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="type">Meal type</label>
+            <select [(ngModel)]="selectedType" class="form-control" name="type" formControlName="type" id="type" rows="3" style="resize: none;" placeholder="Choose the type of meal">
+              <option *ngFor="let t of types" [ngValue]="t.id">{{t.typeName}}</option>
+            </select>
+            <div style="height: 20px;">
+              <div *ngIf="recipeForm.controls['type'].invalid && recipeForm.controls['type'].touched" class="ml-1 mt-0 mb-0">
+                <small *ngIf="recipeForm.controls['type'].errors?.required" class="text-danger">*This field is mandatory</small>
+              </div>
+            </div>
+          </div>
+          <div class="text-right">
+            <button mat-raised-button color="warn" [disabled]="!recipeForm.valid">Submit request</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

@@ -7,12 +7,16 @@ import { LoginComponent } from './components/login/login.component';
 import { NavigationBarComponent } from './components/navigation-bar/navigation-bar.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
+import { HomePageComponent } from './components/home-page/home-page.component';
+import { RecipeFormComponent } from './components/recipe-form/recipe-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    NavigationBarComponent
+    NavigationBarComponent,
+    HomePageComponent,
+    RecipeFormComponent
   ],
   imports: [
     BrowserModule,

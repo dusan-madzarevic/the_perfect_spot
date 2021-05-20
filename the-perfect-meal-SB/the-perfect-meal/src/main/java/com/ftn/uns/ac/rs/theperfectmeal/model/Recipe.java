@@ -5,14 +5,18 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.ftn.uns.ac.rs.theperfectmeal.util.RecipeType;
+
 @Entity
-@Table(name = "ingredient")
+@Table(name = "recipe")
 public class Recipe {
 
 	@Id
@@ -37,6 +41,10 @@ public class Recipe {
 
 	@Column(name = "image")
 	private byte[] image;
+	
+	@Enumerated(value = EnumType.STRING)
+	@Column(name = "type")
+	private RecipeType type;
 
 	@OneToMany(cascade = {CascadeType.ALL}, mappedBy = "recipe")
 	private List<RecipeGrade> recipeGrades;
@@ -111,6 +119,22 @@ public class Recipe {
 
 	public void setImage(byte[] image) {
 		this.image = image;
+	}
+
+	public RecipeType getType() {
+		return type;
+	}
+
+	public void setType(RecipeType type) {
+		this.type = type;
+	}
+
+	public List<RecipeGrade> getRecipeGrades() {
+		return recipeGrades;
+	}
+
+	public void setRecipeGrades(List<RecipeGrade> recipeGrades) {
+		this.recipeGrades = recipeGrades;
 	}
 
 }
