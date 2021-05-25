@@ -15,7 +15,7 @@ public abstract class Grade {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "grade_id")
-	private long id;
+	private Long id;
 	
 	@Column
 	private int value;

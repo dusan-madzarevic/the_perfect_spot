@@ -1,1 +1,28 @@
-<p>navigation-bar works!</p>
+
+<nav id="sidebar" class="h-100">
+  <div class="pt-4 pl-4 pr-4">
+    <img src="assets/images/plate.png" class=" mb-3 "  width="170" height="150" alt="The perfect meal">
+    <ul class="list-unstyled components mb-5">
+      <li>
+        <a routerLink="/admin-panel"><span class="fa fa-home mr-3"></span> Home</a>
+      </li>
+      <li *ngIf=isUser()>
+        <a routerLink="/profile"><span class="fas fa-user mr-3"></span> Profile</a>
+      </li>
+      <li >
+        <a routerLink="/recipes"><span class="fas fa-book mr-3"></span> Recipes</a>
+      </li>
+      <li>
+        <a routerLink="/restaurants"><span class="fas fa-utensils mr-3"></span> Restaurants</a>
+      </li>
+
+      <li  *ngIf="isUser()" class="mt-5" style="cursor: pointer;">
+        <a (click)="logOut()" href="/login"><span class="fas fa-sign-out-alt mr-3 mt-5" ></span>Log out</a>
+      </li>
+      <li  *ngIf="!isUser()" class="mt-5" style="cursor: pointer;">
+        <a href="/login"><span class="fas fa-sign-out-alt mr-3 mt-5" ></span>Log in</a>
+      </li>
+    </ul>
+
+  </div>
+</nav>

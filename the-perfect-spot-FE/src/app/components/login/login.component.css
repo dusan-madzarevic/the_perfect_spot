@@ -5,6 +5,11 @@
   height: 100%;
   background: #60a3bc !important;
 }
+.inputErrorMessage {
+  margin-top: -10px;
+  align-content: center;
+  color: #c0392b;
+}
 .user_card {
   height: 400px;
   width: 350px;

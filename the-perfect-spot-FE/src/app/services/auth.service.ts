@@ -4,7 +4,9 @@ import {Router} from '@angular/router';
 import {LoginModel} from '../model/login.model';
 import {LoginResponse} from '../model/login.response.model';
 import {Observable} from 'rxjs';
-import {TokenModel} from '../model/token.model';
+import {Role, TokenModel} from '../model/token.model';
+import {environment} from '../../environments/environment';
+import {SignupResponse} from '../model/SignupResponse';
 
 
 @Injectable({
@@ -12,11 +14,11 @@ import {TokenModel} from '../model/token.model';
 })
 export class AuthService {
 
-  private readonly ENDPOINT_LOGIN: string = 'auth/log-in';
-
+  private readonly signUpPath: string = 'auth/sign-up';
+  private readonly logInPath: string = 'auth/log-in';
   constructor(private http: HttpClient, private route: Router) { }
 
-  login(data: LoginModel): Observable<LoginResponse> {
+  login(data: any): Observable<LoginResponse> {
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -24,7 +26,15 @@ export class AuthService {
 
     const message = JSON.stringify(data);
 
-    return this.http.post<LoginResponse>(this.ENDPOINT_LOGIN, message, { headers: headers });
+    return this.http.post<LoginResponse>(environment.APP + this.logInPath, message, { headers: headers });
+  }
+
+  signUp(signupDto: string):Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<SignupResponse>(environment.APP + this.signUpPath, signupDto, {headers: headers})
   }
 
   isAdmin(): boolean {
@@ -33,8 +43,25 @@ export class AuthService {
   }
 
   isUser(): boolean {
-   //return localStorage.getItem('accessToken').role==='ROLE_USER';
-    return true;
+    let authorities = this.getUserAuthorities();
+    let role = "ROLE_USER";
+
+    for(let a of authorities) {
+      if(role === a.name)
+        return true;
+    }
+
+    return false;
+  }
+
+  getUserAuthorities(): Array<Role> {
+    let token = this.getToken();
+    if(token) {
+      let model = this.decodeToken(token);
+      return model?.authority ? model.authority : [];
+    } else {
+      return [];
+    }
   }
 
   isLoggedIn(): boolean {
@@ -57,6 +84,7 @@ export class AuthService {
   }
 
   logout(): void {
+    console.log("logout")
     localStorage.removeItem("accessToken");
   }
 }

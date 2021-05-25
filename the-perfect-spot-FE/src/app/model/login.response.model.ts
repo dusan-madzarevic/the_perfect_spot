@@ -1,6 +1,8 @@
+import {AuthorityModel} from './AuthorityModel';
+
 export interface LoginResponse {
   authenticationToken: string;
   expiresAt: number;
   email: string;
-  role: string;
+  roles: Array<AuthorityModel>;
 }

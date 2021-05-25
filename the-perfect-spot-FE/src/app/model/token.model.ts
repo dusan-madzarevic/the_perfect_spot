@@ -1,3 +1,4 @@
+
 export interface TokenModel {
   "iss": string,
   "sub": string,
@@ -7,5 +8,11 @@ export interface TokenModel {
   "user_firstName": string,
   "user_lastName": string,
   "user_id": string,
-  "role": string
+  "authority": Array<Role>
+}
+
+export interface Role {
+  "id": number,
+  "name": string,
+  "authority": string
 }

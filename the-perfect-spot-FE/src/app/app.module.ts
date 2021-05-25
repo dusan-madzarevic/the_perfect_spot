@@ -9,6 +9,12 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { RecipeFormComponent } from './components/recipe-form/recipe-form.component';
+import { SignUpComponent } from './components/sign-up/sign-up.component';
+import { FormsModule } from '@angular/forms';
+import { RestaurantsComponent } from './components/restaurants/restaurants.component';
+import { RecipesComponent } from './components/recipes/recipes.component';
+import { RestaurantFormComponent } from './components/restaurant-form/restaurant-form.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +22,12 @@ import { RecipeFormComponent } from './components/recipe-form/recipe-form.compon
     LoginComponent,
     NavigationBarComponent,
     HomePageComponent,
-    RecipeFormComponent
+    RecipeFormComponent,
+    SignUpComponent,
+    RestaurantsComponent,
+    RecipesComponent,
+    RestaurantFormComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

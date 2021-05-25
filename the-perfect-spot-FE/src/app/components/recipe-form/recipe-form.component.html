@@ -1,9 +1,6 @@
 <div class="wrapper d-flex align-items-stretch">
-    <div style="height: 100vh;">
-      <app-navigation-bar></app-navigation-bar>
-    </div>
+
     <div class="m-3 w-100">
-      <h1 class="mb-4">Request recipe</h1>
       <div class="ml-5 mr-5">
         <form [formGroup]="recipeForm" (ngSubmit)="requestRecipes()">
           <div class="form-group">
