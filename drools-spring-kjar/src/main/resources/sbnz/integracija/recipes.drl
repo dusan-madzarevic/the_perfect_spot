@@ -9,5 +9,5 @@ rule "Recipe type"
         $req: RecipeRequirements($t: type)
         $re: Recipe($t == type)               
     then
-    	System.out.println("Recipe is correct type");
+    	System.out.println("Recipe "+$re.getRecipeName()+" is correct type");
 end
