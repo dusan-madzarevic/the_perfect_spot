@@ -1,0 +1,34 @@
+package sbnz.integracija;
+
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeRequirements;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
+
+declare RecipeCompatibility
+	@PropertyReactive
+	
+	recipeId: long
+	typeScore: double
+end
+
+rule "Compatibility - creating requirement object"
+	agenda-group "recipe"
+	salience 2
+	when
+		$req: RecipeRequirements()
+		$re: Recipe($id: recipeId)
+	then
+		System.out.println("Scoring recipe with id: " + $id);
+		insert(new RecipeCompatibility($id, -1));
+end;
+
+rule "Recipe type"
+	agenda-group "recipe"
+	salience 1
+    when
+        $req: RecipeRequirements($t: type)
+        $re: Recipe($id: recipeId, $t == type)
+        $com: RecipeCompatibility(recipeId == $id) @Watch(!typeScore)               
+    then
+    	System.out.println("Recipe "+$re.getRecipeName()+" is correct type");
+    	modify($com){setTypeScore(1);};
+end
