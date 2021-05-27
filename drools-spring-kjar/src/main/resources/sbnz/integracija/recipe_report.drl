@@ -3,9 +3,13 @@ package sbnz.integracija;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
 import com.ftn.uns.ac.rs.theperfectmeal.model.RecipeGrade;
 import java.time.LocalDate;
+import java.util.List;
+
+global List<Recipe> bestGradedLastMonth;
 
 global List<Recipe> bestGraded;
-global List<Recipe> bestGradedLastMonth;
+
+
 
 
 rule "Best graded recepies - all the time"
@@ -30,12 +34,13 @@ rule "Best graded recepies - last month"
 	when
 		$re: Recipe($grades: recipeGrades)
 		$total : Double() from accumulate(
-	         RecipeGrade( $val: value, $date: date, $date.isAfter(LocalDate.now().minusMonths(1)) ) from  $grades,
+	         RecipeGrade(date.after(java.sql.Date.valueOf(LocalDate.now().minusMonths(1))) == true ,$val: value) from  $grades,
 	         init( double total = 0; ),
 	         action( total = total + $val; ),
 	         reverse( total = total - ( $val ); ),
 	         result( new Double( total / $grades.size() ) ) )
 	then
-		bestGradedLastMonth.add($re);
+		
 		System.out.println($re.getRecipeName() + ": " + $total);
+		bestGradedLastMonth.add($re);
 end;

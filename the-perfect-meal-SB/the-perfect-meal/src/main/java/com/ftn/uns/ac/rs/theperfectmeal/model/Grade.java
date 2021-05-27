@@ -21,7 +21,7 @@ public abstract class Grade {
 	private int value;
 	
 	@Column
-	private LocalDate date;
+	private Date date;
 	
 	@ManyToOne
 	private RegisteredUser user;
@@ -30,7 +30,7 @@ public abstract class Grade {
 		super();
 	}
 
-	public Grade(int value, LocalDate date, RegisteredUser user, long id) {
+	public Grade(int value, Date date, RegisteredUser user, long id) {
 		super();
 		this.value = value;
 		this.date = date;
@@ -46,11 +46,11 @@ public abstract class Grade {
 		this.value = value;
 	}
 
-	public LocalDate getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDate date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 

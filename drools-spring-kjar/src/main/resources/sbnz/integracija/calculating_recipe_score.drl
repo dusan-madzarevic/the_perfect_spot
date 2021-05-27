@@ -1,9 +1,11 @@
 package sbnz.integracija;
 
 import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
-
+import java.util.List;
 
 global Recipe topRecipe;
+
+global List<Recipe> topRecipes;
 
 declare FoundRecipe
 end
@@ -31,3 +33,28 @@ salience ($aleS * 100 + $typeS * 10 + $servingS + $calS + $ingS + $timeS + $grad
 		
 	
 end
+
+
+rule "THE PERFECT Recipes 2"
+agenda-group "Calculating recipe score"
+salience ($aleS * 100 + $typeS * 10 + $servingS + $calS + $ingS + $timeS + $gradeS)
+	when
+		$recC: RecipeCompatibility(	
+			$recId: recipeId,
+			$typeS: typeScore,
+			$servingS: servingScore,
+			$calS: calorieScore,
+			$ingS: ingredientScore,
+			$timeS: timeScore,
+			$aleS: alergyScore,
+			$gradeS: gradeScore
+			)
+		$topRecipe: Recipe(recipeId == $recId)
+	
+	then
+	    topRecipes.add($topRecipe);
+		System.out.println("Recipe "+$topRecipe.getRecipeName()+" with score "+ ($aleS * 100 + $typeS * 10 + $servingS + $calS + $ingS + $timeS + $gradeS)+" is choosen.");
+		
+
+end
+
