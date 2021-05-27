@@ -15,7 +15,11 @@ public class RecipeRequirements {
 	
 	private List<IngredientAmount> ingredients;
 	
+	private List<Long> alergies;
+	
 	private boolean limitedTime;
+	
+	private int availableTime;
 	
 	private RecipeType type;
 
@@ -23,16 +27,48 @@ public class RecipeRequirements {
 		super();
 	}
 
+	
+
+
 	public RecipeRequirements(CookingSkill skill, boolean lowCalorie, int servings, List<IngredientAmount> ingredients,
-			boolean limitedTime, RecipeType type) {
+			List<Long> alergies, boolean limitedTime, int availableTime, RecipeType type) {
 		super();
 		this.skill = skill;
 		this.lowCalorie = lowCalorie;
 		this.servings = servings;
 		this.ingredients = ingredients;
+		this.alergies = alergies;
 		this.limitedTime = limitedTime;
+		this.availableTime = availableTime;
 		this.type = type;
 	}
+
+
+
+
+	public List<Long> getAlergies() {
+		return alergies;
+	}
+
+
+
+
+	public void setAlergies(List<Long> alergies) {
+		this.alergies = alergies;
+	}
+
+
+
+
+	public int getAvailableTime() {
+		return availableTime;
+	}
+
+
+	public void setAvailableTime(int availableTime) {
+		this.availableTime = availableTime;
+	}
+
 
 	public CookingSkill getSkill() {
 		return skill;

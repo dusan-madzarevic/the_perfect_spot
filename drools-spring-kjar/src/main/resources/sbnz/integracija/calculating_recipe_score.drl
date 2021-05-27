@@ -1,0 +1,33 @@
+package sbnz.integracija;
+
+import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
+
+
+global Recipe topRecipe;
+
+declare FoundRecipe
+end
+
+rule "THE PERFECT Recipes"
+agenda-group "Calculating recipe score"
+salience ($aleS * 100 + $typeS * 10 + $servingS + $calS + $ingS + $timeS + $gradeS)
+	when
+		$recC: RecipeCompatibility(	
+			$recId: recipeId,
+			$typeS: typeScore,
+			$servingS: servingScore,
+			$calS: calorieScore,
+			$ingS: ingredientScore,
+			$timeS: timeScore,
+			$aleS: alergyScore,
+			$gradeS: gradeScore
+			)
+		$topRecipe: Recipe(recipeId == $recId)
+		not FoundRecipe()
+	then
+		System.out.println("Recipe "+$topRecipe.getRecipeName()+" with score "+ ($aleS * 100 + $typeS * 10 + $servingS + $calS + $ingS + $timeS + $gradeS)+" is choosen.");
+		drools.getKnowledgeRuntime().setGlobal("topRecipe", $topRecipe);
+		insert(new FoundRecipe());
+		
+	
+end

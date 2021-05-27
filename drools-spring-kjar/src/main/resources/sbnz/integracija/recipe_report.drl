@@ -1,0 +1,41 @@
+package sbnz.integracija;
+
+import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
+import com.ftn.uns.ac.rs.theperfectmeal.model.RecipeGrade;
+import java.time.LocalDate;
+
+global List<Recipe> bestGraded;
+global List<Recipe> bestGradedLastMonth;
+
+
+rule "Best graded recepies - all the time"
+	agenda-group "best-graded-report"
+	salience $total
+	when
+		$recipe: Recipe($grades: recipeGrades)
+		$total : Double() from accumulate(
+	         RecipeGrade( $val: value ) from  $grades,
+	         init( double total = 0; ),
+	         action( total = total + $val; ),
+	         reverse( total = total - ( $val ); ),
+	         result( new Double( total / $grades.size() ) ) )
+	then
+		bestGraded.add($recipe);
+		System.out.println($recipe.getRecipeName() + ": " + $total);
+end;
+
+rule "Best graded recepies - last month"
+	agenda-group "last-month-best-graded-report"
+	salience $total
+	when
+		$re: Recipe($grades: recipeGrades)
+		$total : Double() from accumulate(
+	         RecipeGrade( $val: value, $date: date, $date.isAfter(LocalDate.now().minusMonths(1)) ) from  $grades,
+	         init( double total = 0; ),
+	         action( total = total + $val; ),
+	         reverse( total = total - ( $val ); ),
+	         result( new Double( total / $grades.size() ) ) )
+	then
+		bestGradedLastMonth.add($re);
+		System.out.println($re.getRecipeName() + ": " + $total);
+end;
