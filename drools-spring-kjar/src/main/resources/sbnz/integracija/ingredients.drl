@@ -1,0 +1,4 @@
+package sbnz.integracija;
+
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeRequirements;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;

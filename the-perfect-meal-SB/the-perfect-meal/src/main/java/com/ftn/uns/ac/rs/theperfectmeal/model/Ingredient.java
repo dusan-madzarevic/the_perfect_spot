@@ -1,10 +1,14 @@
 package com.ftn.uns.ac.rs.theperfectmeal.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -24,6 +28,9 @@ public class Ingredient {
 
 	@Column(name = "image")
 	private byte[] image;
+	
+	@OneToMany(cascade = {CascadeType.ALL}, mappedBy = "ingredient", orphanRemoval = true)
+	private List<RecipeIngredient> recipes;
 
 	public Ingredient() {
 		super();
@@ -67,6 +74,14 @@ public class Ingredient {
 
 	public void setImage(byte[] image) {
 		this.image = image;
+	}
+
+	public List<RecipeIngredient> getRecipes() {
+		return recipes;
+	}
+
+	public void setRecipes(List<RecipeIngredient> recipes) {
+		this.recipes = recipes;
 	}
 
 }

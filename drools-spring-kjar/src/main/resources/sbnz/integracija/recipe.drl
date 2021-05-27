@@ -2,23 +2,33 @@ package sbnz.integracija;
 
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeRequirements;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
+import com.ftn.uns.ac.rs.theperfectmeal.model.RecipeIngredient;
+import com.ftn.uns.ac.rs.theperfectmeal.dto.IngredientAmount;
+
+import java.util.List;
 
 declare RecipeCompatibility
 	@PropertyReactive
 	
 	recipeId: long
 	typeScore: double
+	servingScore: double
+	calorieScore: double
+	ingredientScore: double
+	timeScore: double
+	alergyScore: double
+	gradeScore: double
 end
 
 rule "Compatibility - creating requirement object"
 	agenda-group "recipe"
-	salience 2
+	salience 3
 	when
 		$req: RecipeRequirements()
 		$re: Recipe($id: recipeId)
 	then
 		System.out.println("Scoring recipe with id: " + $id);
-		insert(new RecipeCompatibility($id, -1));
+		insert(new RecipeCompatibility($id, -1, 0, 0, 0, 0, 0, 0));
 end;
 
 rule "Recipe type"
@@ -32,3 +42,34 @@ rule "Recipe type"
     	System.out.println("Recipe "+$re.getRecipeName()+" is correct type");
     	modify($com){setTypeScore(1);};
 end
+
+rule "Recipe servings"
+	agenda-group "recipe"
+	salience 1
+    when
+        $req: RecipeRequirements($s: servings)
+        $re: Recipe($id: recipeId, $s <= servings, $ser: servings)
+        $com: RecipeCompatibility(recipeId == $id) @Watch(!servingScore)               
+    then
+    	System.out.println("Recipe "+$re.getRecipeName()+" has enough servings");
+    	modify($com){setServingScore(-1*($ser - $s));};
+end
+
+rule "Recipe ingredients"
+	agenda-group "recipe"
+	salience 1
+    when
+        accumulate(RecipeRequirements($ing: ingredients), $ingCount: count($ing))
+        RecipeRequirements($ingr: ingredients)
+        $ingIds: List(!this.isEmpty()) from accumulate (IngredientAmount($ingId: ingredientId) from $ingr, collectList($ingId))
+        $re: Recipe($id: recipeId, $recIng: ingredients)
+		Number($value: intValue == $ingCount) from accumulate(
+        	RecipeIngredient($t:this, $recIngId: ingredient.getIngredientId(), $recIngId memberOf $ingIds) from $recIng,
+        	count($t)
+        )
+        $com: RecipeCompatibility(recipeId == $id) @Watch(!ingredientScore)               
+    then
+    	System.out.println("Recipe "+$re.getRecipeName()+" contains all the ingredients");
+    	modify($com){setIngredientScore(-1*($value - $ingCount));};
+end
+

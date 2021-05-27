@@ -49,6 +49,9 @@ public class Recipe {
 	@OneToMany(cascade = {CascadeType.ALL}, mappedBy = "recipe")
 	private List<RecipeGrade> recipeGrades;
 	
+	@OneToMany(cascade = {CascadeType.ALL}, mappedBy = "recipe", orphanRemoval = true)
+	private List<RecipeIngredient> ingredients;
+	
 	public Recipe() {
 		super();
 	}
@@ -135,6 +138,14 @@ public class Recipe {
 
 	public void setRecipeGrades(List<RecipeGrade> recipeGrades) {
 		this.recipeGrades = recipeGrades;
+	}
+
+	public List<RecipeIngredient> getIngredients() {
+		return ingredients;
+	}
+
+	public void setIngredients(List<RecipeIngredient> ingredients) {
+		this.ingredients = ingredients;
 	}
 
 }
