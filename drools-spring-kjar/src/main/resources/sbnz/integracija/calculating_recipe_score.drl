@@ -27,6 +27,7 @@ salience ($aleS * 100 + $typeS * 10 + $servingS + $calS + $ingS + $timeS + $grad
 		$topRecipe: Recipe(recipeId == $recId)
 		not FoundRecipe()
 	then
+		System.out.println("IngredientScore: "+$ingS);
 		System.out.println("Recipe "+$topRecipe.getRecipeName()+" with score "+ ($aleS * 100 + $typeS * 10 + $servingS + $calS + $ingS + $timeS + $gradeS)+" is choosen.");
 		drools.getKnowledgeRuntime().setGlobal("topRecipe", $topRecipe);
 		insert(new FoundRecipe());
@@ -35,26 +36,5 @@ salience ($aleS * 100 + $typeS * 10 + $servingS + $calS + $ingS + $timeS + $grad
 end
 
 
-rule "THE PERFECT Recipes 2"
-agenda-group "Calculating recipe score"
-salience ($aleS * 100 + $typeS * 10 + $servingS + $calS + $ingS + $timeS + $gradeS)
-	when
-		$recC: RecipeCompatibility(	
-			$recId: recipeId,
-			$typeS: typeScore,
-			$servingS: servingScore,
-			$calS: calorieScore,
-			$ingS: ingredientScore,
-			$timeS: timeScore,
-			$aleS: alergyScore,
-			$gradeS: gradeScore
-			)
-		$topRecipe: Recipe(recipeId == $recId)
-	
-	then
-	    topRecipes.add($topRecipe);
-		System.out.println("Recipe "+$topRecipe.getRecipeName()+" with score "+ ($aleS * 100 + $typeS * 10 + $servingS + $calS + $ingS + $timeS + $gradeS)+" is choosen.");
-		
 
-end
 

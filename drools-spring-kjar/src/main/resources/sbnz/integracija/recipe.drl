@@ -68,7 +68,7 @@ rule "Recipe ingredients"
         $com: RecipeCompatibility(recipeId == $id) @Watch(!ingredientScore)               
     then
     	System.out.println("Recipe "+$re.getRecipeName()+" contains all the ingredients");
-    	modify($com){setIngredientScore(1);};
+    	modify($com){setIngredientScore($ingIds.size() - $recIngIds.size() );};
 end
 
 
