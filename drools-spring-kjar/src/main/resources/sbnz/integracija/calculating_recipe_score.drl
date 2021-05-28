@@ -24,14 +24,11 @@ salience ($aleS * 100 + $typeS * 10 + $servingS + $calS + $ingS + $timeS + $grad
 			$aleS: alergyScore,
 			$gradeS: gradeScore
 			)
-		$topRecipe: Recipe(recipeId == $recId)
-		not FoundRecipe()
+		$topRecipe: Recipe(recipeId== $recId)
 	then
 		System.out.println("IngredientScore: "+$ingS);
 		System.out.println("Recipe "+$topRecipe.getRecipeName()+" with score "+ ($aleS * 100 + $typeS * 10 + $servingS + $calS + $ingS + $timeS + $gradeS)+" is choosen.");
-		drools.getKnowledgeRuntime().setGlobal("topRecipe", $topRecipe);
-		insert(new FoundRecipe());
-		
+		topRecipes.add($topRecipe);
 	
 end
 

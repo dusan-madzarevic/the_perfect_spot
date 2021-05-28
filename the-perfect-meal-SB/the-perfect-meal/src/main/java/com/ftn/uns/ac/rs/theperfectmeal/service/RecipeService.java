@@ -37,20 +37,22 @@ public class RecipeService {
 			kieSession.insert(recipe);
 
 		}
+		Recipe topRecipe = new Recipe();
+		kieSession.setGlobal("topRecipe",topRecipe);
 		kieSession.getAgenda().getAgendaGroup("recipe").setFocus();
 		kieSession.fireAllRules();
 
-		kieSession.getAgenda().getAgendaGroup("Calculating recipe score").setFocus();
-		kieSession.fireAllRules();
-
-		Recipe topRecipe = (Recipe) kieSession.getGlobal("topRecipe");
+	
 		System.out.println(topRecipe.getRecipeName());
 
-		/*
-		 * List<Recipe> topRecipes = (ArrayList<Recipe>)
-		 * kieSession.getGlobal("topRecipes"); for(Recipe r: topRecipes)
-		 * System.out.println(r.getRecipeName());
-		 */
+		
+		 List<Recipe> topRecipes = new ArrayList<Recipe>();
+		 kieSession.setGlobal("topRecipes", topRecipes);
+		 kieSession.getAgenda().getAgendaGroup("Calculating recipe score").setFocus();
+		 kieSession.fireAllRules();
+		 for(Recipe r: topRecipes)
+			 System.out.println(r.getRecipeName());
+		 
 		kieSession.dispose();
 		return new MessageResponse("Successfully");
 

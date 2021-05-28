@@ -49,10 +49,10 @@ rule "Recipe servings"
 	salience 1
     when
         $req: RecipeRequirements($s: servings)
-        $re: Recipe($id: recipeId, $ser: servings)
+        $re: Recipe($id: recipeId, $ser: servings, $ser >= $s)
         $com: RecipeCompatibility(recipeId == $id) @Watch(!servingScore)               
     then
-    	System.out.println("Recipe "+$re.getRecipeName()+" has enough servings");
+    	System.out.println("Servings score  "+ (-1*(Math.abs($ser - $s))));
     	modify($com){setServingScore(-1*(Math.abs($ser - $s)));};
 end
 
