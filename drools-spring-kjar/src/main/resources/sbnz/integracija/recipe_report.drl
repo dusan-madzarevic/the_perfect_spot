@@ -12,6 +12,22 @@ global List<Recipe> bestGraded;
 
 
 
+rule "Best graded recepies - last month"
+	agenda-group "best-graded-report-lastMonth"
+	salience $total
+	when
+		$recipe: Recipe($grades: recipeGrades)
+		$total : Double() from accumulate(
+	         RecipeGrade(date.after(java.sql.Date.valueOf(LocalDate.now().minusMonths(1))) == true ,  $val: value ) from  $grades,
+	         init( double total = 0; ),
+	         action( total = total + $val; ),
+	         reverse( total = total - ( $val ); ),
+	         result( new Double( total / $grades.size() ) ) )
+	then
+		bestGradedLastMonth.add($recipe);
+		System.out.println($recipe.getRecipeName() + ": " + $total);
+end;
+
 rule "Best graded recepies - all the time"
 	agenda-group "best-graded-report"
 	salience $total
@@ -26,21 +42,4 @@ rule "Best graded recepies - all the time"
 	then
 		bestGraded.add($recipe);
 		System.out.println($recipe.getRecipeName() + ": " + $total);
-end;
-
-rule "Best graded recepies - last month"
-	agenda-group "last-month-best-graded-report"
-	salience $total
-	when
-		$re: Recipe($grades: recipeGrades)
-		$total : Double() from accumulate(
-	         RecipeGrade(date.after(java.sql.Date.valueOf(LocalDate.now().minusMonths(1))) == true ,$val: value) from  $grades,
-	         init( double total = 0; ),
-	         action( total = total + $val; ),
-	         reverse( total = total - ( $val ); ),
-	         result( new Double( total / $grades.size() ) ) )
-	then
-		
-		System.out.println($re.getRecipeName() + ": " + $total);
-		bestGradedLastMonth.add($re);
 end;

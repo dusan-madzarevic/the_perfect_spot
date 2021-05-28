@@ -38,4 +38,12 @@ public class RecipeController {
 		return ResponseEntity.ok().body(recipeService.bestGradedRecipe());
 		
 	}
+	
+	@CrossOrigin
+	@GetMapping("/bestGradedLastMonth")
+	public ResponseEntity<ArrayList<RecipeDTO>> bestGradedLastMonth(){
+		
+		return ResponseEntity.ok().body(recipeService.bestGradedRecipeLastMonth());
+		
+	}
 }

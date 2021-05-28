@@ -77,15 +77,36 @@ public class RecipeService {
 		for (Recipe r : bestGraded) {
 			recipesDto.add(this.recipeMapper.toDto(r));
 		}
+		 
+		return recipesDto;
+	}
+	
+	public ArrayList<RecipeDTO> bestGradedRecipeLastMonth() {
+
+		this.kieService.releaseRulesSession();
+		KieSession session = this.kieService.getRulesSession();
+
+
+		List<Recipe> recipes = this.recipeRepository.findAll();
+
+		for (Recipe r : recipes) {
+			session.insert(r);
+		}
+	    List<Recipe> bestGradedLastMonth = new  ArrayList<>(); 
+	    session.setGlobal("bestGradedLastMonth", bestGradedLastMonth);
+		
 
 		
-	   session.getAgenda().getAgendaGroup("last-month-best-graded-report").setFocus();
+	   session.getAgenda().getAgendaGroup("best-graded-report-lastMonth").setFocus();
 	   session.fireAllRules(); 
-	   List<Recipe> bestGradedLastMonth = new  ArrayList<>(); 
-	   session.setGlobal("bestGradedLastMonth", bestGradedLastMonth);
+
 	   for(Recipe r: bestGradedLastMonth) 
 		  System.out.println(r.getRecipeName());
-		 
+	   
+	   ArrayList<RecipeDTO> recipesDto = new ArrayList<RecipeDTO>();
+		for (Recipe r : bestGradedLastMonth) {
+			recipesDto.add(this.recipeMapper.toDto(r));
+		}
 		return recipesDto;
 	}
 
