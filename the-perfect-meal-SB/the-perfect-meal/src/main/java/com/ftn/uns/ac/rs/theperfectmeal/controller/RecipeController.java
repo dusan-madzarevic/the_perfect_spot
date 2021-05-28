@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.MessageResponse;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeRequirements;
-import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
 import com.ftn.uns.ac.rs.theperfectmeal.service.RecipeService;
 
 @RestController
