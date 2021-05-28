@@ -9,9 +9,6 @@ global List<Recipe> bestGradedLastMonth;
 
 global List<Recipe> bestGraded;
 
-
-
-
 rule "Best graded recepies - last month"
 	agenda-group "best-graded-report-lastMonth"
 	salience $total

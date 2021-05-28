@@ -40,7 +40,7 @@ rule "Recipe type"
         $re: Recipe($id: recipeId, $t == type)
         $com: RecipeCompatibility(recipeId == $id) @Watch(!typeScore)               
     then
-    	System.out.println("Recipe "+$re.getRecipeName()+" is correct type");
+    	System.out.println("RECIPE TYPE RULE FIRED: Recipe "+$re.getRecipeName()+" is correct type");
     	modify($com){setTypeScore(1);};
 end
 
@@ -52,7 +52,7 @@ rule "Recipe servings"
         $re: Recipe($id: recipeId, $ser: servings)
         $com: RecipeCompatibility(recipeId == $id) @Watch(!servingScore)               
     then
-    	System.out.println("Recipe "+$re.getRecipeName()+" has enough servings");
+    	System.out.println("RECPIE SERVINGS RULE FIRED: Recipe "+$re.getRecipeName()+" has enough servings");
     	modify($com){setServingScore(-1*(Math.abs($ser - $s)));};
 end
 
@@ -67,7 +67,7 @@ rule "Recipe ingredients"
         eval($recIngIds.containsAll($ingIds))
         $com: RecipeCompatibility(recipeId == $id) @Watch(!ingredientScore)               
     then
-    	System.out.println("Recipe "+$re.getRecipeName()+" contains all the ingredients");
+    	System.out.println("RECIPE INGREDIENTS RULE FIRED: Recipe "+$re.getRecipeName()+" contains all the ingredients");
     	modify($com){setIngredientScore($ingIds.size() - $recIngIds.size() );};
 end
 
@@ -80,7 +80,7 @@ rule "Recipe preparation time"
         $re: Recipe($id: recipeId, $at >= prepDuration, $pd: prepDuration)
         $com: RecipeCompatibility(recipeId == $id) @Watch(!timeScore)               
     then
-    	System.out.println("You have enough time to cook recipe '"+$re.getRecipeName()+"'.");
+    	System.out.println("RECIPE PREPARATION TIME RULE FIRED: You have enough time to cook recipe '"+$re.getRecipeName()+"'.");
     	modify($com){setTimeScore(2);};
 end
 
@@ -96,6 +96,6 @@ rule "Recipe alergies"
         )
         $com: RecipeCompatibility(recipeId == $id) @Watch(!alergyScore)               
     then
-    	System.out.println("Recipe '"+$re.getRecipeName()+"' contains ingridients you are allergic to.");
+    	System.out.println("RECIPE ALLERGIES RULE FIRED: Recipe '"+$re.getRecipeName()+"' contains ingridients you are allergic to.");
     	modify($com){setAlergyScore(-1);};
 end
