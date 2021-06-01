@@ -1,0 +1,61 @@
+package sbnz.integracija;
+
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeRequirements;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeCalcInfo;
+import com.ftn.uns.ac.rs.theperfectmeal.util.CookingSkill;
+
+query isInDifficultyRange(Long $low, Long $high, int $steps, int $prepTime, int $po)
+	eval(($steps * 40 + $prepTime * 0.05 + $po * 0.01) >= $low && ($steps * 40 + $prepTime * 0.05 + $po * 0.01) < $high)
+end
+
+
+rule "Overtime calc"
+	agenda-group "recipe-difficulty"
+	salience 5
+	when
+		$req: RecipeRequirements($s: skill)
+		$re: Recipe($id: recipeId, $prepTime: prepDuration)
+        $reCalc: RecipeCalcInfo($idCalc: recipeId, $idCalc == $id, prepOvertime == 0)
+        eval($prepTime >= 3600)
+    then
+    	System.out.println("RECIPE OVERTIME RULE FIRED: Recipe '"+$re.getRecipeName()+"' requires more than one hour of cooking.");
+        modify($reCalc){setPrepOvertime($prepTime - 3600);};
+end
+
+rule "Recipe difficulty - LOW"
+	agenda-group "recipe-difficulty"
+	salience 1
+	when
+		$re: Recipe($id: recipeId, $prepTime: prepDuration, $steps: stepsNumber)
+        $reCalc: RecipeCalcInfo($idCalc: recipeId, $idCalc == $id, $po: prepOvertime)
+        isInDifficultyRange(0L,200L, $steps, $prepTime, $po;)
+    then
+    	System.out.println("RECIPE DIFFICULTY RULE FIRED: Recipe '"+$re.getRecipeName()+"' is a LOW difficulty recipe.");
+        modify($reCalc){setRecipeDifficulty(CookingSkill.LOW);};
+end
+
+rule "Recipe difficulty - MEDIUM"
+	agenda-group "recipe-difficulty"
+	salience 1
+	when
+		$re: Recipe($id: recipeId, $prepTime: prepDuration, $steps: stepsNumber)
+        $reCalc: RecipeCalcInfo($idCalc: recipeId, $idCalc == $id, $po: prepOvertime)
+        isInDifficultyRange(200L,500L, $steps, $prepTime, $po;)
+    then
+    	System.out.println("RECIPE DIFFICULTY RULE FIRED: Recipe '"+$re.getRecipeName()+"' is a MEDIUM difficulty recipe.");
+        modify($reCalc){setRecipeDifficulty(CookingSkill.MEDIUM);};
+end
+
+rule "Recipe difficulty - HIGH"
+	agenda-group "recipe-difficulty"
+	salience 1
+	when
+		$re: Recipe($id: recipeId, $prepTime: prepDuration, $steps: stepsNumber)
+        $reCalc: RecipeCalcInfo($idCalc: recipeId, $idCalc == $id, $po: prepOvertime)
+        isInDifficultyRange(500L,9999L, $steps, $prepTime, $po;)
+    then
+    	System.out.println("RECIPE DIFFICULTY RULE FIRED: Recipe '"+$re.getRecipeName()+"' is a HIGH difficulty recipe.");
+        modify($reCalc){setRecipeDifficulty(CookingSkill.HIGH);};
+end
+

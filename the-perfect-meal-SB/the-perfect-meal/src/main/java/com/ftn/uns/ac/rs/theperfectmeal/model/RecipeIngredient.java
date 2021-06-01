@@ -8,6 +8,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 
+import com.ftn.uns.ac.rs.theperfectmeal.dto.IngredientAmount;
+
 @Entity
 @Table(name = "recipe_ingredient")
 public class RecipeIngredient {
@@ -70,4 +72,8 @@ public class RecipeIngredient {
 		this.amount = amount;
 	}
 
+	public long amountDifference(IngredientAmount ing) {
+		return this.amount - ing.getAmount();
+	}
+	
 }

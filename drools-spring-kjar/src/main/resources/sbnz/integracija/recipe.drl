@@ -4,15 +4,16 @@ import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeRequirements;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
 import com.ftn.uns.ac.rs.theperfectmeal.model.RecipeIngredient;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.IngredientAmount;
+import com.ftn.uns.ac.rs.theperfectmeal.util.CaloricType;
 
 import java.util.List;
 import java.lang.Math;
 
 declare RecipeCompatibility
 	@PropertyReactive
-	
 	recipeId: long
 	typeScore: double
+	difficultyScore: double
 	servingScore: double
 	calorieScore: double
 	ingredientScore: double
@@ -29,7 +30,7 @@ rule "Compatibility - creating requirement object"
 		$re: Recipe($id: recipeId)
 	then
 		System.out.println("Scoring recipe with id: " + $id);
-		insert(new RecipeCompatibility($id, -1, 0, 0, 0, 0, 0, 0));
+		insert(new RecipeCompatibility($id, -1, 0, -1, 0, 0, 0, 0, 0));
 end;
 
 rule "Recipe type"
@@ -98,4 +99,46 @@ rule "Recipe alergies"
     then
     	System.out.println("RECIPE ALLERGIES RULE FIRED: Recipe '"+$re.getRecipeName()+"' contains ingridients you are allergic to.");
     	modify($com){setAlergyScore(-1);};
+end
+
+rule "Recipe calories - high"
+	agenda-group "recipe"
+	salience 1
+	when
+		$req: RecipeRequirements(lowCalorie == true)
+		$re: Recipe($id: recipeId)
+		$reCalc: RecipeCalcInfo($idCalc: recipeId, $idCalc == $id, caloricType == CaloricType.HIGH_CAL)
+		$com: RecipeCompatibility(recipeId == $id) @Watch(!calorieScore) 
+		
+	then
+		System.out.println("RECIPE CALORIES RULE FIRED: Recipe '"+$re.getRecipeName()+"' deprioritized due to high caloric count.");
+    	modify($com){setCalorieScore(-1);};
+end
+
+rule "Recipe calories - low"
+	agenda-group "recipe"
+	salience 1
+	when
+		$req: RecipeRequirements(lowCalorie == true)
+		$re: Recipe($id: recipeId)
+		$reCalc: RecipeCalcInfo($idCalc: recipeId, $idCalc == $id, caloricType == CaloricType.LOW_CAL)
+		$com: RecipeCompatibility(recipeId == $id) @Watch(!calorieScore) 
+		
+	then
+		System.out.println("RECIPE CALORIES RULE FIRED: Recipe '"+$re.getRecipeName()+"' prioritized due to low caloric count.");
+    	modify($com){setCalorieScore(1);};
+end
+
+rule "Recipe difficulty - matches"
+	agenda-group "recipe"
+	salience 1
+	when
+		$req: RecipeRequirements($skill: skill)
+		$re: Recipe($id: recipeId)
+		$reCalc: RecipeCalcInfo($idCalc: recipeId, $idCalc == $id, recipeDifficulty == $skill)
+		$com: RecipeCompatibility(recipeId == $id) @Watch(!difficultyScore) 
+		
+	then
+		System.out.println("RECIPE DIFFICULTY RULE FIRED: Recipe '"+$re.getRecipeName()+"' matches desired difficulty.");
+    	modify($com){setDifficultyScore(1);};
 end

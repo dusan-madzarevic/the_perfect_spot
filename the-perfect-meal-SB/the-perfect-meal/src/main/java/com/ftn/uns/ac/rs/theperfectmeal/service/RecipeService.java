@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ftn.uns.ac.rs.theperfectmeal.dto.MessageResponse;
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeCalcInfo;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeRequirements;
 import com.ftn.uns.ac.rs.theperfectmeal.helper.RecipeMapper;
@@ -33,10 +34,19 @@ public class RecipeService {
 
 		kieSession.insert(requirements);
 		for (Recipe recipe : recipeRepository.findAll()) {
-
+			RecipeCalcInfo info = new RecipeCalcInfo();
+			info.setRecipeId(recipe.getRecipeId());
+			
 			kieSession.insert(recipe);
-
+			kieSession.insert(info);
 		}
+		
+		kieSession.getAgenda().getAgendaGroup("ingredients").setFocus();
+		kieSession.fireAllRules();
+		
+		kieSession.getAgenda().getAgendaGroup("recipe-difficulty").setFocus();
+		kieSession.fireAllRules();
+		
 		Recipe topRecipe = new Recipe();
 		kieSession.setGlobal("topRecipe",topRecipe);
 		kieSession.getAgenda().getAgendaGroup("recipe").setFocus();
