@@ -1,0 +1,171 @@
+package sbnz.integracija;
+
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirements;
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirementsDTO;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Cousine;
+import com.ftn.uns.ac.rs.theperfectmeal.model.MusicGenre;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Occassion;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Prices;
+
+rule "Wanted cousine"
+agenda-group "fill-restaurant-requirements"
+salience 10
+lock-on-active true
+when
+	$resReqDto: RestaurantRequirementsDTO($cousine: cousine)
+	$req: RestaurantRequirements(  )
+then
+	System.out.println("Cousine type added - " + $cousine);
+	modify($req){setCousine($cousine);};
+
+end;
+
+rule "Wanted occassion"
+agenda-group "fill-restaurant-requirements"
+salience 10
+lock-on-active true
+when
+	$resReqDto: RestaurantRequirementsDTO($occassion: occassion)
+	$req: RestaurantRequirements(  )
+then
+	System.out.println("Occassion type added - " + $occassion);
+	modify($req){setOccassion($occassion);};
+
+end;
+
+rule "Wanted prices"
+agenda-group "fill-restaurant-requirements"
+salience 10
+lock-on-active true
+when
+	$resReqDto: RestaurantRequirementsDTO($prices: prices)
+	$req: RestaurantRequirements(  )
+then
+	System.out.println("Prices added - " + $prices);
+	modify($req){setPrices($prices);};
+
+end;
+
+rule "Pet friendy restaurant "
+agenda-group "fill-restaurant-requirements"
+salience 10
+lock-on-active true
+when
+	$resReqDto: RestaurantRequirementsDTO($pet: petFriendly)
+	$req: RestaurantRequirements(  )
+then
+	System.out.println("Pet-friendly added - " + $pet);
+	modify($req){setPetFriendly($pet);};
+
+end;
+
+rule "User's location "
+agenda-group "fill-restaurant-requirements"
+salience 10
+lock-on-active true
+when
+	$resReqDto: RestaurantRequirementsDTO($lon: lon, $lat: lat, $lon != 0 && $lat != 0)
+	$req: RestaurantRequirements(  )
+then
+	System.out.println("User's location added - " + $lon + ", "+ $lat);
+	modify($req){setLon($lon);};
+	modify($req){setLat($lat);};
+
+end;
+
+rule "Car park "
+agenda-group "fill-restaurant-requirements"
+salience 10
+lock-on-active true
+when
+	$resReqDto: RestaurantRequirementsDTO($car: goingByCar, $car == true)
+	$req: RestaurantRequirements(  )
+then
+	System.out.println("User is going by car - parking added.");
+	modify($req){setHasCarPark(true);};
+
+end;
+
+
+rule "Access for disabled "
+agenda-group "fill-restaurant-requirements"
+salience 10
+lock-on-active true
+when
+	$resReqDto: RestaurantRequirementsDTO($dis: accessForDisabled)
+	$req: RestaurantRequirements(  )
+then
+	System.out.println("Restaurant has access for disabled - " + $dis + " added.");
+	modify($req){setAccessForDisabled($dis);};
+
+end;
+
+rule "Business meal "
+agenda-group "fill-restaurant-requirements"
+salience 5
+lock-on-active true
+when
+	$req: RestaurantRequirements( $occassion: occassion, $occassion == Occasion.BUSINESS_MEAL )
+then
+	System.out.println("Wifi and business hall set true.");
+	modify($req){setHasWifi(true);};
+	modify($req){setHasBusinessHall(true);};
+
+end;
+
+rule "Family meal with kids "
+agenda-group "fill-restaurant-requirements"
+salience 5
+lock-on-active true
+when
+	$req: RestaurantRequirements( $occassion: occassion, $occassion == Occasion.FAMILY_WITH_KIDS )
+then
+	System.out.println("Playground set true;");
+	modify($req){setHasPlayground(true);};
+
+end;
+
+rule "Romantic date"
+agenda-group "fill-restaurant-requirements"
+salience 5
+lock-on-active true
+when
+	$req: RestaurantRequirements( $occassion: occassion, $occassion == Occasion.ROMANTIC_DATE )
+then
+	System.out.println("Live music, serving alcohol and piano set true;");
+	modify($req){setLiveMusic(true);};
+	modify($req){setServingAlcohol(true);};
+	modify($req){setMusicGenre(MusicGenre.PIANO);};
+
+end;
+
+rule "Celebration day"
+agenda-group "fill-restaurant-requirements"
+salience 5
+lock-on-active true
+when
+	$req: RestaurantRequirements( $occassion: occassion, $occassion == Occasion.CELEBRATION_DAY )
+then
+	System.out.println("Live music, serving alcohol smoking part and tambourines set true;");
+	modify($req){setLiveMusic(true);};
+	modify($req){setHasSmokingPart(true);};
+	modify($req){setServingAlcohol(true);};
+	modify($req){setMusicGenre(MusicGenre.TAMBOURINES);};
+
+end;
+
+rule "Celebration night"
+agenda-group "fill-restaurant-requirements"
+salience 5
+lock-on-active true
+when
+	$req: RestaurantRequirements( $occassion: occassion, $occassion == Occasion.CELEBRATION_NIGHT )
+then
+	System.out.println("Live music,pop, serving alcohol and smoking part set true;");
+	modify($req){setLiveMusic(true);};
+	modify($req){setHasSmokingPart(true);};
+	modify($req){setServingAlcohol(true);};
+	modify($req){setMusicGenre(MusicGenre.POP);};
+
+end;

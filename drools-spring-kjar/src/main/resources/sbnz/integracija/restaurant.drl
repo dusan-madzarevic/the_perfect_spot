@@ -1,4 +1,40 @@
 package sbnz.integracija;
 
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirements;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
 
+declare RestaurantCompatibility
+	@PropertyReactive
+	
+	restId: long
+	cousineScore: double
+	petFriendlyScore: double
+	occassionScore: double
+	pricesScore: double
+	disabledScore: double
+	locationScore: double
+	
+end
 
+rule "Compatibility - creating restaurant requirement object"
+	agenda-group "restaurant"
+	salience 3
+	when
+		$req: RestaurantRequirements()
+		$re: Restaurant($id: id)
+	then
+		System.out.println("Scoring restaurant with id: " + $id);
+		insert(new RestaurantCompatibility($id, -1, 0, 0, 0, 0, 0));
+end;
+
+rule "Restaurant cousine type"
+	agenda-group "restaurant"
+	salience 1
+    when
+        $req: RestaurantRequirements($c: cousine)
+	    $re: Restaurant($id: id, $c == cousine)
+        $com: RestaurantCompatibility(restId == $id) @Watch(!cousineScore)               
+    then
+    	System.out.println("Restaurant "+$re.getName()+" cousine is correct type");
+    	modify($com){setCousineScore(1);};
+end

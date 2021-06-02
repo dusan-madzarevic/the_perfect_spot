@@ -21,7 +21,7 @@ declare RecipeCompatibility
 	gradeScore: double
 end
 
-rule "Compatibility - creating requirement object"
+rule "Compatibility - creating recipe requirement object"
 	agenda-group "recipe"
 	salience 3
 	when

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.ftn.uns.ac.rs.theperfectmeal.dto.MessageResponse;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantDTO;
-import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirements;
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirementsDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.helper.RestaurantMapper;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
@@ -27,7 +27,7 @@ public class RestaurantService {
 	@Autowired
 	private RestaurantMapper restaurantMapper;
 	
-	public MessageResponse process(RestaurantRequirements requirements) {
+	public MessageResponse process(RestaurantRequirementsDTO requirements) {
 		this.kieService.releaseRulesSession();
 		KieSession kieSession = kieService.getRulesSession();
 
@@ -40,11 +40,11 @@ public class RestaurantService {
 		kieSession.getAgenda().getAgendaGroup("restaurant").setFocus();
 		kieSession.fireAllRules();
 		
-		kieSession.getAgenda().getAgendaGroup("Calculating restaurant score").setFocus();
-		kieSession.fireAllRules();
-		
-		Restaurant topRestaurant = (Restaurant) kieSession.getGlobal("topRestaurant");
-		System.out.println(topRestaurant.getName());
+//		kieSession.getAgenda().getAgendaGroup("Calculating restaurant score").setFocus();
+//		kieSession.fireAllRules();
+//		
+//		Restaurant topRestaurant = (Restaurant) kieSession.getGlobal("topRestaurant");
+//		System.out.println(topRestaurant.getName());
 		
 		kieSession.dispose();
 		return new MessageResponse("Successfully");
