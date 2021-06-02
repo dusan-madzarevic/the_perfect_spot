@@ -11,23 +11,27 @@ declare FoundRecipe
 end
 
 rule "THE PERFECT Recipes"
-agenda-group "Calculating recipe score"
-salience ($aleS * 100 + $typeS * 10 + $servingS + $calS + $ingS + $timeS + $gradeS)
+	agenda-group "Calculating recipe score"
+	salience ($finalS)
 	when
 		$recC: RecipeCompatibility(	
 			$recId: recipeId,
 			$typeS: typeScore,
+			$diffS: difficultyScore,
 			$servingS: servingScore,
 			$calS: calorieScore,
 			$ingS: ingredientScore,
 			$timeS: timeScore,
 			$aleS: alergyScore,
-			$gradeS: gradeScore
+			$gradeS: gradeScore,
+			$finalS: (alergyScore * 100 + typeScore * 10 + difficultyScore + servingScore + calorieScore + ingredientScore + timeScore + gradeScore)
 			)
 		$topRecipe: Recipe(recipeId== $recId)
 	then
 		System.out.println("IngredientScore: "+$ingS);
-		System.out.println("Recipe "+$topRecipe.getRecipeName()+" with score "+ ($aleS * 100 + $typeS * 10 + $servingS + $calS + $ingS + $timeS + $gradeS)+" is choosen.");
+		System.out.println("DifficultyScore: "+$diffS);
+		System.out.println("CalorieScore: "+$calS);
+		System.out.println("Recipe "+$topRecipe.getRecipeName()+" with score "+ ($aleS * 100 + $typeS * 10 + $diffS + $servingS + $calS + $ingS + $timeS + $gradeS)+" is choosen.");
 		topRecipes.add($topRecipe);
 	
 end
