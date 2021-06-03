@@ -7,6 +7,7 @@ import com.ftn.uns.ac.rs.theperfectmeal.model.Cousine;
 import com.ftn.uns.ac.rs.theperfectmeal.model.MusicGenre;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Occassion;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Prices;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Distance;
 
 rule "Wanted cousine"
 agenda-group "fill-restaurant-requirements"
@@ -68,6 +69,7 @@ then
 	System.out.println("User's location added - " + $lon + ", "+ $lat);
 	modify($req){setLon($lon);};
 	modify($req){setLat($lat);};
+	modify($req){setDistance(Distance.NONE);};
 
 end;
 

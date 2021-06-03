@@ -84,6 +84,13 @@ public class Restaurant {
 	@Column(name="accessForDisabled", nullable = false)
 	private boolean accessForDisabled;
 	
+	@Column(name="lon", nullable = true)
+	private double lon;
+	
+	@Column(name="lat", nullable = true)
+	private double lat;
+	
+	
 	public Restaurant() {
 		super();
 	}
@@ -94,6 +101,40 @@ public class Restaurant {
 
 	
 
+
+
+
+	public Restaurant(long id, String name, List<RestaurantGrade> grades, String address, Date dateOfLastGrade,
+			String webSite, Cousine cousine, Prices prices, String phoneNumber, String workingHours, boolean hasGarden,
+			boolean hasPlayground, boolean hasCarPark, boolean hasSmokingPart, byte[] image, MusicGenre musicGenre,
+			boolean liveMusic, boolean servingAlcohol, boolean hasWifi, boolean hasBusinessHall, boolean petFriendly,
+			boolean accessForDisabled, double lon, double lat) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.grades = grades;
+		this.address = address;
+		this.dateOfLastGrade = dateOfLastGrade;
+		this.webSite = webSite;
+		this.cousine = cousine;
+		this.prices = prices;
+		this.phoneNumber = phoneNumber;
+		this.workingHours = workingHours;
+		this.hasGarden = hasGarden;
+		this.hasPlayground = hasPlayground;
+		this.hasCarPark = hasCarPark;
+		this.hasSmokingPart = hasSmokingPart;
+		this.image = image;
+		this.musicGenre = musicGenre;
+		this.liveMusic = liveMusic;
+		this.servingAlcohol = servingAlcohol;
+		this.hasWifi = hasWifi;
+		this.hasBusinessHall = hasBusinessHall;
+		this.petFriendly = petFriendly;
+		this.accessForDisabled = accessForDisabled;
+		this.lon = lon;
+		this.lat = lat;
+	}
 
 
 
@@ -126,14 +167,6 @@ public class Restaurant {
 		this.petFriendly = petFriendly;
 		this.accessForDisabled = accessForDisabled;
 	}
-
-
-
-
-
-
-
-
 
 
 	public long getId() {
@@ -301,16 +334,9 @@ public class Restaurant {
 		this.servingAlcohol = servingAlcohol;
 	}
 
-
-
-
-
 	public boolean isHasWifi() {
 		return hasWifi;
 	}
-
-
-
 
 
 	public void setHasWifi(boolean hasWifi) {
@@ -318,15 +344,9 @@ public class Restaurant {
 	}
 
 
-
-
-
 	public boolean isHasBusinessHall() {
 		return hasBusinessHall;
 	}
-
-
-
 
 
 	public void setHasBusinessHall(boolean hasBusinessHall) {
@@ -334,38 +354,13 @@ public class Restaurant {
 	}
 
 
-
-
-
-
-
-
-
-
 	public boolean isPetFriendly() {
 		return petFriendly;
 	}
 
-
-
-
-
-
-
-
-
-
 	public void setPetFriendly(boolean petFriendly) {
 		this.petFriendly = petFriendly;
 	}
-
-
-
-
-
-
-
-
 
 
 	public boolean isAccessForDisabled() {
@@ -373,19 +368,32 @@ public class Restaurant {
 	}
 
 
-
-
-
-
-
-
-
-
 	public void setAccessForDisabled(boolean accessForDisabled) {
 		this.accessForDisabled = accessForDisabled;
+	}
+
+
+
+	public double getLon() {
+		return lon;
+	}
+
+
+
+	public void setLon(double lon) {
+		this.lon = lon;
+	}
+
+
+	public double getLat() {
+		return lat;
+	}
+
+
+	public void setLat(double lat) {
+		this.lat = lat;
 	}
 	
 	
 	
-
 }

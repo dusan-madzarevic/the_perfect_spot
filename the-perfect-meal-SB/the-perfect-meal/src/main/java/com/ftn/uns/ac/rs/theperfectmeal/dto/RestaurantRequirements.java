@@ -3,6 +3,7 @@ package com.ftn.uns.ac.rs.theperfectmeal.dto;
 import java.util.Date;
 
 import com.ftn.uns.ac.rs.theperfectmeal.model.Cousine;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Distance;
 import com.ftn.uns.ac.rs.theperfectmeal.model.MusicGenre;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Occassion;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Prices;
@@ -33,6 +34,7 @@ public class RestaurantRequirements {
 	private boolean hasGarden;
 	
 	private boolean active;
+	private Distance distance;
 	
 	public RestaurantRequirements() {
 		super();
@@ -54,6 +56,7 @@ public class RestaurantRequirements {
 		this.prices = prices;
 		this.goingByCar = goingByCar;
 		this.accessForDisabled = accessForDisabled;
+		//this.distance = Distance.NONE;
 	}
 
 
@@ -335,6 +338,24 @@ public class RestaurantRequirements {
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+
+
+
+
+
+	public Distance getDistance() {
+		return distance;
+	}
+
+
+
+
+
+
+	public void setDistance(Distance distance) {
+		this.distance = distance;
 	}
     
     

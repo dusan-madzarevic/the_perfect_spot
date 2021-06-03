@@ -4,6 +4,7 @@ import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirements;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
 import com.ftn.uns.ac.rs.theperfectmeal.model.RestaurantGrade;
 import java.time.LocalDate;
+import java.lang.Math;
 
 global Restaurant foundRestaurant;
 
@@ -443,7 +444,7 @@ rule "Stimulate restaurants with better grade this month"
         $com: RestaurantCompatibility(restId == $id) 
         not ( MonthlyBonusScore( restId == $id) )          
 	then
-		System.out.println("Restaurant "+$re.getName()+" got bonus score for last month. Score: 3" + $grade);
+		System.out.println("Restaurant "+$re.getName()+" got bonus score for last month. Score: 3 " + $grade);
 		insert (new MonthlyBonusScore( 3 , $id));
 		insert (new  MonthlyPenalScore( 0 , $id));
 
@@ -489,4 +490,21 @@ rule "No bonus-no penal for last month"
 	then
 		insert (new  MonthlyPenalScore( 0 , $id));
 		insert (new MonthlyBonusScore( 0 , $id));
+end;
+
+rule "Calculation distance"
+agenda-group "distance"
+when	
+	$req: RestaurantRequirements(distance == Distance.NONE, $lon2: lon, $lat2: lat)
+	$rest: Restaurant($id: id, $lon1: lon, $lat1: lat)
+	$com: RestaurantCompatibility(restId == $id) 
+	$dLat: java.lang.Math.toRadians($lat2 - $lat1)
+    $dLon: Math.toRadians($lon2 - $lon1)
+    $a: eval(  Math.pow(Math.sin($dLat / 2), 2) + Math.pow(Math.sin($dLon / 2), 2) * Math.cos(Math.toRadians($lat1)) * Math.cos(Math.toRadians($lat2)) )
+    $rad: eval(6371)
+    $c: eval(2 * Math.asin(Math.sqrt($a)))
+    $distance: eval($rad * $c)
+then	
+	System.out.println("Distance from restaurant "+$rest.getName()+" is "+ $distance +" km.");
+	modify($req){setDistance(Distance.FAR)};
 end;
