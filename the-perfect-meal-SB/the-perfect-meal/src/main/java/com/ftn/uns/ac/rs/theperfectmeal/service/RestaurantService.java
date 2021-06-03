@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.ftn.uns.ac.rs.theperfectmeal.dto.MessageResponse;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantDTO;
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirements;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirementsDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.helper.RestaurantMapper;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
@@ -27,7 +28,7 @@ public class RestaurantService {
 	@Autowired
 	private RestaurantMapper restaurantMapper;
 	
-	public MessageResponse process(RestaurantRequirementsDTO requirements) {
+	public MessageResponse process(RestaurantRequirements requirements) {
 		this.kieService.releaseRulesSession();
 		KieSession kieSession = kieService.getRulesSession();
 
@@ -37,9 +38,22 @@ public class RestaurantService {
 			kieSession.insert(rest);
 			
 		}
+		
+	
+		kieSession.getAgenda().getAgendaGroup("fill-restaurant-requirements").setFocus();
+		kieSession.fireAllRules();
+		//Restaurant foundRest = new Restaurant();
+		//kieSession.setGlobal("foundRestaurant", foundRest);
+		 List<Restaurant> topRestaurants = new ArrayList<Restaurant>();
+		 kieSession.setGlobal("foundRestaurant", topRestaurants);
 		kieSession.getAgenda().getAgendaGroup("restaurant").setFocus();
 		kieSession.fireAllRules();
-		
+		System.out.println(topRestaurants.size());
+		for(Restaurant r: topRestaurants)
+			System.out.println(r.getName());
+		//Restaurant foundRestaurant = (Restaurant) kieSession.getGlobal("foundRestaurant");
+		//System.out.println(foundRestaurant.getName());
+//		
 //		kieSession.getAgenda().getAgendaGroup("Calculating restaurant score").setFocus();
 //		kieSession.fireAllRules();
 //		

@@ -1,0 +1,20 @@
+package sbnz.integracija;
+
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirements;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Cousine;
+import com.ftn.uns.ac.rs.theperfectmeal.model.MusicGenre;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Occassion;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Prices;
+
+rule "Wanted cousindde"
+agenda-group "proba"
+salience 10
+lock-on-active true
+when
+	$req: RestaurantRequirements($cousine: cousine)
+then
+	System.out.println("Cousine type added - " + $cousine);
+	modify($req){setCousine($cousine);};
+
+end;

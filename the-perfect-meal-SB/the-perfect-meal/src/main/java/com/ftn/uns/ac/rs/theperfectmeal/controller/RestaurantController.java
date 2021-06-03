@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.uns.ac.rs.theperfectmeal.dto.MessageResponse;
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirements;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirementsDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.service.RestaurantService;
 
@@ -21,7 +22,7 @@ public class RestaurantController {
 	
 	@CrossOrigin
 	@PostMapping("/process")
-	public ResponseEntity<MessageResponse> processRequirements(@RequestBody RestaurantRequirementsDTO request){
+	public ResponseEntity<MessageResponse> processRequirements(@RequestBody RestaurantRequirements request){
 		
 		return ResponseEntity.ok().body(restaurantService.process(request));
 		

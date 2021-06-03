@@ -2,39 +2,398 @@ package sbnz.integracija;
 
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirements;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
+import java.util.List;
+
+global List<Restaurant> foundRestaurant;
 
 declare RestaurantCompatibility
-	@PropertyReactive
-	
 	restId: long
-	cousineScore: double
-	petFriendlyScore: double
-	occassionScore: double
-	pricesScore: double
-	disabledScore: double
-	locationScore: double
-	
 end
 
-rule "Compatibility - creating restaurant requirement object"
+declare CousineScore
+	cousineScore: double
+	restId: long
+end
+
+declare PetFriendlyScore
+	petScore: double
+	restId: long
+end
+
+
+declare PricesScore
+	pricesScore: double
+	restId: long
+end
+
+declare DisabledScore
+	disabledScore: double
+	restId: long
+end
+
+declare AlcoholScore
+	alcScore: double
+	restId: long
+end
+
+declare LiveMusicScore
+	liveMusicScore: double
+	restId: long
+end
+
+declare MusicGenreScore
+	genreScore: double
+	restId: long
+end
+
+declare BusinessHallScore
+	hallScore: double
+	restId: long
+end
+
+declare WifiScore
+	wifiScore: double
+	restId: long
+end
+
+declare ParkingScore
+	parkingScore: double
+	restId: long
+end
+
+declare SmokingScore
+	smokingScore: double
+	restId: long
+end
+
+declare PlaygroundScore
+	playgroundScore: double
+	restId: long
+end
+
+declare GardenScore
+	gardenScore: double
+	restId: long
+end
+
+
+
+
+rule "Restaurant Compatibility"
+	agenda-group "restaurant"
+	salience ($cousine + $pet + $prices + $disabled + $alc + $liveMusic + $genre + $hall + $wifi + $parking + $smoking + $playground )
+	when
+		RestaurantCompatibility( $rest: restId)
+	    CousineScore(restId == $rest, $cousine: cousineScore)
+		PlaygroundScore(restId == $rest, $playground: playgroundScore)
+		SmokingScore(restId == $rest, $smoking: smokingScore)
+		ParkingScore(restId == $rest, $parking: parkingScore)
+		WifiScore(restId == $rest, $wifi: wifiScore)
+		BusinessHallScore(restId == $rest, $hall: hallScore)
+		MusicGenreScore(restId == $rest, $genre: genreScore)
+		LiveMusicScore(restId == $rest, $liveMusic: liveMusicScore)
+		DisabledScore(restId == $rest, $disabled: disabledScore)
+		PricesScore(restId == $rest, $prices: pricesScore)
+		PetFriendlyScore(restId == $rest,$pet: petScore)
+	    AlcoholScore(restId == $rest, $alc: alcScore)
+		
+	
+		$foundRestaurant: Restaurant(id == $rest)
+		
+	then
+		System.out.println("Restaurant with id " + $rest + " has been choosen.");
+		System.out.println("Final Score: " +  ($cousine + $pet + $prices + $disabled + $alc + $liveMusic + $genre + $hall + $wifi + $parking + $smoking + $playground )); 
+		foundRestaurant.add($foundRestaurant);
+
+end;
+
+
+rule "Inserting restaurants"
 	agenda-group "restaurant"
 	salience 3
 	when
-		$req: RestaurantRequirements()
-		$re: Restaurant($id: id)
+		$res: Restaurant($id: id)
 	then
-		System.out.println("Scoring restaurant with id: " + $id);
-		insert(new RestaurantCompatibility($id, -1, 0, 0, 0, 0, 0));
+		insert(new RestaurantCompatibility($id));
 end;
 
 rule "Restaurant cousine type"
 	agenda-group "restaurant"
-	salience 1
+	salience 2
     when
         $req: RestaurantRequirements($c: cousine)
 	    $re: Restaurant($id: id, $c == cousine)
-        $com: RestaurantCompatibility(restId == $id) @Watch(!cousineScore)               
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( CousineScore( restId == $id) )              
     then
     	System.out.println("Restaurant "+$re.getName()+" cousine is correct type");
-    	modify($com){setCousineScore(1);};
+    	insert (new CousineScore(2,$id) );
+end
+
+rule "Pet friendly"
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($pet: petFriendly, $pet == true)
+	    $re: Restaurant($id: id, petFriendly == $pet )
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( PetFriendlyScore( restId == $id) )              
+    then
+    	System.out.println("Restaurant "+$re.getName()+" is pet friendly.");
+    	insert (new PetFriendlyScore(2,$id));
+end
+
+
+rule "Set pet friendly score to 0"
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($pet: petFriendly, $pet == false)
+        $re: Restaurant($id: id)
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( PetFriendlyScore( restId == $id) )              
+    then
+    	System.out.println("Restaurant "+$re.getName()+" PF score set to 0.");
+    	insert (new PetFriendlyScore(0,$id));
+end
+
+rule "Prices"
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($p:prices)
+	    $re: Restaurant($id: id, prices == $p )
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( PricesScore( restId == $id) )              
+    then
+    	System.out.println("Restaurant "+$re.getName()+" prices is correct type");
+    	insert (new PricesScore(2,$id));
+end
+
+rule "Access for disabled"
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($disabled: accessForDisabled, $disabled == true)
+	    $re: Restaurant($id: id, accessForDisabled == $disabled )
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( DisabledScore( restId == $id) )              
+    then
+    	System.out.println("Restaurant "+$re.getName()+" has access for disabled.");
+    	insert (new DisabledScore(2,$id));
+end
+
+rule "Set access for disabled score to 0"
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($disabled: accessForDisabled, $disabled == false)
+        $re: Restaurant($id: id)
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( DisabledScore( restId == $id) )              
+    then
+        System.out.println("Restaurant "+$re.getName()+" AFD score set to 0.");
+    
+    	insert (new DisabledScore(0,$id));
+end
+
+rule "Serving alcohol"
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($alc: servingAlcohol, $alc == true)
+	    $re: Restaurant($id: id, servingAlcohol == $alc)
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( AlcoholScore( restId == $id) )              
+    then
+    	System.out.println("Restaurant "+$re.getName()+" is serving alcohol.");
+    	insert (new AlcoholScore(2,$id));
+end
+
+rule "Set serving alcohol score to 0"
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($alc: servingAlcohol, $alc == false)
+        $re: Restaurant($id: id)
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( AlcoholScore( restId == $id) )              
+    then
+        	System.out.println("Restaurant "+$re.getName()+" alc score set to 0.");
+    
+    	insert (new AlcoholScore(2,$id));
+end
+
+rule "Live music"
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($live: liveMusic, $live == true)
+	    $re: Restaurant($id: id, liveMusic == $live  )
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( LiveMusicScore( restId == $id) )              
+    then
+    	System.out.println("Restaurant "+$re.getName()+" has live music.");
+    	insert (new LiveMusicScore(2,$id));
+end
+
+rule "Set live music score to 0"
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($live: liveMusic, $live == false)
+        $re: Restaurant($id: id)
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( LiveMusicScore( restId == $id) )              
+    then
+        System.out.println("Restaurant "+$re.getName()+" live music score set to 0.");
+    
+    	insert (new LiveMusicScore(0,$id));
+end
+
+rule "Music genre"
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($genre: musicGenre)
+	    $re: Restaurant($id: id,  musicGenre == $genre  )
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( MusicGenreScore( restId == $id) )              
+    then
+    	System.out.println("Restaurant "+$re.getName()+" has right music genre.");
+    	insert (new MusicGenreScore(1,$id));
+end
+
+rule "Bussines hall "
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($hall: hasBusinessHall, $hall == true)
+	    $re: Restaurant($id: id, hasBusinessHall == $hall )
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( BusinessHallScore( restId == $id) )              
+    then
+    	System.out.println("Restaurant "+$re.getName()+" has business hall.");
+    	insert (new BusinessHallScore(2,$id));
+end
+
+rule "Set bussines hall score to 0 "
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($hall: hasBusinessHall, $hall == false)
+        $re: Restaurant($id: id)
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( BusinessHallScore( restId == $id) )              
+    then
+        	System.out.println("Restaurant "+$re.getName()+" BH score set to 0.");
+    
+    	insert (new BusinessHallScore(0,$id));
+end
+
+rule "Wifi "
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($wifi: hasWifi, $wifi==true)
+	    $re: Restaurant($id: id, hasWifi==$wifi )
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( WifiScore( restId == $id) )              
+    then
+    	System.out.println("Restaurant "+$re.getName()+" has wifi.");
+    	insert (new WifiScore(1,$id));
+end
+
+rule "Set wifi score to 0 "
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($wifi: hasWifi, $wifi==false)
+        $re: Restaurant($id: id)
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( WifiScore( restId == $id) )              
+    then
+      System.out.println("Restaurant "+$re.getName()+" wifi score set to 0.");
+    
+    	insert (new WifiScore(0,$id));
+end
+
+rule "Parking "
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($park: hasCarPark, $park==true)
+	    $re: Restaurant($id: id, hasCarPark==$park   )
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( ParkingScore( restId == $id) )              
+    then
+    	System.out.println("Restaurant "+$re.getName()+" has parking.");
+    	insert (new ParkingScore(1,$id));
+end
+
+rule "Set parking score to 0 "
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($park: hasCarPark, $park==false)
+        $re: Restaurant($id: id)
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( ParkingScore( restId == $id) )              
+    then
+        	System.out.println("Restaurant "+$re.getName()+" Park score set to 0.");
+    
+    	insert (new ParkingScore(0,$id));
+end
+rule "Smoking "
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($smoking: hasSmokingPart, $smoking==true)
+	    $re: Restaurant($id: id, hasSmokingPart==$smoking  )
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( SmokingScore( restId == $id) )              
+    then
+    	System.out.println("Restaurant "+$re.getName()+" has smoking part.");
+    	insert (new SmokingScore(1,$id));
+end
+
+rule "Set smoking score to 0 "
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($smoking: hasSmokingPart, $smoking==false)
+        $re: Restaurant($id: id)
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( SmokingScore( restId == $id) )              
+    then
+        	System.out.println("Restaurant "+$re.getName()+" smok score set to 0.");
+    
+    	insert (new SmokingScore(0,$id));
+end
+
+rule "Playground "
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($play: hasPlayground, $play==true)
+	    $re: Restaurant($id: id, hasPlayground==$play   )
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( PlaygroundScore( restId == $id) )              
+    then
+    	System.out.println("Restaurant "+$re.getName()+" has playground.");
+    	insert (new PlaygroundScore(1, $id));
+end
+
+rule "Set playground score to 0 "
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($play: hasPlayground, $play == false)
+		$re: Restaurant($id: id)       
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( PlaygroundScore( restId == $id) )              
+    then
+        	System.out.println("Restaurant "+$re.getName()+" PG score set to 0.");
+    
+    	insert (new PlaygroundScore(0, $id));
 end

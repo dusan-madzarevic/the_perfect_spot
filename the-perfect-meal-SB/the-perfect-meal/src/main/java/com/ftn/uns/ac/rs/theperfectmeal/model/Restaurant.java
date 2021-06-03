@@ -78,6 +78,11 @@ public class Restaurant {
 	@Column(name="businessHall", nullable = false)
 	private boolean hasBusinessHall;
 	
+	@Column(name="petFriendly", nullable = false)
+	private boolean petFriendly;
+	
+	@Column(name="accessForDisabled", nullable = false)
+	private boolean accessForDisabled;
 	
 	public Restaurant() {
 		super();
@@ -87,10 +92,16 @@ public class Restaurant {
 
 
 
+	
+
+
+
+
 	public Restaurant(long id, String name, List<RestaurantGrade> grades, String address, Date dateOfLastGrade,
 			String webSite, Cousine cousine, Prices prices, String phoneNumber, String workingHours, boolean hasGarden,
 			boolean hasPlayground, boolean hasCarPark, boolean hasSmokingPart, byte[] image, MusicGenre musicGenre,
-			boolean liveMusic, boolean servingAlcohol, boolean hasWifi, boolean hasBusinessHall) {
+			boolean liveMusic, boolean servingAlcohol, boolean hasWifi, boolean hasBusinessHall, boolean petFriendly,
+			boolean accessForDisabled) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -112,7 +123,14 @@ public class Restaurant {
 		this.servingAlcohol = servingAlcohol;
 		this.hasWifi = hasWifi;
 		this.hasBusinessHall = hasBusinessHall;
+		this.petFriendly = petFriendly;
+		this.accessForDisabled = accessForDisabled;
 	}
+
+
+
+
+
 
 
 
@@ -313,6 +331,58 @@ public class Restaurant {
 
 	public void setHasBusinessHall(boolean hasBusinessHall) {
 		this.hasBusinessHall = hasBusinessHall;
+	}
+
+
+
+
+
+
+
+
+
+
+	public boolean isPetFriendly() {
+		return petFriendly;
+	}
+
+
+
+
+
+
+
+
+
+
+	public void setPetFriendly(boolean petFriendly) {
+		this.petFriendly = petFriendly;
+	}
+
+
+
+
+
+
+
+
+
+
+	public boolean isAccessForDisabled() {
+		return accessForDisabled;
+	}
+
+
+
+
+
+
+
+
+
+
+	public void setAccessForDisabled(boolean accessForDisabled) {
+		this.accessForDisabled = accessForDisabled;
 	}
 	
 	

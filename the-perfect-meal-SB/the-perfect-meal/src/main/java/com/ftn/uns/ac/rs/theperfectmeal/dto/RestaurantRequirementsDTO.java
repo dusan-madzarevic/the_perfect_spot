@@ -1,4 +1,4 @@
-package com.ftn.uns.ac.rs.theperfectmeal.dto;
+ package com.ftn.uns.ac.rs.theperfectmeal.dto;
 
 import java.util.Date;
 
