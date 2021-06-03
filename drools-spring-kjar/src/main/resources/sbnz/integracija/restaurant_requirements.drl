@@ -107,6 +107,7 @@ when
 then
 	System.out.println("Wifi and business hall set true.");
 	modify($req){setHasWifi(true);};
+	modify($req){setLiveMusic(false);};
 	modify($req){setHasBusinessHall(true);};
 
 end;

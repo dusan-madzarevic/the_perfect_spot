@@ -44,6 +44,24 @@ public class RestaurantRequirements {
 	
 
 	public RestaurantRequirements(double lon, double lat, Cousine cousine, boolean petFriendly, Occassion occassion,
+			Prices prices, boolean goingByCar, boolean accessForDisabled) {
+		super();
+		this.lon = lon;
+		this.lat = lat;
+		this.cousine = cousine;
+		this.petFriendly = petFriendly;
+		this.occassion = occassion;
+		this.prices = prices;
+		this.goingByCar = goingByCar;
+		this.accessForDisabled = accessForDisabled;
+	}
+
+
+
+
+
+
+	public RestaurantRequirements(double lon, double lat, Cousine cousine, boolean petFriendly, Occassion occassion,
 			Prices prices, boolean goingByCar, Date date, boolean accessForDisabled, boolean servingAlcohol,
 			boolean liveMusic, MusicGenre musicGenre, boolean hasBusinessHall, boolean hasWifi, boolean hasCarPark,
 			boolean hasSmokingPart, boolean hasPlayground, boolean hasGarden, boolean active) {

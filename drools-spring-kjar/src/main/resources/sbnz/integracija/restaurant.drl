@@ -2,9 +2,10 @@ package sbnz.integracija;
 
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirements;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
-import java.util.List;
+import com.ftn.uns.ac.rs.theperfectmeal.model.RestaurantGrade;
+import java.time.LocalDate;
 
-global List<Restaurant> foundRestaurant;
+global Restaurant foundRestaurant;
 
 declare RestaurantCompatibility
 	restId: long
@@ -76,12 +77,24 @@ declare GardenScore
 	restId: long
 end
 
+declare GradeScore
+	gradeScore: double
+	restId: long
+end
 
+declare MonthlyBonusScore
+	bonusScore: double
+	restId: long
+end
 
+declare MonthlyPenalScore
+	penalScore: double
+	restId: long
+end
 
 rule "Restaurant Compatibility"
 	agenda-group "restaurant"
-	salience ($cousine + $pet + $prices + $disabled + $alc + $liveMusic + $genre + $hall + $wifi + $parking + $smoking + $playground )
+	salience ($cousine + $pet + $prices + $disabled + $alc + $liveMusic + $genre + $hall + $wifi + $parking + $smoking + $playground + $grade + $bonus + $penal )
 	when
 		RestaurantCompatibility( $rest: restId)
 	    CousineScore(restId == $rest, $cousine: cousineScore)
@@ -96,15 +109,14 @@ rule "Restaurant Compatibility"
 		PricesScore(restId == $rest, $prices: pricesScore)
 		PetFriendlyScore(restId == $rest,$pet: petScore)
 	    AlcoholScore(restId == $rest, $alc: alcScore)
-		
-	
+	    MonthlyBonusScore(restId == $rest, $bonus: bonusScore)
+	    MonthlyPenalScore(restId == $rest, $penal: penalScore)
+	    GradeScore(restId == $rest, $grade: gradeScore)
 		$foundRestaurant: Restaurant(id == $rest)
-		
 	then
 		System.out.println("Restaurant with id " + $rest + " has been choosen.");
-		System.out.println("Final Score: " +  ($cousine + $pet + $prices + $disabled + $alc + $liveMusic + $genre + $hall + $wifi + $parking + $smoking + $playground )); 
-		foundRestaurant.add($foundRestaurant);
-
+		System.out.println("Final Score: " +  ($cousine + $pet + $prices + $disabled + $alc + $liveMusic + $genre + $hall + $wifi + $parking + $smoking + $playground + $grade + $bonus + $penal  )); 
+		drools.getKnowledgeRuntime().setGlobal("foundRestaurant", $foundRestaurant);
 end;
 
 
@@ -397,3 +409,84 @@ rule "Set playground score to 0 "
     
     	insert (new PlaygroundScore(0, $id));
 end
+
+rule "Stimulate restaurants with better grade"
+	agenda-group "restaurant"
+	salience 2
+	when
+		$re: Restaurant($id: id, $grades: grades) 
+		$grade: Double() from accumulate (
+			RestaurantGrade(
+				$val: value
+			) from $grades,
+			average($val)
+		)     
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( GradeScore( restId == $id) )          
+	then
+		System.out.println("Restaurant "+$re.getName()+" got grade score. Score: " + $grade);
+		insert (new GradeScore( $grade , $id));
+end;
+
+rule "Stimulate restaurants with better grade this month"
+	agenda-group "restaurant"
+	salience 2
+	when
+		$re: Restaurant($id: id, $grades: grades) 
+		$grade: Double($grade >= 4.5) from accumulate (
+			RestaurantGrade(
+				$val : value,
+				date.after(java.sql.Date.valueOf(LocalDate.now().minusMonths(1))) == true
+			) from $grades,
+			average($val)
+		)     
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( MonthlyBonusScore( restId == $id) )          
+	then
+		System.out.println("Restaurant "+$re.getName()+" got bonus score for last month. Score: 3" + $grade);
+		insert (new MonthlyBonusScore( 3 , $id));
+		insert (new  MonthlyPenalScore( 0 , $id));
+
+end;
+
+rule "Destimulate restaurants that have bad grades this month"
+	agenda-group "restaurant"
+	salience 2
+	when
+		$re: Restaurant($id: id, $grades: grades) 
+		$grade: Double($grade <= 2.5) from accumulate (
+			RestaurantGrade(
+				$val : value,
+				date.after(java.sql.Date.valueOf(LocalDate.now().minusMonths(1))) == true
+			) from $grades,
+			average($val)
+			
+		)     
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( MonthlyPenalScore( restId == $id) )          
+	then
+		System.out.println("Restaurant "+$re.getName()+" got penal score for last month. Score: -3");
+		System.out.println(java.sql.Date.valueOf(LocalDate.now().minusMonths(1)));
+		insert (new  MonthlyPenalScore( -3 , $id));
+		insert (new MonthlyBonusScore( 0 , $id));
+end;
+
+rule "No bonus-no penal for last month"
+	agenda-group "restaurant"
+	salience 2
+	when
+		$re: Restaurant($id: id, $grades: grades) 
+		$grade: Double( $grade >  2.5 && $grade < 4.5)
+		 from accumulate (
+			RestaurantGrade(
+				$val : value,
+				date.after(java.sql.Date.valueOf(LocalDate.now().minusMonths(1))) == true
+			) from $grades,
+			average($val))
+		
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( MonthlyPenalScore( restId == $id) )          
+	then
+		insert (new  MonthlyPenalScore( 0 , $id));
+		insert (new MonthlyBonusScore( 0 , $id));
+end;

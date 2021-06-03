@@ -44,13 +44,15 @@ public class RestaurantService {
 		kieSession.fireAllRules();
 		//Restaurant foundRest = new Restaurant();
 		//kieSession.setGlobal("foundRestaurant", foundRest);
-		 List<Restaurant> topRestaurants = new ArrayList<Restaurant>();
-		 kieSession.setGlobal("foundRestaurant", topRestaurants);
+		 //List<Restaurant> topRestaurants = new ArrayList<Restaurant>();
+		 //kieSession.setGlobal("foundRestaurant", topRestaurants);
 		kieSession.getAgenda().getAgendaGroup("restaurant").setFocus();
 		kieSession.fireAllRules();
-		System.out.println(topRestaurants.size());
-		for(Restaurant r: topRestaurants)
-			System.out.println(r.getName());
+		Restaurant top = (Restaurant) kieSession.getGlobal("foundRestaurant");
+		System.out.println(top.getName());
+//		System.out.println(topRestaurants.size());
+//		for(Restaurant r: topRestaurants)
+//			System.out.println(r.getName());
 		//Restaurant foundRestaurant = (Restaurant) kieSession.getGlobal("foundRestaurant");
 		//System.out.println(foundRestaurant.getName());
 //		
