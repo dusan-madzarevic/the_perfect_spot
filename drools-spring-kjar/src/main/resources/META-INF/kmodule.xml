@@ -4,4 +4,7 @@
    <kbase  name="rules" packages="sbnz.integracija">
 	     <ksession name="thePerfectMealSession"/>
 	</kbase>
+	<kbase name="eventKbase" eventProcessingMode="stream" packages="sbnz.events">
+        <ksession name="eventsSession"/>
+    </kbase>
 </kmodule>

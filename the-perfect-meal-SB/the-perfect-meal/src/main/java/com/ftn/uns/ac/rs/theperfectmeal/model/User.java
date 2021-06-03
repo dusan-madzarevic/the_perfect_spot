@@ -1,5 +1,6 @@
 package com.ftn.uns.ac.rs.theperfectmeal.model;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -47,6 +48,12 @@ public class User implements UserDetails {
 	
 	@Column(nullable = false)
 	private String password;
+	
+	@Column(name = "login_cooldown")
+	private boolean loginCooldown;
+	
+	@Column(name = "last_login_attempt")
+	private long lastLoginAttempt;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_authority", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"), inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
@@ -54,6 +61,7 @@ public class User implements UserDetails {
 	
 	public User() {
 		super();
+		this.loginCooldown = false;
 	}
 
 	public User(Long id,String firstName, String lastName, String email, String password) {
@@ -63,6 +71,7 @@ public class User implements UserDetails {
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
+		this.loginCooldown = false;
 	}
 
 	public User(String firstName, String lastName, String email, String password) {
@@ -70,6 +79,7 @@ public class User implements UserDetails {
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
+		this.loginCooldown = false;
 	}
 
 	public Long getId() {
@@ -150,6 +160,22 @@ public class User implements UserDetails {
 
 	public void setAuthorities(List<Authority> authorities) {
 		this.authorities = authorities;
+	}
+
+	public boolean isLoginCooldown() {
+		return loginCooldown;
+	}
+
+	public void setLoginCooldown(boolean loginCooldown) {
+		this.loginCooldown = loginCooldown;
+	}
+
+	public long getLastLoginAttempt() {
+		return lastLoginAttempt;
+	}
+
+	public void setLastLoginAttempt(long lastLoginAttempt) {
+		this.lastLoginAttempt = lastLoginAttempt;
 	}
 	
 	

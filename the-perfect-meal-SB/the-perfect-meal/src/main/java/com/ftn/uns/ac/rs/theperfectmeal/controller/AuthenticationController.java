@@ -1,7 +1,11 @@
 package com.ftn.uns.ac.rs.theperfectmeal.controller;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,12 +13,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ftn.uns.ac.rs.theperfectmeal.cep.WrongCredentialsEvent;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.UserDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.UserLoginDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.UserTokenStateDTO;
@@ -35,10 +43,13 @@ import com.ftn.uns.ac.rs.theperfectmeal.helper.UserMapper;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Authority;
 import com.ftn.uns.ac.rs.theperfectmeal.model.RegisteredUser;
 import com.ftn.uns.ac.rs.theperfectmeal.model.User;
+import com.ftn.uns.ac.rs.theperfectmeal.repository.UserRepository;
 import com.ftn.uns.ac.rs.theperfectmeal.security.TokenUtils;
 import com.ftn.uns.ac.rs.theperfectmeal.service.CustomUserDetailsService;
+import com.ftn.uns.ac.rs.theperfectmeal.service.KieStatefulSessionService;
 import com.ftn.uns.ac.rs.theperfectmeal.service.RegisteredUserService;
 import com.ftn.uns.ac.rs.theperfectmeal.service.UserService;
+import com.ftn.uns.ac.rs.theperfectmeal.util.LoginAlarm;
 
 
 
@@ -68,6 +79,12 @@ public class AuthenticationController {
 
 	@Autowired
 	private RegisteredUserMapper regUserMapper;
+	
+	@Autowired
+	KieStatefulSessionService kieSessionService;
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	// Prvi endpoint koji pogadja korisnik kada se loguje.
 	// Tada zna samo svoje korisnicko ime i lozinku i to prosledjuje na backend.
@@ -93,9 +110,47 @@ public class AuthenticationController {
 			String jwt = tokenUtils.generateToken(user.getEmail()); // prijavljujemo se na sistem sa email adresom
 			int expiresIn = tokenUtils.getExpiredIn();
 			// Vrati token kao odgovor na uspesnu autentifikaciju
-			return ResponseEntity.ok(new UserTokenStateDTO(jwt, expiresIn, email));
-		} catch (Exception e) {
-			e.printStackTrace();
+			
+			if(user.isLoginCooldown()) {
+				System.out.println("USAO U IF CD");
+				if(Instant.now().isAfter(Instant.ofEpochMilli(user.getLastLoginAttempt()).plus(5, ChronoUnit.MINUTES))) {
+					user.setLoginCooldown(false);
+					user.setLastLoginAttempt(Instant.now().toEpochMilli());
+					userRepository.save(user);
+					userRepository.save(user);
+					return ResponseEntity.ok(new UserTokenStateDTO(jwt, expiresIn, email));
+				}else {
+					System.out.println("LOGIN COOLDOWN ACTIVE!");
+					user.setLastLoginAttempt(Instant.now().toEpochMilli());
+					userRepository.save(user);
+					return null;
+				}
+			}else {
+				return ResponseEntity.ok(new UserTokenStateDTO(jwt, expiresIn, email));
+			}
+			
+			
+			
+		} catch (BadCredentialsException | InternalAuthenticationServiceException e) {
+			User user = userService.findByEmail(authenticationRequest.getEmail());
+			if(user != null) {
+				WrongCredentialsEvent event = new WrongCredentialsEvent(Date.from(Instant.now()), user);
+				KieSession kieSession = kieSessionService.getEventsSession();
+				kieSession.getAgenda().getAgendaGroup("wrong-credentials").setFocus();
+				LoginAlarm loginAlarm = new LoginAlarm();
+				kieSession.setGlobal("loginAlarm", loginAlarm);
+				kieSession.insert(event);
+				kieSession.fireAllRules();	
+				
+				
+				user.setLastLoginAttempt(Instant.now().toEpochMilli());
+				if(loginAlarm.getUserId() == user.getId())
+					user.setLoginCooldown(true);
+				userRepository.save(user);
+				
+			}
+			
+			
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 

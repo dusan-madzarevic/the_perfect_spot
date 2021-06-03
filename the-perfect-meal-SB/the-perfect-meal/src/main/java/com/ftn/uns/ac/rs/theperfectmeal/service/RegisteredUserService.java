@@ -34,10 +34,7 @@ public class RegisteredUserService implements ServiceInterface<RegisteredUser> {
 	public RegisteredUser findOne(Long id) {
 		return registeredUserRepository.findById(id).orElse(null);
 	}
-	
-	
-	
-	
+
 	
 	public RegisteredUser findOneByEmail(String email) {
 		return this.registeredUserRepository.findByEmail(email);

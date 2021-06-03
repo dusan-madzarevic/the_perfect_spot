@@ -1,5 +1,9 @@
 package com.ftn.uns.ac.rs.theperfectmeal.service;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,6 +41,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 			throw new UsernameNotFoundException(String.format("No user found with username '%s'.", email)); 
 		} else {
 			return user;
+			
 		}
 	}
 

@@ -30,6 +30,7 @@ public class RegisteredUserMapper implements MapperInterface<RegisteredUser, Use
 		r.setFirstName(dto.getFirstName());
 		r.setLastName(dto.getLastName());
 		
+		
 		return r;
 	}
 
