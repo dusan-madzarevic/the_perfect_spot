@@ -1,8 +1,21 @@
 package com.ftn.uns.ac.rs.theperfectmeal.service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.maven.shared.invoker.DefaultInvocationRequest;
+import org.apache.maven.shared.invoker.DefaultInvoker;
+import org.apache.maven.shared.invoker.InvocationRequest;
+import org.apache.maven.shared.invoker.Invoker;
+import org.apache.maven.shared.invoker.MavenInvocationException;
+import org.drools.template.ObjectDataCompiler;
 import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +27,8 @@ import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeRequirements;
 import com.ftn.uns.ac.rs.theperfectmeal.helper.RecipeMapper;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
 import com.ftn.uns.ac.rs.theperfectmeal.repository.RecipeRepository;
+import com.ftn.uns.ac.rs.theperfectmeal.templates.DifficultyCategoryTemplateModel;
+import com.ftn.uns.ac.rs.theperfectmeal.util.CookingSkill;
 
 @Service
 public class RecipeService {
@@ -27,7 +42,7 @@ public class RecipeService {
 	@Autowired
 	private RecipeMapper recipeMapper;
 
-	public MessageResponse process(RecipeRequirements requirements) {
+	public MessageResponse process(RecipeRequirements requirements) throws IOException, MavenInvocationException {
 
 		this.kieService.releaseRulesSession();
 		KieSession kieSession = kieService.getRulesSession();
@@ -44,9 +59,19 @@ public class RecipeService {
 		kieSession.getAgenda().getAgendaGroup("ingredients").setFocus();
 		kieSession.fireAllRules();
 		
+		List<DifficultyCategoryTemplateModel> templateModels = new ArrayList<DifficultyCategoryTemplateModel>();
+		
+		templateModels.add(new DifficultyCategoryTemplateModel(0, 200, CookingSkill.LOW));
+		templateModels.add(new DifficultyCategoryTemplateModel(200, 500, CookingSkill.MEDIUM));
+		templateModels.add(new DifficultyCategoryTemplateModel(500, 9999, CookingSkill.HIGH));
+		
+		createRecipeDifficultyRules(templateModels);
+		
 		kieSession.getAgenda().getAgendaGroup("recipe-difficulty").setFocus();
 		kieSession.fireAllRules();
 		
+
+
 		Recipe topRecipe = new Recipe();
 		kieSession.setGlobal("topRecipe",topRecipe);
 		kieSession.getAgenda().getAgendaGroup("recipe").setFocus();
@@ -120,6 +145,35 @@ public class RecipeService {
 			recipesDto.add(this.recipeMapper.toDto(r));
 		}
 		return recipesDto;
+	}
+	
+	private boolean createRecipeDifficultyRules(List<DifficultyCategoryTemplateModel> difficultyModels) throws IOException, MavenInvocationException {
+		
+		InputStream template = new FileInputStream(
+				"D:\\faks\\SBNZ\\drools-spring-kjar\\src\\main\\resources\\sbnz\\templates\\recipe_difficulty.drt");
+
+		// Compile template to generate new rules
+		
+		
+		ObjectDataCompiler compiler = new ObjectDataCompiler();
+		String drl = compiler.compile(difficultyModels, template);
+
+		// Save rule to drl file
+		FileOutputStream drlFile = new FileOutputStream(new File(
+				"D:\\faks\\SBNZ\\drools-spring-kjar\\src\\main\\resources\\sbnz\\integracija\\recipe_difficulty_temp.drl"));
+		drlFile.write(drl.getBytes());
+		drlFile.close();
+
+		// Update Rules project
+		InvocationRequest request = new DefaultInvocationRequest();
+		request.setPomFile(new File("D:\\faks\\SBNZ\\drools-spring-kjar\\pom.xml"));
+		request.setGoals(Arrays.asList("clean", "install"));
+
+		Invoker invoker = new DefaultInvoker();
+		invoker.setMavenHome(new File(System.getenv("M2_HOME")));
+		invoker.execute(request);
+		return true;
+		
 	}
 
 }

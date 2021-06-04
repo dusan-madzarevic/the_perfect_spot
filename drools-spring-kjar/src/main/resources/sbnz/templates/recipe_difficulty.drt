@@ -1,0 +1,45 @@
+template header
+minDifficultyScore
+maxDifficultyScore
+difficulty
+
+package sbnz.templates;
+
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeRequirements;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeCalcInfo;
+import com.ftn.uns.ac.rs.theperfectmeal.util.CookingSkill;
+
+
+query isInDifficultyRange(Long $low, Long $high, int $steps, int $prepTime, int $po)
+	eval(($steps * 40 + $prepTime * 0.05 + $po * 0.01) >= $low && ($steps * 40 + $prepTime * 0.05 + $po * 0.01) < $high)
+end
+
+rule "Overtime calc"
+	agenda-group "recipe-difficulty"
+	salience 5
+	when
+		$req: RecipeRequirements($s: skill)
+		$re: Recipe($id: recipeId, $prepTime: prepDuration)
+        $reCalc: RecipeCalcInfo($idCalc: recipeId, $idCalc == $id, prepOvertime == 0)
+        eval($prepTime >= 3600)
+    then
+    	System.out.println("RECIPE OVERTIME RULE FIRED: Recipe '"+$re.getRecipeName()+"' requires more than one hour of cooking.");
+        modify($reCalc){setPrepOvertime($prepTime - 3600);};
+end
+
+template "matches-interval-rules"
+
+rule "Recipe difficulty - @{difficulty}"
+	agenda-group "recipe-difficulty"
+	salience 1
+	when
+		$re: Recipe($id: recipeId, $prepTime: prepDuration, $steps: stepsNumber)
+        $reCalc: RecipeCalcInfo($idCalc: recipeId, $idCalc == $id, $po: prepOvertime)
+        isInDifficultyRange(Long.valueOf("@{minDifficultyScore}"),Long.valueOf("@{maxDifficultyScore}"), $steps, $prepTime, $po;)
+    then
+    	System.out.println("RECIPE DIFFICULTY RULE FIRED: Recipe '"+$re.getRecipeName()+"' is a @{difficulty} difficulty recipe.");
+        modify($reCalc){setRecipeDifficulty(CookingSkill.valueOf("@{difficulty}"));};
+end
+
+end template

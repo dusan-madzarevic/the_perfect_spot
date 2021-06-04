@@ -1,7 +1,5 @@
 package com.ftn.uns.ac.rs.theperfectmeal.tests.restaurants;
 
-
-
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -10,8 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
@@ -33,7 +31,7 @@ public class RestaurantRequirementsTest {
 	private Restaurant rest1;
 	private Restaurant rest2;
 	
-	@Before
+	@BeforeEach
 	public void setUp() throws ParseException {
 
 		KieServices ks = KieServices.Factory.get();
@@ -125,9 +123,6 @@ public class RestaurantRequirementsTest {
 		this.kieSession.insert(rest1);
 		RestaurantRequirements req = new RestaurantRequirements(0, 0, Cousine.ASIAN, false, Occassion.BUSINESS_MEAL, Prices.AFFORDABLE, false,false);
 		this.kieSession.insert(req);
-
-		
-		
 	
 		this.kieSession.getAgenda().getAgendaGroup("fill-restaurant-requirements").setFocus();
 		int firedRules = this.kieSession.fireAllRules();
