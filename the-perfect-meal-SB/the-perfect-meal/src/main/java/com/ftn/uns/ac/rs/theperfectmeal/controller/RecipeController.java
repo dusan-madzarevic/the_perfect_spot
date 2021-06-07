@@ -1,7 +1,9 @@
 package com.ftn.uns.ac.rs.theperfectmeal.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.maven.shared.invoker.MavenInvocationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,7 +27,7 @@ public class RecipeController {
 	
 	@CrossOrigin
 	@PostMapping("/process")
-	public ResponseEntity<MessageResponse> processRequirements(@RequestBody RecipeRequirements request){
+	public ResponseEntity<MessageResponse> processRequirements(@RequestBody RecipeRequirements request) throws IOException, MavenInvocationException{
 		
 		return ResponseEntity.ok().body(recipeService.process(request));
 		
