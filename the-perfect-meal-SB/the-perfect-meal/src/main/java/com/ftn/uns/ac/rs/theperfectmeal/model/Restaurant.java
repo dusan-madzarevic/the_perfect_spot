@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.lang.Math;
 
 @Entity
 public class Restaurant {
@@ -90,6 +91,7 @@ public class Restaurant {
 	@Column(name="lat", nullable = true)
 	private double lat;
 	
+	private double distance;
 	
 	public Restaurant() {
 		super();
@@ -395,5 +397,44 @@ public class Restaurant {
 	}
 	
 	
-	
+	public double getDistance(double lat1, double lon1) {
+		return this.haversine(lat1, lon1);
+	}
+
+
+
+
+
+
+
+
+
+
+	public void setDistance(double distance) {
+		this.distance = distance;
+	}
+
+
+
+
+
+
+
+
+
+
+	public double haversine(double lat, double lon)
+		{
+		// distance between latitudes and longitudes
+		double dLat = Math.toRadians(this.lat - lat);
+		double dLon = Math.toRadians(this.lon - lon);
+		
+		// convert to radians
+		
+		// apply formulae
+		double a = Math.pow(Math.sin(dLat / 2), 2) + Math.pow(Math.sin(dLon / 2), 2) * Math.cos(Math.toRadians(lat)) * Math.cos(Math.toRadians(this.lat));
+		double rad = 6371;
+		double c = 2 * Math.asin(Math.sqrt(a));
+		return rad * c;
+		}
 }

@@ -3,6 +3,7 @@ package sbnz.integracija;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirements;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
 import com.ftn.uns.ac.rs.theperfectmeal.model.RestaurantGrade;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Distance;
 import java.time.LocalDate;
 import java.lang.Math;
 
@@ -93,9 +94,19 @@ declare MonthlyPenalScore
 	restId: long
 end
 
+declare Distancee
+	distance: double
+	restId: long
+end
+
+declare DistanceScore
+	score: double
+	restId: long
+end
+
 rule "Restaurant Compatibility"
 	agenda-group "restaurant"
-	salience ($cousine + $pet + $prices + $disabled + $alc + $liveMusic + $genre + $hall + $wifi + $parking + $smoking + $playground + $grade + $bonus + $penal )
+	salience ($distance + $cousine + $pet + $prices + $disabled + $alc + $liveMusic + $genre + $hall + $wifi + $parking + $smoking + $playground + $grade + $bonus + $penal )
 	when
 		RestaurantCompatibility( $rest: restId)
 	    CousineScore(restId == $rest, $cousine: cousineScore)
@@ -113,10 +124,11 @@ rule "Restaurant Compatibility"
 	    MonthlyBonusScore(restId == $rest, $bonus: bonusScore)
 	    MonthlyPenalScore(restId == $rest, $penal: penalScore)
 	    GradeScore(restId == $rest, $grade: gradeScore)
+	    DistanceScore(restId == $rest, $distance: score)
 		$foundRestaurant: Restaurant(id == $rest)
 	then
 		System.out.println("Restaurant with id " + $rest + " has been choosen.");
-		System.out.println("Final Score: " +  ($cousine + $pet + $prices + $disabled + $alc + $liveMusic + $genre + $hall + $wifi + $parking + $smoking + $playground + $grade + $bonus + $penal  )); 
+		System.out.println("Final Score: " +  ($distance + $cousine + $pet + $prices + $disabled + $alc + $liveMusic + $genre + $hall + $wifi + $parking + $smoking + $playground + $grade + $bonus + $penal  )); 
 		drools.getKnowledgeRuntime().setGlobal("foundRestaurant", $foundRestaurant);
 end;
 
@@ -493,18 +505,41 @@ rule "No bonus-no penal for last month"
 end;
 
 rule "Calculation distance"
-agenda-group "distance"
+agenda-group "restaurant"
+salience 2
 when	
 	$req: RestaurantRequirements(distance == Distance.NONE, $lon2: lon, $lat2: lat)
 	$rest: Restaurant($id: id, $lon1: lon, $lat1: lat)
-	$com: RestaurantCompatibility(restId == $id) 
-	$dLat: java.lang.Math.toRadians($lat2 - $lat1)
-    $dLon: Math.toRadians($lon2 - $lon1)
-    $a: eval(  Math.pow(Math.sin($dLat / 2), 2) + Math.pow(Math.sin($dLon / 2), 2) * Math.cos(Math.toRadians($lat1)) * Math.cos(Math.toRadians($lat2)) )
-    $rad: eval(6371)
-    $c: eval(2 * Math.asin(Math.sqrt($a)))
-    $distance: eval($rad * $c)
+	
+	$com: RestaurantCompatibility(restId == $id)
+	 not ( Distancee( restId == $id) )  
 then	
-	System.out.println("Distance from restaurant "+$rest.getName()+" is "+ $distance +" km.");
-	modify($req){setDistance(Distance.FAR)};
+	System.out.println("Distance from restaurant "+$rest.getName()+" is "+ $rest.getDistance($lat2,$lon2) +" km.");
+	insert (new Distancee($rest.getDistance($lat2,$lon2), $id));
+end;
+
+rule "Scoring distance-FAR"
+agenda-group "restaurant"
+salience 2
+when	
+	Distancee(distance > 3755, $id: restId)
+	$rest: Restaurant($id: id)
+	$com: RestaurantCompatibility(restId == $id)
+	 not ( DistanceScore( restId == $id) )  
+then	
+	System.out.println("Distance from restaurant "+$rest.getName()+" is FAR.");
+	insert (new DistanceScore(-5, $id));
+end;
+
+rule "Scoring distance-NEAR"
+agenda-group "restaurant"
+salience 2
+when	
+	Distancee(distance < 3755, $id: restId)
+	$rest: Restaurant($id: id)
+	$com: RestaurantCompatibility(restId == $id)
+	 not ( DistanceScore( restId == $id) )  
+then	
+	System.out.println("Distance from restaurant "+$rest.getName()+" is NEAR.");
+	insert (new DistanceScore(5, $id));
 end;
