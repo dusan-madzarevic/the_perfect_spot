@@ -2,7 +2,7 @@
 
 import java.util.Date;
 
-import com.ftn.uns.ac.rs.theperfectmeal.model.Cousine;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Cuisine;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Occassion;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Prices;
 
@@ -11,7 +11,7 @@ public class RestaurantRequirementsDTO {
 
 	private double lon;
 	private double lat;
-    private Cousine cousine;
+    private Cuisine cuisine;
     private boolean petFriendly;
     private Occassion occassion;
     private Prices prices;
@@ -25,12 +25,12 @@ public class RestaurantRequirementsDTO {
 
 
 
-	public RestaurantRequirementsDTO(double lon, double lat, Cousine cousine, boolean petFriendly, Occassion occassion,
+	public RestaurantRequirementsDTO(double lon, double lat, Cuisine cuisine, boolean petFriendly, Occassion occassion,
 			Prices prices, boolean goingByCar, boolean accessForDisabled, Date date) {
 		super();
 		this.lon = lon;
 		this.lat = lat;
-		this.cousine = cousine;
+		this.cuisine = cuisine;
 		this.petFriendly = petFriendly;
 		this.occassion = occassion;
 		this.prices = prices;
@@ -57,13 +57,18 @@ public class RestaurantRequirementsDTO {
 		this.lat = lat;
 	}
 
-	public Cousine getCousine() {
-		return cousine;
+
+	public Cuisine getCuisine() {
+		return cuisine;
 	}
 
-	public void setCousine(Cousine cousine) {
-		this.cousine = cousine;
+
+
+	public void setCuisine(Cuisine cuisine) {
+		this.cuisine = cuisine;
 	}
+
+
 
 	public boolean isPetFriendly() {
 		return petFriendly;

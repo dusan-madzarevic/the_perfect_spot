@@ -94,7 +94,7 @@ declare MonthlyPenalScore
 	restId: long
 end
 
-declare Distancee
+declare CalculatedDistance
 	distance: double
 	restId: long
 end
@@ -178,7 +178,6 @@ rule "Set pet friendly score to 0"
         $com: RestaurantCompatibility(restId == $id) 
         not ( PetFriendlyScore( restId == $id) )              
     then
-    	System.out.println("Restaurant "+$re.getName()+" PF score set to 0.");
     	insert (new PetFriendlyScore(0,$id));
 end
 
@@ -216,9 +215,7 @@ rule "Set access for disabled score to 0"
         $re: Restaurant($id: id)
         $com: RestaurantCompatibility(restId == $id) 
         not ( DisabledScore( restId == $id) )              
-    then
-        System.out.println("Restaurant "+$re.getName()+" AFD score set to 0.");
-    
+    then  
     	insert (new DisabledScore(0,$id));
 end
 
@@ -244,8 +241,6 @@ rule "Set serving alcohol score to 0"
         $com: RestaurantCompatibility(restId == $id) 
         not ( AlcoholScore( restId == $id) )              
     then
-        	System.out.println("Restaurant "+$re.getName()+" alc score set to 0.");
-    
     	insert (new AlcoholScore(2,$id));
 end
 
@@ -271,8 +266,6 @@ rule "Set live music score to 0"
         $com: RestaurantCompatibility(restId == $id) 
         not ( LiveMusicScore( restId == $id) )              
     then
-        System.out.println("Restaurant "+$re.getName()+" live music score set to 0.");
-    
     	insert (new LiveMusicScore(0,$id));
 end
 
@@ -311,8 +304,6 @@ rule "Set bussines hall score to 0 "
         $com: RestaurantCompatibility(restId == $id) 
         not ( BusinessHallScore( restId == $id) )              
     then
-        	System.out.println("Restaurant "+$re.getName()+" BH score set to 0.");
-    
     	insert (new BusinessHallScore(0,$id));
 end
 
@@ -338,8 +329,6 @@ rule "Set wifi score to 0 "
         $com: RestaurantCompatibility(restId == $id) 
         not ( WifiScore( restId == $id) )              
     then
-      System.out.println("Restaurant "+$re.getName()+" wifi score set to 0.");
-    
     	insert (new WifiScore(0,$id));
 end
 
@@ -365,10 +354,9 @@ rule "Set parking score to 0 "
         $com: RestaurantCompatibility(restId == $id) 
         not ( ParkingScore( restId == $id) )              
     then
-        	System.out.println("Restaurant "+$re.getName()+" Park score set to 0.");
-    
     	insert (new ParkingScore(0,$id));
 end
+
 rule "Smoking "
 	agenda-group "restaurant"
 	salience 2
@@ -391,8 +379,6 @@ rule "Set smoking score to 0 "
         $com: RestaurantCompatibility(restId == $id) 
         not ( SmokingScore( restId == $id) )              
     then
-        	System.out.println("Restaurant "+$re.getName()+" smok score set to 0.");
-    
     	insert (new SmokingScore(0,$id));
 end
 
@@ -418,8 +404,6 @@ rule "Set playground score to 0 "
         $com: RestaurantCompatibility(restId == $id) 
         not ( PlaygroundScore( restId == $id) )              
     then
-        	System.out.println("Restaurant "+$re.getName()+" PG score set to 0.");
-    
     	insert (new PlaygroundScore(0, $id));
 end
 
@@ -479,7 +463,6 @@ rule "Destimulate restaurants that have bad grades this month"
         not ( MonthlyPenalScore( restId == $id) )          
 	then
 		System.out.println("Restaurant "+$re.getName()+" got penal score for last month. Score: -3");
-		System.out.println(java.sql.Date.valueOf(LocalDate.now().minusMonths(1)));
 		insert (new  MonthlyPenalScore( -3 , $id));
 		insert (new MonthlyBonusScore( 0 , $id));
 end;
@@ -506,24 +489,34 @@ end;
 
 rule "Calculation distance"
 agenda-group "restaurant"
-salience 2
+salience 5
 when	
-	$req: RestaurantRequirements(distance == Distance.NONE, $lon2: lon, $lat2: lat)
+	$req: RestaurantRequirements($lon2: lon, $lat2: lat, $lat2 != 0 && $lon2 != 0)
 	$rest: Restaurant($id: id, $lon1: lon, $lat1: lat)
-	
-	$com: RestaurantCompatibility(restId == $id)
-	 not ( Distancee( restId == $id) )  
+	$com: RestaurantCompatibility(restId == $id) 
 then	
 	System.out.println("Distance from restaurant "+$rest.getName()+" is "+ $rest.getDistance($lat2,$lon2) +" km.");
-	insert (new Distancee($rest.getDistance($lat2,$lon2), $id));
+	insert (new CalculatedDistance($rest.getDistance($lat2,$lon2), $id));
 end;
 
-rule "Scoring distance-FAR"
+rule "Distance is not important"
+agenda-group "restaurant"
+salience 5
+when	
+	$req: RestaurantRequirements($lon2: lon, $lat2: lat, $lat2 == 0 && $lon2 == 0)
+	$rest: Restaurant($id: id, $lon1: lon, $lat1: lat)
+	$com: RestaurantCompatibility(restId == $id) 
+then	
+	insert (new CalculatedDistance(-1, $id));
+end;
+
+rule "Scoring distance-FAR-on foot"
 agenda-group "restaurant"
 salience 2
 when	
-	Distancee(distance > 3755, $id: restId)
-	$rest: Restaurant($id: id)
+	CalculatedDistance(distance > 1.5, $idRes: restId)
+	$req: RestaurantRequirements(goingByCar == false)
+	$rest: Restaurant($id: id, $id == $idRes)
 	$com: RestaurantCompatibility(restId == $id)
 	 not ( DistanceScore( restId == $id) )  
 then	
@@ -531,15 +524,56 @@ then
 	insert (new DistanceScore(-5, $id));
 end;
 
-rule "Scoring distance-NEAR"
+rule "Scoring distance-NEAR-on foot"
 agenda-group "restaurant"
 salience 2
 when	
-	Distancee(distance < 3755, $id: restId)
-	$rest: Restaurant($id: id)
+	CalculatedDistance(distance < 1.5 && distance > 0, $idRes: restId)
+	$req: RestaurantRequirements(goingByCar == false)
+	$rest: Restaurant($id: id, $id == $idRes)
 	$com: RestaurantCompatibility(restId == $id)
 	 not ( DistanceScore( restId == $id) )  
 then	
 	System.out.println("Distance from restaurant "+$rest.getName()+" is NEAR.");
 	insert (new DistanceScore(5, $id));
+end;
+
+rule "Scoring distance-FAR-by car"
+agenda-group "restaurant"
+salience 2
+when	
+	CalculatedDistance(distance > 5.5, $idRes: restId)
+	$req: RestaurantRequirements(goingByCar == true)
+	$rest: Restaurant($id: id, $id == $idRes)
+	$com: RestaurantCompatibility(restId == $id)
+	 not ( DistanceScore( restId == $id) )  
+then	
+	System.out.println("Distance from restaurant "+$rest.getName()+" is FAR.");
+	insert (new DistanceScore(-5, $id));
+end;
+
+rule "Scoring distance-NEAR-by car"
+agenda-group "restaurant"
+salience 2
+when	
+	CalculatedDistance(distance < 5.5 && distance > 0, $idRes: restId)
+	$req: RestaurantRequirements(goingByCar == true)
+	$rest: Restaurant($id: id, $id == $idRes)
+	$com: RestaurantCompatibility(restId == $id)
+	 not ( DistanceScore( restId == $id) )  
+then	
+	System.out.println("Distance from restaurant "+$rest.getName()+" is NEAR.");
+	insert (new DistanceScore(5, $id));
+end;
+
+rule "Distance is not important score"
+agenda-group "restaurant"
+salience 2
+when	
+	CalculatedDistance(distance == -1, $idRes: restId)
+	$rest: Restaurant($id: id, $id == $idRes)
+	$com: RestaurantCompatibility(restId == $id)
+	 not ( DistanceScore( restId == $id) )  
+then	
+	insert (new DistanceScore(0, $id));
 end;

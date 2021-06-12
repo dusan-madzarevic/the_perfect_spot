@@ -8337,3 +8337,8 @@ a[data-toggle="collapse"] {
 
 .subscribe-form .form-control {
   background: #5356b1; }
+
+.navBarHeight{
+  min-height: 100% !important;
+  max-height: available;
+}

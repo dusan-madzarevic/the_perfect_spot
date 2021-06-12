@@ -1,6 +1,7 @@
 package com.ftn.uns.ac.rs.theperfectmeal.helper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,6 +36,20 @@ public class AdminMapper implements MapperInterface<Admin, UserDTO>{
 
 	@Override
 	public UserDTO toDto(Admin entity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public List<Admin> toEntityList(List<UserDTO> dtoList) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<UserDTO> toDtoList(List<Admin> entityList) {
 		// TODO Auto-generated method stub
 		return null;
 	}

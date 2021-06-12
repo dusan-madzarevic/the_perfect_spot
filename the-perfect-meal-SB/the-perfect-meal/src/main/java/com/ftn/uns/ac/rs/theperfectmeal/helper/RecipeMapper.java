@@ -1,5 +1,8 @@
 package com.ftn.uns.ac.rs.theperfectmeal.helper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeDTO;
@@ -27,6 +30,19 @@ public class RecipeMapper implements MapperInterface<Recipe, RecipeDTO> {
 		dto.setType(entity.getType());
 		
 		return dto;
+	}
+
+
+	@Override
+	public List<Recipe> toEntityList(List<RecipeDTO> dtoList) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<RecipeDTO> toDtoList(List<Recipe> entityList) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -1,5 +1,5 @@
 package com.ftn.uns.ac.rs.theperfectmeal.model;
 
-public enum Cousine {
+public enum Cuisine {
 	MEXICAN, CHINESE, ITALIAN, SERBIAN, ASIAN
 }

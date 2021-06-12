@@ -1,6 +1,7 @@
 package com.ftn.uns.ac.rs.theperfectmeal.helper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,6 +37,19 @@ public class RegisteredUserMapper implements MapperInterface<RegisteredUser, Use
 
 	@Override
 	public UserDTO toDto(RegisteredUser entity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<RegisteredUser> toEntityList(List<UserDTO> dtoList) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<UserDTO> toDtoList(List<RegisteredUser> entityList) {
 		// TODO Auto-generated method stub
 		return null;
 	}

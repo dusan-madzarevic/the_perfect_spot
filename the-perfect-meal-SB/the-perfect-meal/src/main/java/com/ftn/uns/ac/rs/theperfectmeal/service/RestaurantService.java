@@ -1,10 +1,14 @@
 package com.ftn.uns.ac.rs.theperfectmeal.service;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ftn.uns.ac.rs.theperfectmeal.dto.MessageResponse;
@@ -15,6 +19,8 @@ import com.ftn.uns.ac.rs.theperfectmeal.helper.RestaurantMapper;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
 import com.ftn.uns.ac.rs.theperfectmeal.repository.RestaurantRepository;
+import com.ftn.uns.ac.rs.theperfectmeal.util.PageImplMapper;
+import com.ftn.uns.ac.rs.theperfectmeal.util.PageImplementation;
 
 @Service
 public class RestaurantService {
@@ -90,5 +96,16 @@ public class RestaurantService {
 		}
 		return restorantsDTO;
 		
+	}
+	
+	public PageImplementation<RestaurantDTO> findAll(Pageable pageable){
+		
+		Page<Restaurant> restaurantsPage = this.restaurantRepository.findAll(pageable);
+		List<RestaurantDTO> dtoList = this.restaurantMapper.toDtoList(restaurantsPage.toList());
+		Page<RestaurantDTO> restaurantDtoPage = new PageImpl<RestaurantDTO>(dtoList,restaurantsPage.getPageable(), restaurantsPage.getTotalElements());
+		PageImplMapper<RestaurantDTO> pageMapper = new PageImplMapper<RestaurantDTO>();
+		PageImplementation<RestaurantDTO> pageImpl = pageMapper.toPageImpl(restaurantDtoPage);
+		
+		return pageImpl;
 	}
 }

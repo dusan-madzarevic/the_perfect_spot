@@ -25,8 +25,17 @@ public class Restaurant {
 	@Column(nullable = false)
 	private String name;
 	
+	@Column(nullable = false)
+	private String description;
+	
 	@OneToMany(cascade = {CascadeType.ALL}, mappedBy = "restaurant")
 	private List<RestaurantGrade> grades;
+	
+	@OneToMany(cascade = {CascadeType.ALL}, mappedBy = "restaurant")
+	private List<RestaurantTable> tables;
+	
+	@OneToMany(cascade = {CascadeType.ALL}, mappedBy = "restaurant")
+	private List<Reservation> reservations;
 	
 	@Column(nullable = false)
 	private String address;
@@ -38,7 +47,7 @@ public class Restaurant {
 	private String webSite;
 	
 	@Enumerated(value = EnumType.STRING)
-	private Cousine cousine;
+	private Cuisine cuisine;
 	
 	@Enumerated(value = EnumType.STRING)
 	private Prices prices;
@@ -46,8 +55,11 @@ public class Restaurant {
 	@Column(name="phone_number", nullable = false)
 	private String phoneNumber;
 	
-	@Column(name="working_hours", nullable = false)
-	private String workingHours;
+	@Column(name="working_hours_start", nullable = false)
+	private String workingHoursStart;
+	
+	@Column(name="working_hours_end", nullable = false)
+	private String workingHoursEnd;
 	
 	@Column(name="garden", nullable = false)
 	private boolean hasGarden;
@@ -91,23 +103,58 @@ public class Restaurant {
 	@Column(name="lat", nullable = true)
 	private double lat;
 	
-	private double distance;
 	
 	public Restaurant() {
 		super();
+	}
+
+	
+	
+
+
+	public Restaurant(long id, String name, String description, List<RestaurantGrade> grades,
+			List<RestaurantTable> tables, List<Reservation> reservations, String address, Date dateOfLastGrade,
+			String webSite, Cuisine cuisine, Prices prices, String phoneNumber, String workingHoursStart,String workingHoursEnd, boolean hasGarden,
+			boolean hasPlayground, boolean hasCarPark, boolean hasSmokingPart, byte[] image, MusicGenre musicGenre,
+			boolean liveMusic, boolean servingAlcohol, boolean hasWifi, boolean hasBusinessHall, boolean petFriendly,
+			boolean accessForDisabled, double lon, double lat) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.grades = grades;
+		this.tables = tables;
+		this.reservations = reservations;
+		this.address = address;
+		this.dateOfLastGrade = dateOfLastGrade;
+		this.webSite = webSite;
+		this.cuisine = cuisine;
+		this.prices = prices;
+		this.phoneNumber = phoneNumber;
+		this.workingHoursStart = workingHoursStart;
+		this.workingHoursEnd = workingHoursEnd;
+		this.hasGarden = hasGarden;
+		this.hasPlayground = hasPlayground;
+		this.hasCarPark = hasCarPark;
+		this.hasSmokingPart = hasSmokingPart;
+		this.image = image;
+		this.musicGenre = musicGenre;
+		this.liveMusic = liveMusic;
+		this.servingAlcohol = servingAlcohol;
+		this.hasWifi = hasWifi;
+		this.hasBusinessHall = hasBusinessHall;
+		this.petFriendly = petFriendly;
+		this.accessForDisabled = accessForDisabled;
+		this.lon = lon;
+		this.lat = lat;
 	}
 
 
 
 
 
-	
-
-
-
-
 	public Restaurant(long id, String name, List<RestaurantGrade> grades, String address, Date dateOfLastGrade,
-			String webSite, Cousine cousine, Prices prices, String phoneNumber, String workingHours, boolean hasGarden,
+			String webSite, Cuisine cousine, Prices prices, String phoneNumber, String workingHoursStart,String workingHoursEnd, boolean hasGarden,
 			boolean hasPlayground, boolean hasCarPark, boolean hasSmokingPart, byte[] image, MusicGenre musicGenre,
 			boolean liveMusic, boolean servingAlcohol, boolean hasWifi, boolean hasBusinessHall, boolean petFriendly,
 			boolean accessForDisabled, double lon, double lat) {
@@ -118,10 +165,11 @@ public class Restaurant {
 		this.address = address;
 		this.dateOfLastGrade = dateOfLastGrade;
 		this.webSite = webSite;
-		this.cousine = cousine;
+		this.cuisine = cousine;
 		this.prices = prices;
 		this.phoneNumber = phoneNumber;
-		this.workingHours = workingHours;
+		this.workingHoursStart = workingHoursStart;
+		this.workingHoursEnd = workingHoursEnd;
 		this.hasGarden = hasGarden;
 		this.hasPlayground = hasPlayground;
 		this.hasCarPark = hasCarPark;
@@ -141,7 +189,7 @@ public class Restaurant {
 
 
 	public Restaurant(long id, String name, List<RestaurantGrade> grades, String address, Date dateOfLastGrade,
-			String webSite, Cousine cousine, Prices prices, String phoneNumber, String workingHours, boolean hasGarden,
+			String webSite, Cuisine cousine, Prices prices, String phoneNumber, String workingHoursStart,String workingHoursEnd, boolean hasGarden,
 			boolean hasPlayground, boolean hasCarPark, boolean hasSmokingPart, byte[] image, MusicGenre musicGenre,
 			boolean liveMusic, boolean servingAlcohol, boolean hasWifi, boolean hasBusinessHall, boolean petFriendly,
 			boolean accessForDisabled) {
@@ -152,10 +200,11 @@ public class Restaurant {
 		this.address = address;
 		this.dateOfLastGrade = dateOfLastGrade;
 		this.webSite = webSite;
-		this.cousine = cousine;
+		this.cuisine = cousine;
 		this.prices = prices;
 		this.phoneNumber = phoneNumber;
-		this.workingHours = workingHours;
+		this.workingHoursStart = workingHoursStart;
+		this.workingHoursEnd = workingHoursEnd;
 		this.hasGarden = hasGarden;
 		this.hasPlayground = hasPlayground;
 		this.hasCarPark = hasCarPark;
@@ -212,13 +261,15 @@ public class Restaurant {
 		this.webSite = webSite;
 	}
 
-	public Cousine getCousine() {
-		return cousine;
+
+	public Cuisine getCuisine() {
+		return cuisine;
 	}
 
-	public void setCousine(Cousine cousine) {
-		this.cousine = cousine;
+	public void setCuisine(Cuisine cuisine) {
+		this.cuisine = cuisine;
 	}
+
 
 	public String getPhoneNumber() {
 		return phoneNumber;
@@ -228,13 +279,7 @@ public class Restaurant {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public String getWorkingHours() {
-		return workingHours;
-	}
 
-	public void setWorkingHours(String workingHours) {
-		this.workingHours = workingHours;
-	}
 
 	public boolean isHasGarden() {
 		return hasGarden;
@@ -396,32 +441,99 @@ public class Restaurant {
 		this.lat = lat;
 	}
 	
+
+	public List<RestaurantTable> getTables() {
+		return tables;
+	}
+
+	public void setTables(List<RestaurantTable> tables) {
+		this.tables = tables;
+	}
 	
+	
+
+	public List<Reservation> getReservations() {
+		return reservations;
+	}
+
+
+
+	public void setReservations(List<Reservation> reservations) {
+		this.reservations = reservations;
+	}
+
+
+
+	public String getDescription() {
+		return description;
+	}
+
+
+
+
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+
+
+
+
+	public String getWorkingHoursStart() {
+		return workingHoursStart;
+	}
+
+
+
+
+
+	public void setWorkingHoursStart(String workingHoursStart) {
+		this.workingHoursStart = workingHoursStart;
+	}
+
+
+
+
+
+	public String getWorkingHoursEnd() {
+		return workingHoursEnd;
+	}
+
+
+
+
+
+	public void setWorkingHoursEnd(String workingHoursEnd) {
+		this.workingHoursEnd = workingHoursEnd;
+	}
+
+
+
+
+
 	public double getDistance(double lat1, double lon1) {
+		//return this.distance(lat1, lon1, this.lat, this.lon);
 		return this.haversine(lat1, lon1);
 	}
+	
 
-
-
-
-
-
-
-
-
-
-	public void setDistance(double distance) {
-		this.distance = distance;
+	private double deg2rad(double deg) {
+		  return (deg * Math.PI / 180.0);
 	}
-
-
-
-
-
-
-
-
-
+	
+	private double rad2deg(double rad) {
+		  return (rad * 180.0 / Math.PI);
+	}
+		
+	private double distance(double lat1, double lon1, double lat2, double lon2) {
+		  double theta = lon1 - lon2;
+		  double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+		  dist = Math.acos(dist);
+		  dist = rad2deg(dist);
+		  dist = dist * 60 * 1.1515 * 1.609344;
+		  return (dist);
+		}
 
 	public double haversine(double lat, double lon)
 		{
@@ -429,9 +541,7 @@ public class Restaurant {
 		double dLat = Math.toRadians(this.lat - lat);
 		double dLon = Math.toRadians(this.lon - lon);
 		
-		// convert to radians
-		
-		// apply formulae
+		// apply formula
 		double a = Math.pow(Math.sin(dLat / 2), 2) + Math.pow(Math.sin(dLon / 2), 2) * Math.cos(Math.toRadians(lat)) * Math.cos(Math.toRadians(this.lat));
 		double rad = 6371;
 		double c = 2 * Math.asin(Math.sqrt(a));

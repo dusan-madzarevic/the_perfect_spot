@@ -1,0 +1,28 @@
+.cardHeight {
+  height: 320px;
+}
+.cardBackground{
+  background-color: white;
+}
+.bellBtn {
+  width: 13%;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  transform: scale(1.02);
+  transition: transform .5s ease;
+}
+
+p.excerpt { height:1.1em; overflow:hidden }
+
+.closed{
+  color: #c0392b;
+}
+
+.closedOpacity{
+  opacity: 0.7;
+}

@@ -16,7 +16,7 @@ import org.kie.api.runtime.KieSession;
 
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirements;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Authority;
-import com.ftn.uns.ac.rs.theperfectmeal.model.Cousine;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Cuisine;
 import com.ftn.uns.ac.rs.theperfectmeal.model.MusicGenre;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Occassion;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Prices;
@@ -46,7 +46,7 @@ public class RestaurantRequirementsTest {
 		
 		rest1.setAccessForDisabled(true);
 		rest1.setAddress("Kralja Petra I 23");
-		rest1.setCousine(Cousine.SERBIAN);
+		rest1.setCuisine(Cuisine.SERBIAN);
 		rest1.setDateOfLastGrade(sdf.parse("2021-05-23"));
 		rest1.setPrices(Prices.CHEAP);
 		rest1.setPhoneNumber("020294583");
@@ -60,7 +60,8 @@ public class RestaurantRequirementsTest {
 		rest1.setLiveMusic(true);
 		rest1.setId(1);
 		rest1.setWebSite("www.ddd.com");
-		rest1.setWorkingHours("5-6");
+		rest1.setWorkingHoursStart("7:00");
+		rest1.setWorkingHoursEnd("22:00");
 		rest1.setMusicGenre(MusicGenre.PIANO);
 		List<RestaurantGrade> grades1 = new ArrayList<RestaurantGrade>();
 		RestaurantGrade g1 = new RestaurantGrade();
@@ -91,7 +92,7 @@ public class RestaurantRequirementsTest {
 		rest2.setName("Velvet");
 		rest2.setAccessForDisabled(false);
 		rest2.setAddress("Kumanovska 43");
-		rest2.setCousine(Cousine.SERBIAN);
+		rest2.setCuisine(Cuisine.SERBIAN);
 		rest2.setDateOfLastGrade(sdf.parse("2021-05-29"));
 		rest2.setHasBusinessHall(false);
 		rest2.setHasCarPark(false);
@@ -104,7 +105,8 @@ public class RestaurantRequirementsTest {
 		rest2.setPhoneNumber("020294583");
 		rest2.setMusicGenre(MusicGenre.TAMBOURINES);
 		rest2.setWebSite("www.ddd.com");
-		rest2.setWorkingHours("5-6");
+		rest2.setWorkingHoursStart("7:00");
+		rest2.setWorkingHoursEnd("22:00");
 		List<RestaurantGrade> grades2 = new ArrayList<RestaurantGrade>();
 		RestaurantGrade g2 = new RestaurantGrade();
 		
@@ -121,7 +123,7 @@ public class RestaurantRequirementsTest {
 	public void setInputData() throws ParseException {	
 		this.kieSession.insert(rest2);
 		this.kieSession.insert(rest1);
-		RestaurantRequirements req = new RestaurantRequirements(0, 0, Cousine.ASIAN, false, Occassion.BUSINESS_MEAL, Prices.AFFORDABLE, false,false);
+		RestaurantRequirements req = new RestaurantRequirements(0, 0, Cuisine.ASIAN, false, Occassion.BUSINESS_MEAL, Prices.AFFORDABLE, false,false);
 		this.kieSession.insert(req);
 	
 		this.kieSession.getAgenda().getAgendaGroup("fill-restaurant-requirements").setFocus();

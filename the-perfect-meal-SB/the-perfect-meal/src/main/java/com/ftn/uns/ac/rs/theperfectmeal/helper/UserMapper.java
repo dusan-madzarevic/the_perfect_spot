@@ -53,4 +53,24 @@ public class UserMapper implements MapperInterface<User, UserDTO> {
         }
         return userDTOS;
     }
+
+
+
+	@Override
+	public List<User> toEntityList(List<UserDTO> dtoList) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public List<UserDTO> toDtoList(List<User> entityList) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+
 }

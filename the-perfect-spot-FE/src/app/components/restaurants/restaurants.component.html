@@ -2,8 +2,29 @@
   <div style="height: 100vh;">
     <app-navigation-bar></app-navigation-bar>
   </div>
-  <div class="m-3">
-    <h1>Restaurants</h1>
-  <app-restaurant-form *ngIf="isUser()"></app-restaurant-form>
+  <div class="m-3 w-100 shadow ">
+
+    <app-restaurant-form *ngIf="isUser()"></app-restaurant-form>
+    <div  id="restaurants" class="row col-md-12 w-100 pt-1 pl-auto pr-auto">
+      <app-restaurant class="col-md-4"
+                      *ngFor="let restaurant of getAllRestaurants()"
+                      [restaurant]="restaurant"
+      >
+      </app-restaurant>
+      <div id="noRestDiv" *ngIf="getAllRestaurants().length === 0">
+        <h4>There are no restaurants to show.</h4>
+      </div>
+    </div>
+    <div class="mb-5 mt-5" style=" background: #f39c12; bottom: 0;  width: fit-content;  display: flex;  justify-content: center;
+  margin: 0 auto;">
+      <mat-paginator
+        (page)="handlePageEvent($event)"
+        [length]="p_length"
+        [pageSize]="pageSize"
+        [showFirstLastButtons]="showFirstLastButtons"
+        [pageIndex]="pageIndex">
+      </mat-paginator>
+    </div>
   </div>
+
 </div>

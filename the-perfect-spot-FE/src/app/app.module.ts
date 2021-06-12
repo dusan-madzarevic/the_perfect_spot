@@ -15,6 +15,10 @@ import { RestaurantsComponent } from './components/restaurants/restaurants.compo
 import { RecipesComponent } from './components/recipes/recipes.component';
 import { RestaurantFormComponent } from './components/restaurant-form/restaurant-form.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { RestaurantComponent } from './components/restaurant/restaurant.component';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatIconModule} from '@angular/material/icon';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -27,13 +31,17 @@ import { ProfileComponent } from './components/profile/profile.component';
     RestaurantsComponent,
     RecipesComponent,
     RestaurantFormComponent,
-    ProfileComponent
+    ProfileComponent,
+    RestaurantComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatPaginatorModule,
+    BrowserAnimationsModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -2,7 +2,7 @@ package com.ftn.uns.ac.rs.theperfectmeal.dto;
 
 import java.util.Date;
 
-import com.ftn.uns.ac.rs.theperfectmeal.model.Cousine;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Cuisine;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Distance;
 import com.ftn.uns.ac.rs.theperfectmeal.model.MusicGenre;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Occassion;
@@ -12,7 +12,7 @@ public class RestaurantRequirements {
 	
 	private double lon;
 	private double lat;
-    private Cousine cousine;
+    private Cuisine cuisine;
     private boolean petFriendly;
     private Occassion occassion; 
     private Prices prices;
@@ -40,17 +40,12 @@ public class RestaurantRequirements {
 		super();
 	}
 
-	
-
-
-	
-
-	public RestaurantRequirements(double lon, double lat, Cousine cousine, boolean petFriendly, Occassion occassion,
+	public RestaurantRequirements(double lon, double lat, Cuisine cuisine, boolean petFriendly, Occassion occassion,
 			Prices prices, boolean goingByCar, boolean accessForDisabled) {
 		super();
 		this.lon = lon;
 		this.lat = lat;
-		this.cousine = cousine;
+		this.cuisine = cuisine;
 		this.petFriendly = petFriendly;
 		this.occassion = occassion;
 		this.prices = prices;
@@ -59,19 +54,14 @@ public class RestaurantRequirements {
 		//this.distance = Distance.NONE;
 	}
 
-
-
-
-
-
-	public RestaurantRequirements(double lon, double lat, Cousine cousine, boolean petFriendly, Occassion occassion,
+	public RestaurantRequirements(double lon, double lat, Cuisine cuisine, boolean petFriendly, Occassion occassion,
 			Prices prices, boolean goingByCar, Date date, boolean accessForDisabled, boolean servingAlcohol,
 			boolean liveMusic, MusicGenre musicGenre, boolean hasBusinessHall, boolean hasWifi, boolean hasCarPark,
 			boolean hasSmokingPart, boolean hasPlayground, boolean hasGarden, boolean active) {
 		super();
 		this.lon = lon;
 		this.lat = lat;
-		this.cousine = cousine;
+		this.cuisine = cuisine;
 		this.petFriendly = false;
 		this.occassion = occassion;
 		this.prices = prices;
@@ -90,17 +80,9 @@ public class RestaurantRequirements {
 		this.active = active;
 	}
 
-
-
-
-
-
 	public boolean isActive() {
 		return active;
 	}
-
-
-
 
 
 
@@ -110,17 +92,14 @@ public class RestaurantRequirements {
 
 
 
-
-
-
-	public RestaurantRequirements(double lon, double lat, Cousine cousine, boolean petFriendly, Occassion occassion,
+	public RestaurantRequirements(double lon, double lat, Cuisine cuisine, boolean petFriendly, Occassion occassion,
 			Prices prices, boolean goingByCar, Date date, boolean accessForDisabled, boolean servingAlcohol,
 			boolean liveMusic, MusicGenre musicGenre, boolean hasBusinessHall, boolean hasWifi, boolean hasCarPark,
 			boolean hasSmokingPart, boolean hasPlayground, boolean hasGarden) {
 		super();
 		this.lon = lon;
 		this.lat = lat;
-		this.cousine = cousine;
+		this.cuisine = cuisine;
 		this.petFriendly = petFriendly;
 		this.occassion = occassion;
 		this.prices = prices;
@@ -159,13 +138,25 @@ public class RestaurantRequirements {
 		this.lat = lat;
 	}
 
-	public Cousine getCousine() {
-		return cousine;
+	
+
+	public Cuisine getCuisine() {
+		return cuisine;
 	}
 
-	public void setCousine(Cousine cousine) {
-		this.cousine = cousine;
+
+
+
+
+
+	public void setCuisine(Cuisine cuisine) {
+		this.cuisine = cuisine;
 	}
+
+
+
+
+
 
 	public boolean isPetFriendly() {
 		return petFriendly;
