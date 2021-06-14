@@ -1,0 +1,26 @@
+template header
+minGrade
+maxGrade
+
+package sbnz.templates;
+
+import java.util.ArrayList;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
+import com.ftn.uns.ac.rs.theperfectmeal.model.RestaurantGrade;
+
+template "restaurants-in-grade-range"
+
+global ArrayList<Restaurant> restaurants;
+
+rule "Select restaurants with grade in range @{minGrade} - @{maxGrade} @{row.rowNumber}"
+no-loop true
+	when:
+		$rest: Restaurant()
+		Number(doubleValue >= @(minGrade}, doubleValue <= @{maxGrade}) from accumulate(
+		RestaurantGrade($g: value) from $rest.getGrades(),
+		average($g)
+		);
+	then:
+		restaurants.add($rest);
+end
+end template

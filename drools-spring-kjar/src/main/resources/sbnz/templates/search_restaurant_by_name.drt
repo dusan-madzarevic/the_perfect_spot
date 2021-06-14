@@ -1,0 +1,20 @@
+template header
+name
+
+package sbnz.templates;
+
+import java.util.ArrayList;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
+
+template "restaurants-by-name"
+
+global ArrayList<Restaurant> restaurants;
+
+rule "Select restaurants whose name contains word '@{name}'"
+no-loop true
+	when:
+		$rest: Restaurant($name: name, $name.contains(@{name}))
+	then:
+		restaurants.add($rest);
+end
+end template

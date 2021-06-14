@@ -8,10 +8,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.ftn.uns.ac.rs.theperfectmeal.dto.ChangePasswordDto;
+import com.ftn.uns.ac.rs.theperfectmeal.dto.UserNameDto;
 import com.ftn.uns.ac.rs.theperfectmeal.helper.ServiceInterface;
 import com.ftn.uns.ac.rs.theperfectmeal.model.User;
 import com.ftn.uns.ac.rs.theperfectmeal.repository.UserRepository;
-
 
 @Service
 public class UserService implements ServiceInterface<User> {
@@ -62,24 +63,30 @@ public class UserService implements ServiceInterface<User> {
 		return null;
 	}
 
-	/*
-	 * public User changePassword(ChangePasswordDto entity, Long id) throws
-	 * Exception { User user = userRepository.findById(id).orElse(null);
-	 * BCryptPasswordEncoder enc = new BCryptPasswordEncoder(); if (user != null) {
-	 * user.setPassword(enc.encode(entity.getNewPassword())); } else { throw new
-	 * Exception("User with given id doesn't exist."); }
-	 * 
-	 * return userRepository.save(user); }
-	 * 
-	 * public User update(UserNameDto entity, Long id) throws Exception { User user
-	 * = userRepository.findById(id).orElse(null);
-	 * 
-	 * if (user != null) { user.setFirstName(entity.getFirstName());
-	 * user.setLastName(entity.getLastName());
-	 * 
-	 * } else { throw new Exception("User with given id doesn't exist."); }
-	 * 
-	 * return userRepository.save(user); }
-	 */
+	public User changePassword(ChangePasswordDto entity, Long id) throws Exception {
+		User user = userRepository.findById(id).orElse(null);
+		BCryptPasswordEncoder enc = new BCryptPasswordEncoder();
+		if (user != null) {
+			user.setPassword(enc.encode(entity.getNewPassword()));
+		} else {
+			throw new Exception("User with given id doesn't exist.");
+		}
+
+		return userRepository.save(user);
+	}
+
+	public User update(UserNameDto entity, Long id) throws Exception {
+		User user = userRepository.findById(id).orElse(null);
+
+		if (user != null) {
+			user.setFirstName(entity.getFirstName());
+			user.setLastName(entity.getLastName());
+
+		} else {
+			throw new Exception("User with given id doesn't exist.");
+		}
+
+		return userRepository.save(user);
+	}
 
 }

@@ -1,0 +1,5 @@
+package sbnz.queries;
+
+query "getAllRestaurantsThatWorkNow"()
+	$rest: Restaurant(java.sql.Date.valueOf(LocalDate.now()).after(convertToHoursStart()), java.sql.Date.valueOf(LocalDate.now()).before(convertToHoursEnd()) )
+end;

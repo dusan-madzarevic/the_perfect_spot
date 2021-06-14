@@ -19,6 +19,8 @@ import { RestaurantComponent } from './components/restaurant/restaurant.componen
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatIconModule} from '@angular/material/icon';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     RecipesComponent,
     RestaurantFormComponent,
     ProfileComponent,
-    RestaurantComponent
+    RestaurantComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +44,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ReactiveFormsModule,
     MatPaginatorModule,
     BrowserAnimationsModule,
-    MatIconModule
+    MatIconModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

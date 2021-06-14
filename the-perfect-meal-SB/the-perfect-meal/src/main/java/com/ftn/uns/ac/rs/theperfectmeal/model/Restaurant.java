@@ -1,6 +1,8 @@
 package com.ftn.uns.ac.rs.theperfectmeal.model;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -547,4 +549,26 @@ public class Restaurant {
 		double c = 2 * Math.asin(Math.sqrt(a));
 		return rad * c;
 		}
+	
+	public Date convertToHoursStart() {
+		Date dt = new Date();
+		Calendar c = Calendar.getInstance(); 
+		c.setTime(dt);
+		c.add(Calendar.HOUR, Integer.valueOf(this.workingHoursStart.split(":")[0]));
+		dt = c.getTime();
+		return dt;
+	}
+	
+	public Date convertToHoursEnd() {
+		Date dt = new Date();
+		Calendar c = Calendar.getInstance(); 
+		c.setTime(dt);
+		if(this.workingHoursEnd.split(":")[0].equalsIgnoreCase("00") || this.workingHoursEnd.split(":")[0].equalsIgnoreCase("01")) {
+			c.add(Calendar.DATE, 1);
+			c.add(Calendar.HOUR, Integer.valueOf(this.workingHoursEnd.split(":")[0]) );
+		} else
+			c.add(Calendar.HOUR, Integer.valueOf(this.workingHoursEnd.split(":")[0]));
+		dt = c.getTime();
+		return dt;
+	}
 }

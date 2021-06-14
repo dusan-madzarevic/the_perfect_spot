@@ -1,0 +1,30 @@
+
+.Link {
+  text-decoration: none;
+  color: #6200EE;
+}
+.divWidth{
+  width: 100%;
+}
+.w-55{
+  width: 55%;
+}
+.circle {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.initials {
+  color         : #FFFFFF;
+  font-size     : 40px;
+  line-height   : 19px;
+  letter-spacing: 0.2625px;
+}
+.inputError {
+  color: crimson;
+}

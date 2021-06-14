@@ -1,4 +1,5 @@
 package com.ftn.uns.ac.rs.theperfectmeal.controller;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ftn.uns.ac.rs.theperfectmeal.dto.ChangePasswordDto;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.UserDTO;
+import com.ftn.uns.ac.rs.theperfectmeal.dto.UserNameDto;
 import com.ftn.uns.ac.rs.theperfectmeal.helper.UserMapper;
 import com.ftn.uns.ac.rs.theperfectmeal.model.User;
 import com.ftn.uns.ac.rs.theperfectmeal.service.UserService;
-
-
 
 @RestController
 @RequestMapping("/users")
@@ -117,39 +118,49 @@ public class UserController {
 		return new ResponseEntity<>(userMapper.toDto(user), HttpStatus.OK);
 	}
 
-	/*
-	 * @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
-	 * 
-	 * @RequestMapping(value = "/editProfile/{id}", method = RequestMethod.PUT,
-	 * consumes = MediaType.APPLICATION_JSON_VALUE) public ResponseEntity<UserDTO>
-	 * updateUserName(@RequestBody UserNameDto userDTO, @PathVariable Long id) {
-	 * User user; try { user = userService.update(userDTO, id); } catch (Exception
-	 * e) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
-	 * 
-	 * return new ResponseEntity<>(userMapper.toDto(user), HttpStatus.OK); }
-	 * 
-	 * @RequestMapping(value = "/changePassword", method = RequestMethod.PUT,
-	 * consumes = MediaType.APPLICATION_JSON_VALUE)
-	 * 
-	 * @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')") public
-	 * ResponseEntity<UserDTO> changePassword(@RequestBody ChangePasswordDto
-	 * passDTO) { User user; Long id; // getting user id from current user
-	 * Authentication data = SecurityContextHolder.getContext().getAuthentication();
-	 * String email = data.getName(); User currentUser =
-	 * this.userService.findByEmail(email); BCryptPasswordEncoder enc = new
-	 * BCryptPasswordEncoder(); if (currentUser != null) { boolean passMatch =
-	 * enc.matches(passDTO.getOldPassword(), currentUser.getPassword());
-	 * if(passMatch) { id = currentUser.getId(); try { user =
-	 * userService.changePassword(passDTO, id); } catch (Exception e) { return new
-	 * ResponseEntity<>(HttpStatus.BAD_REQUEST); }
-	 * 
-	 * return new ResponseEntity<>(userMapper.toDto(user), HttpStatus.OK); } else
-	 * return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-	 * 
-	 * } else { return new ResponseEntity<>(HttpStatus.NOT_FOUND); }
-	 * 
-	 * }
-	 */
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+
+	@RequestMapping(value = "/editProfile/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<UserDTO> updateUserName(@RequestBody UserNameDto userDTO, @PathVariable Long id) {
+		User user;
+		try {
+			user = userService.update(userDTO, id);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+
+		return new ResponseEntity<>(userMapper.toDto(user), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/changePassword", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+	public ResponseEntity<UserDTO> changePassword(@RequestBody ChangePasswordDto passDTO) {
+		User user;
+		Long id; // getting user id from current user
+		Authentication data = SecurityContextHolder.getContext().getAuthentication();
+		String email = data.getName();
+		User currentUser = this.userService.findByEmail(email);
+		BCryptPasswordEncoder enc = new BCryptPasswordEncoder();
+		if (currentUser != null) {
+			boolean passMatch = enc.matches(passDTO.getOldPassword(), currentUser.getPassword());
+			if (passMatch) {
+				id = currentUser.getId();
+				try {
+					user = userService.changePassword(passDTO, id);
+				} catch (Exception e) {
+					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				}
+
+				return new ResponseEntity<>(userMapper.toDto(user), HttpStatus.OK);
+			} else
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+
+	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	@PreAuthorize("hasRole('ROLE_ADMIN')")

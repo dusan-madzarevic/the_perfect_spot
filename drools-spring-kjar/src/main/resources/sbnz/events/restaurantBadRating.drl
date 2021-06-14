@@ -1,0 +1,32 @@
+package sbnz.events;
+
+import com.ftn.uns.ac.rs.theperfectmeal.cep.BadRestaurantRatingEvent;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
+import com.ftn.uns.ac.rs.theperfectmeal.util.BadRatingAlarm;
+
+declare BadRatingEvent
+    @role(event)
+    @expires(24h)
+    restaurant: Restaurant
+    reason: String
+end;
+
+global LoginAlarm loginAlarm;
+
+rule "The rating of restaurant fell bellow 2.3 "
+	agenda-group "bad-restaurant-rating"
+	when
+		$brre1: BadRestaurantRatingEvent($restId: grade.getRestaurant().getId(), $rest: grade.getRestaurant())
+		Number(doubleValue < 2.3) from accumulate (
+			$brre2: BadRestaurantRatingEvent(
+				grade.getRestaurant().getId() == $restId, $grade: grade.getValue() ),
+			average($grade)
+		)
+		not (BadRatingEvent(restaurant.getId() == $restId, 
+        	reason == "Rating fell bellow 2.3"))
+	then
+    	String reason = "Rating fell bellow 2.3";
+        insert(new BadRatingEvent($rest, reason));
+        System.out.println("Rating fell bellow 2.3 for restaurant " + $rest.getName());
+        badRatingAlarm.setRestaurantId($restId);
+end;
