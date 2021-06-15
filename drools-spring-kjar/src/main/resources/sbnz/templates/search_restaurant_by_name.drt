@@ -1,20 +1,22 @@
 template header
-name
+searchData
 
 package sbnz.templates;
 
 import java.util.ArrayList;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
 
-template "restaurants-by-name"
 
 global ArrayList<Restaurant> restaurants;
 
-rule "Select restaurants whose name contains word '@{name}'"
+template "restaurants-by-name"
+
+
+rule "Select restaurants whose name contains word [@{searchData}]_@{row.rowNumber}"
 no-loop true
-	when:
-		$rest: Restaurant($name: name, $name.contains(@{name}))
-	then:
-		restaurants.add($rest);
+when
+	$rest: Restaurant(name.toLowerCase().contains("@{searchData}"))
+then
+	restaurants.add($rest);
 end
 end template

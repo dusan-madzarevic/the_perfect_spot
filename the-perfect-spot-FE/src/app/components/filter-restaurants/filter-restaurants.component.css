@@ -1,0 +1,28 @@
+
+.parent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+::ng-deep .mat-select-value {
+  color: black !important;
+}
+::ng-deep .mat-form-field-label {
+  color: black !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline {
+  color: black !important;
+}
+::ng-deep .mat-form-field-appearance-outline {
+  color: black !important;
+}
+
+.stil {
+  background-color: #c0392b;
+  opacity: 95%;
+  margin-left: 50px;
+  margin-right: 30px;
+  border-radius: 25px;
+}

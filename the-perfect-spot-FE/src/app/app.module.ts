@@ -5,12 +5,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { NavigationBarComponent } from './components/navigation-bar/navigation-bar.component';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { RecipeFormComponent } from './components/recipe-form/recipe-form.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
-import { FormsModule } from '@angular/forms';
 import { RestaurantsComponent } from './components/restaurants/restaurants.component';
 import { RecipesComponent } from './components/recipes/recipes.component';
 import { RestaurantFormComponent } from './components/restaurant-form/restaurant-form.component';
@@ -21,6 +20,10 @@ import {MatIconModule} from '@angular/material/icon';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import {MatButtonModule} from '@angular/material/button';
+import { FilterRestaurantsComponent } from './components/filter-restaurants/filter-restaurants.component';
+import { NgSelectModule } from "@ng-select/ng-select";
+import {MatSelectModule} from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -35,7 +38,8 @@ import {MatButtonModule} from '@angular/material/button';
     RestaurantFormComponent,
     ProfileComponent,
     RestaurantComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    FilterRestaurantsComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +49,10 @@ import {MatButtonModule} from '@angular/material/button';
     MatPaginatorModule,
     BrowserAnimationsModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    FormsModule,
+    MatSelectModule,
+    MatInputModule
   ],
   providers: [],
   bootstrap: [AppComponent]

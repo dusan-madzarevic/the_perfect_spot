@@ -28,12 +28,15 @@ export class RestaurantComponent implements OnInit {
     const fadeTarget = document.getElementById(id);
     const start = new Date();
     const end = new Date();
+    const now = new Date();
+    const midnight = new Date();
+    midnight.setHours(23,59,59);
+    console.log(now<midnight)
     start.setHours(parseInt(this.restaurant.workingHours.split('-')[0].split(':')[0]),0,0);
-    if(this.restaurant.workingHours.split('-')[1] == '00:00' || this.restaurant.workingHours.split('-')[1] == '01:00'){
+    if( now <= midnight  &&  this.restaurant.workingHours.split('-')[1] == '00:00' || this.restaurant.workingHours.split('-')[1] == '01:00'){
       end.setDate(end.getDate() + 1);
     }
     end.setHours(parseInt(this.restaurant.workingHours.split('-')[1].split(';')[0]),0, 0);
-    const now = new Date();
 
     if (now.getTime() >= start.getTime() && now.getTime() <= end.getTime()){
       this.isWorking = true;

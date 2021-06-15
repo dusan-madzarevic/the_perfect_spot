@@ -1,5 +1,7 @@
 template header
-cuisineTypes
+
+prices
+cuisines
 
 package sbnz.templates;
 
@@ -8,13 +10,12 @@ import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
 
 global ArrayList<Restaurant> restaurants;
 
-template "restaurants-by-cuisine"
+template "restaurants-by-prices-and-cuisine"
 
-
-rule "Select restaurants with @{cuisineTypes} cuisine(s)"
+rule "Select restaurants with [@{prices}] prices and [@{cuisines}] cuisines"
 no-loop true
 	when
-		$rest: Restaurant(cuisine memberOf "@{cuisineTypes}")
+		$rest: Restaurant(prices memberOf "@{prices}", cuisine memberOf "@{cuisines}")
 		
 	then
 		restaurants.add($rest);

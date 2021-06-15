@@ -1,5 +1,5 @@
 
-<nav id="sidebar" class="navBarHeight h-100">
+<nav id="sidebar" class="navBarHeight h-100 ">
   <div class="pt-4 pl-4 pr-4 ">
     <img src="assets/images/plate.png" class=" mb-3 "  width="170" height="150" alt="The perfect meal">
     <ul class="list-unstyled components mb-5">
@@ -12,8 +12,14 @@
       <li >
         <a routerLink="/recipes"><span class="fas fa-book mr-3"></span> Recipes</a>
       </li>
+      <li *ngIf="isUser()">
+        <a routerLink="/restaurant-recommendation" class="ml-5">Recipes recommendation</a>
+      </li>
       <li>
         <a routerLink="/restaurants"><span class="fas fa-utensils mr-3"></span> Restaurants</a>
+      </li>
+      <li *ngIf="isUser()">
+        <a routerLink="/restaurant-recommendation" class="ml-5">Restaurant recommendation</a>
       </li>
 
       <li  *ngIf="isUser()" class="mt-5" style="cursor: pointer;">

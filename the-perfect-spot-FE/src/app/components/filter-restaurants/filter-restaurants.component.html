@@ -1,0 +1,33 @@
+<div class="w-100 mt-3 mb-3">
+  <form class=" shadow  stil parent example-form w-100" [formGroup]="filterForm" (ngSubmit)="filterRestaurants()" >
+    <mat-form-field appearance="outline" class="w-25 ml-5 mr-2 mt-2">
+      <mat-label>Select cuisine(s)</mat-label>
+      <mat-select id="cuisines" formControlName="cuisines" multiple >
+        <mat-option value="SERBIAN">SERBIAN</mat-option>
+        <mat-option value="ASIAN">ASIAN</mat-option>
+        <mat-option value="CHINESE">CHINESE</mat-option>
+        <mat-option value="MEXICAN">MEXICAN</mat-option>
+        <mat-option value="ITALIAN">ITALIAN</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-25 ml-2 mr-2 mt-2">
+      <mat-label>Select prices</mat-label>
+      <mat-select id="prices" formControlName="prices" multiple >
+        <mat-option value="EXPENSIVE">EXPENSIVE</mat-option>
+        <mat-option value="AFFORDABLE">AFFORDABLE</mat-option>
+        <mat-option value="CHEAP">CHEAP</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary" id="applyFilter" class="btn-block mr-4 ml-3" [disabled]="filterForm.controls['cuisines'].value == '' && filterForm.controls['prices'].value == '' " (click)="onApplyFilter()">Apply filter</button>
+
+    <mat-form-field appearance="fill" class="w-50 ml-2 mr-4 mt-2">
+      <mat-label>Search restaurants</mat-label>
+      <input matInput id="nameRes" class="mr-5" formControlName="restName" type="text" >
+    </mat-form-field>
+    <button mat-raised-button color="primary" id="search" class="btn-block mr-5" [disabled]="filterForm.controls['restName'].value == ''"  (click)="onApplyFilter()"><mat-icon>search</mat-icon></button>
+
+
+  </form>
+
+</div>
+
