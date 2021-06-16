@@ -3,21 +3,21 @@ package sbnz.integracija;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirements;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirementsDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
-import com.ftn.uns.ac.rs.theperfectmeal.model.Cousine;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Cuisine;
 import com.ftn.uns.ac.rs.theperfectmeal.model.MusicGenre;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Occassion;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Prices;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Distance;
 
-rule "Wanted cousine"
+rule "Wanted cuisine"
 agenda-group "fill-restaurant-requirements"
 salience 10
 lock-on-active true
 when
-	$req: RestaurantRequirements($cousine: cousine)
+	$req: RestaurantRequirements($cousine: cuisine)
 then
 	System.out.println("Cousine type added - " + $cousine);
-	modify($req){setCousine($cousine);};
+	modify($req){setCuisine($cousine);};
 
 end;
 

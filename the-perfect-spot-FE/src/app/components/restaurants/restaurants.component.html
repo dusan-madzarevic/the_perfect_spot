@@ -1,14 +1,12 @@
 <div class="wrapper d-flex align-items-stretch">
-  <div style="height: 147vh;">
+  <div style="height: 158vh;">
     <app-navigation-bar></app-navigation-bar>
   </div>
-  <div class="m-3 w-100 shadow ">
-    <div class="ml-3 ">
+  <div class="m-5 w-100 shadow round">
       <h1>Restaurants</h1>
-    </div>
     <div  id="restaurants" class="row col-md-12 w-100 pt-1 pl-auto pr-auto">
 
-      <app-filter-restaurants (filterEvent)="filterRestaurants($event)"></app-filter-restaurants>
+      <app-filter-restaurants (filterEvent)="filterRestaurants($event)" (searchEvent)="searchRestaurants($event)"></app-filter-restaurants>
       <app-restaurant class="col-md-4"
                       *ngFor="let restaurant of getAllRestaurants()"
                       [restaurant]="restaurant"

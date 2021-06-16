@@ -571,4 +571,12 @@ public class Restaurant {
 		dt = c.getTime();
 		return dt;
 	}
+	
+	public boolean isWorkingNow() {
+		boolean working = false;
+		Date now = new Date();
+		if(this.convertToHoursStart().before(now) && this.convertToHoursEnd().after(now) )
+			working = true;
+		return working;
+	}
 }

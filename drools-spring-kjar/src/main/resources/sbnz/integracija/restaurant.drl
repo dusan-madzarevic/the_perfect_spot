@@ -7,7 +7,6 @@ import com.ftn.uns.ac.rs.theperfectmeal.model.Distance;
 import java.time.LocalDate;
 import java.lang.Math;
 
-global Restaurant foundRestaurant;
 
 declare RestaurantCompatibility
 	restId: long
@@ -104,34 +103,6 @@ declare DistanceScore
 	restId: long
 end
 
-rule "Restaurant Compatibility"
-	agenda-group "restaurant"
-	salience ($distance + $cousine + $pet + $prices + $disabled + $alc + $liveMusic + $genre + $hall + $wifi + $parking + $smoking + $playground + $grade + $bonus + $penal )
-	when
-		RestaurantCompatibility( $rest: restId)
-	    CousineScore(restId == $rest, $cousine: cousineScore)
-		PlaygroundScore(restId == $rest, $playground: playgroundScore)
-		SmokingScore(restId == $rest, $smoking: smokingScore)
-		ParkingScore(restId == $rest, $parking: parkingScore)
-		WifiScore(restId == $rest, $wifi: wifiScore)
-		BusinessHallScore(restId == $rest, $hall: hallScore)
-		MusicGenreScore(restId == $rest, $genre: genreScore)
-		LiveMusicScore(restId == $rest, $liveMusic: liveMusicScore)
-		DisabledScore(restId == $rest, $disabled: disabledScore)
-		PricesScore(restId == $rest, $prices: pricesScore)
-		PetFriendlyScore(restId == $rest,$pet: petScore)
-	    AlcoholScore(restId == $rest, $alc: alcScore)
-	    MonthlyBonusScore(restId == $rest, $bonus: bonusScore)
-	    MonthlyPenalScore(restId == $rest, $penal: penalScore)
-	    GradeScore(restId == $rest, $grade: gradeScore)
-	    DistanceScore(restId == $rest, $distance: score)
-		$foundRestaurant: Restaurant(id == $rest)
-	then
-		System.out.println("Restaurant with id " + $rest + " has been choosen.");
-		System.out.println("Final Score: " +  ($distance + $cousine + $pet + $prices + $disabled + $alc + $liveMusic + $genre + $hall + $wifi + $parking + $smoking + $playground + $grade + $bonus + $penal  )); 
-		drools.getKnowledgeRuntime().setGlobal("foundRestaurant", $foundRestaurant);
-end;
-
 
 rule "Inserting restaurants"
 	agenda-group "restaurant"
@@ -146,8 +117,8 @@ rule "Restaurant cousine type"
 	agenda-group "restaurant"
 	salience 2
     when
-        $req: RestaurantRequirements($c: cousine)
-	    $re: Restaurant($id: id, $c == cousine)
+        $req: RestaurantRequirements($c: cuisine)
+	    $re: Restaurant($id: id, $c == cuisine)
         $com: RestaurantCompatibility(restId == $id) 
         not ( CousineScore( restId == $id) )              
     then
@@ -483,15 +454,38 @@ rule "No bonus-no penal for last month"
         $com: RestaurantCompatibility(restId == $id) 
         not ( MonthlyPenalScore( restId == $id) )          
 	then
+	    System.out.println("Restaurant "+$re.getName()+" got penal score 0-NO BONUS NO PENAL");
 		insert (new  MonthlyPenalScore( 0 , $id));
 		insert (new MonthlyBonusScore( 0 , $id));
 end;
+
+rule "No bonus-no penal for last month-not graded last month"
+	agenda-group "restaurant"
+	salience 2
+	when
+		$re: Restaurant($id: id, $grades: grades) 
+		Number( intValue == 0)
+		 from accumulate (
+			RestaurantGrade(
+				$val : value,
+				date.after(java.sql.Date.valueOf(LocalDate.now().minusMonths(1))) == true
+			) from $grades,
+			count($val))
+		
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( MonthlyPenalScore( restId == $id) )          
+	then
+	    System.out.println("Restaurant "+$re.getName()+" got penal score 0-Not graded last month");
+		insert (new  MonthlyPenalScore( 0 , $id));
+		insert (new MonthlyBonusScore( 0 , $id));
+end;
+
 
 rule "Calculation distance"
 agenda-group "restaurant"
 salience 5
 when	
-	$req: RestaurantRequirements($lon2: lon, $lat2: lat, $lat2 != 0 && $lon2 != 0)
+	$req: RestaurantRequirements($lon2: lon, $lat2: lat, $lat2 != 0.0 && $lon2 != 0.0)
 	$rest: Restaurant($id: id, $lon1: lon, $lat1: lat)
 	$com: RestaurantCompatibility(restId == $id) 
 then	

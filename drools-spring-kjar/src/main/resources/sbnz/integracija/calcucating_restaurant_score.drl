@@ -1,0 +1,41 @@
+package sbnz.integracija;
+
+import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
+
+import java.time.LocalDate;
+import java.lang.Math;
+
+global Restaurant foundRestaurant;
+
+declare FoundRestaurant
+end
+
+rule "Restaurant Compatibility"
+	agenda-group "calculating-restaurant-score"
+	salience ($bonus + $penal + $cousine + $playground+ $smoking + $parking + $wifi + $hall + $genre + $liveMusic+ $disabled + $prices+ $pet + $alc + $grade + $distance )
+	when
+		RestaurantCompatibility( $rest: restId)
+	    CousineScore(restId == $rest, $cousine: cousineScore) 
+		PlaygroundScore(restId == $rest, $playground: playgroundScore)
+		SmokingScore(restId == $rest, $smoking: smokingScore)
+		ParkingScore(restId == $rest, $parking: parkingScore)
+		WifiScore(restId == $rest, $wifi: wifiScore)
+		BusinessHallScore(restId == $rest, $hall: hallScore)
+		MusicGenreScore(restId == $rest, $genre: genreScore)
+		LiveMusicScore(restId == $rest, $liveMusic: liveMusicScore)
+		DisabledScore(restId == $rest, $disabled: disabledScore)
+		PricesScore(restId == $rest, $prices: pricesScore)
+		PetFriendlyScore(restId == $rest,$pet: petScore)
+	    AlcoholScore(restId == $rest, $alc: alcScore)
+	    GradeScore(restId == $rest, $grade: gradeScore)
+	    DistanceScore(restId == $rest, $distance: score)
+	    MonthlyPenalScore(restId == $rest, $penal: penalScore)
+	    MonthlyBonusScore(restId == $rest, $bonus: bonusScore)
+		$foundRestaurant: Restaurant(id == $rest)
+		not FoundRestaurant( )
+	then
+		System.out.println("Restaurant with id " + $rest + " has been choosen.");
+		System.out.println("Final Score: " +  ($bonus + $penal + $cousine +$playground + $smoking + $parking + $wifi + $hall + $genre + $liveMusic+ $disabled + $prices+ $pet + $alc + $grade + $distance  )); 
+		drools.getKnowledgeRuntime().setGlobal("foundRestaurant", $foundRestaurant);
+		insert(new FoundRestaurant());
+end;

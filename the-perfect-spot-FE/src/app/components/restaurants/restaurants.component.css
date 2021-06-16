@@ -8,6 +8,11 @@
   margin: 0 auto;
 }
 
-.round{
+h1 {
+  text-align: center;
+  margin-top: 10px;
+}
 
+.round{
+  border-radius: 25px;
 }

@@ -68,26 +68,15 @@ public class RestaurantService {
 
 		kieSession.getAgenda().getAgendaGroup("fill-restaurant-requirements").setFocus();
 		kieSession.fireAllRules();
-		// Restaurant foundRest = new Restaurant();
-		// kieSession.setGlobal("foundRestaurant", foundRest);
-		// List<Restaurant> topRestaurants = new ArrayList<Restaurant>();
-		// kieSession.setGlobal("foundRestaurant", topRestaurants);
+
 		kieSession.getAgenda().getAgendaGroup("restaurant").setFocus();
 		kieSession.fireAllRules();
+		
+		kieSession.getAgenda().getAgendaGroup("calculating-restaurant-score").setFocus();
+		int rules = kieSession.fireAllRules();
+		
 		Restaurant top = (Restaurant) kieSession.getGlobal("foundRestaurant");
-		System.out.println(top.getName());
-//		System.out.println(topRestaurants.size());
-//		for(Restaurant r: topRestaurants)
-//			System.out.println(r.getName());
-		// Restaurant foundRestaurant = (Restaurant)
-		// kieSession.getGlobal("foundRestaurant");
-		// System.out.println(foundRestaurant.getName());
-//		
-//		kieSession.getAgenda().getAgendaGroup("Calculating restaurant score").setFocus();
-//		kieSession.fireAllRules();
-//		
-//		Restaurant topRestaurant = (Restaurant) kieSession.getGlobal("topRestaurant");
-//		System.out.println(topRestaurant.getName());
+		System.out.println(rules);
 
 		kieSession.dispose();
 		return new MessageResponse("Successfully");
@@ -123,6 +112,7 @@ public class RestaurantService {
 
 		Page<Restaurant> restaurantsPage = this.restaurantRepository.findAll(pageable);
 		List<RestaurantDTO> dtoList = this.restaurantMapper.toDtoList(restaurantsPage.toList());
+		System.out.println(dtoList.get(0).isPetFriendly());
 		Page<RestaurantDTO> restaurantDtoPage = new PageImpl<RestaurantDTO>(dtoList, restaurantsPage.getPageable(),
 				restaurantsPage.getTotalElements());
 		PageImplMapper<RestaurantDTO> pageMapper = new PageImplMapper<RestaurantDTO>();
@@ -243,7 +233,7 @@ public class RestaurantService {
 		return pageImpl;
 	}
 
-	public PageImplementation<RestaurantDTO> filter(Pageable pageable, String restName) throws FileNotFoundException {
+	public PageImplementation<RestaurantDTO> search(Pageable pageable, String restName) throws FileNotFoundException {
 
 		List<Restaurant> result = new ArrayList<Restaurant>();
 
@@ -297,5 +287,11 @@ public class RestaurantService {
 		}
 
 		return kieHelper.build().newKieSession();
+	}
+
+	public RestaurantDTO getOne(long id) {
+		Restaurant r = this.restaurantRepository.findById(id).orElse(null);
+		RestaurantDTO dto = this.restaurantMapper.toDto(r);
+		return dto;
 	}
 }

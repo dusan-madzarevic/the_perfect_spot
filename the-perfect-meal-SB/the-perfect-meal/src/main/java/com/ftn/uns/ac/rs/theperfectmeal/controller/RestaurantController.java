@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,10 +33,10 @@ public class RestaurantController {
 	@Autowired
 	private RestaurantService restaurantService;
 	
-	@CrossOrigin
+    //@PreAuthorize("hasRole('ROLE_USER')")
 	@PostMapping("/process")
 	public ResponseEntity<MessageResponse> processRequirements(@RequestBody RestaurantRequirements request){
-		
+		System.out.println(request.getLat());
 		return ResponseEntity.ok().body(restaurantService.process(request));
 		
 	}
@@ -48,10 +49,23 @@ public class RestaurantController {
 		return new ResponseEntity<PageImplementation<RestaurantDTO>>(pageImpl, HttpStatus.OK);
 	}
 	
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<RestaurantDTO> getOne(@PathVariable long id){
+		RestaurantDTO dto = this.restaurantService.getOne(id);
+		return new ResponseEntity<RestaurantDTO>(dto, HttpStatus.OK);
+	}
+	
 	@GetMapping(value = "/filter/by-page/{pageNum}")
 	public ResponseEntity<PageImplementation<RestaurantDTO>> filter(@PathVariable int pageNum, @RequestParam("prices") ArrayList<Prices> prices,@RequestParam("cuisines") ArrayList<Cuisine> cuisines) throws FileNotFoundException{
 		Pageable pageable = PageRequest.of(pageNum, 6);
 		PageImplementation<RestaurantDTO> pageImpl = this.restaurantService.filter(pageable,cuisines,prices);
+		return new ResponseEntity<PageImplementation<RestaurantDTO>>(pageImpl, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/search/by-page/{pageNum}")
+	public ResponseEntity<PageImplementation<RestaurantDTO>> search(@PathVariable int pageNum, @RequestParam("restName") String restName ) throws FileNotFoundException{
+		Pageable pageable = PageRequest.of(pageNum, 6);
+		PageImplementation<RestaurantDTO> pageImpl = this.restaurantService.search(pageable,restName);
 		return new ResponseEntity<PageImplementation<RestaurantDTO>>(pageImpl, HttpStatus.OK);
 	}
 }

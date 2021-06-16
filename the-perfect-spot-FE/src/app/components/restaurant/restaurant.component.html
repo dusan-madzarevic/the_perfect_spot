@@ -5,19 +5,22 @@
       <img class="card-img-top" style="height: 150px;" [alt]="restaurant.name" *ngIf="restaurant.image !== null" [src]="'data:image/png;base64,'+restaurant.image.picByte">
       <div class="card-body">
         <div style="height: 50px;">
-          <h4 class="float-left" title="Title">{{restaurant.name}}</h4>
+          <h3 class="float-left" title="Title">{{restaurant.name}}</h3>
           <h4 class="float-left closed" *ngIf="!isWorking"><span class="ml-2"><mat-icon>lock</mat-icon><b>CLOSED</b></span></h4>
           <h5> <i class="fa fa-star float-right" aria-hidden="true" title="Average grade"> {{restaurant.grade.toFixed(2)}}</i></h5>
 
         </div>
-
+        <mat-star-rating *ngIf="isUser()" [restaurantName]="restaurant.name" [rating]="rating"  [starCount]=5 [color]="starColor" (ratingUpdated)="onRatingChanged($event)"></mat-star-rating>
         <p class="card-text excerpt" title="Description"><small>{{restaurant.description}}</small></p>
       </div>
     </div>
     <div class="pl-2">
       <h6 class="float-left"><span class="badge badge-light float-left" title="Working hours"><mat-icon>alarm</mat-icon> {{restaurant.workingHours}} </span></h6>
 
-      <h6 *ngIf="restaurant.hasWifi" class="float-right"><span class="badge badge-light float-left" title="Working hours"><mat-icon>wifi</mat-icon></span></h6>
+      <h6 *ngIf="restaurant.hasWifi" class="float-right mr-1"><span class="badge badge-light float-left" title="Has wifi"><mat-icon>wifi</mat-icon></span></h6>
+      <h6 *ngIf="restaurant.hasSmokingPart" class="float-right mr-1"><span class="badge badge-light float-left" title="Smoking allowed"><mat-icon>smoking_rooms</mat-icon></span></h6>
+      <h6 *ngIf="!restaurant.hasSmokingPart" class="float-right mr-1"><span class="badge badge-light float-left" title="Smoking free"><mat-icon>smoke_free</mat-icon></span></h6>
+      <h6 *ngIf="restaurant.petFriendly" class="float-right mr-1"><span class="badge badge-light float-left " title="Pet friendly"><i class="fas fa-paw"></i> </span></h6>
 
       <div class="float-right" *ngIf="isAdmin()">
         <button mat-mini-fab color="warn" class="mr-2 mb-2" (click)=deleteRestaurant(restaurant.id) style="outline: none">

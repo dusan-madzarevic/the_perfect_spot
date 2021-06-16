@@ -26,3 +26,6 @@
   margin-right: 30px;
   border-radius: 25px;
 }
+.mat-raised-button.mat-primary {
+  background-color: #60a3bc;
+}

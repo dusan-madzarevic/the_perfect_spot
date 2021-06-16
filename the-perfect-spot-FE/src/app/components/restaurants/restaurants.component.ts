@@ -15,6 +15,8 @@ export class RestaurantsComponent implements OnInit {
   private restaurants: Array<RestaurantModel> = [];
   public filterObj: FilterObject = { name: '', cuisines: [], prices: [] };
   public isFilter: boolean = false;
+  public isSearch: boolean = false;
+  public restName: String = '';
   p_length = 0;
   pageSize = 6;
   pageIndex = 0;
@@ -26,6 +28,7 @@ export class RestaurantsComponent implements OnInit {
   ngOnInit(): void {
     this.restService.getAll(this.pageIndex).subscribe((response) => {
       this.restaurants = response.content;
+      console.log(this.restaurants)
       this.p_length= response.totalElements;
     });
     console.log(this.restaurants)
@@ -59,5 +62,16 @@ export class RestaurantsComponent implements OnInit {
       }
       )
     }
+
+  searchRestaurants(data: String) {
+    this.isSearch = true;
+    this.pageIndex = 1;
+    this.restName = data;
+    this.restService.getByPageSearch(this.pageIndex, data).subscribe(
+      (res) => {
+        this.restaurants = res.content;
+      }
+    )
+  }
 
 }

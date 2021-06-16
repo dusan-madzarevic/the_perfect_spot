@@ -1,1 +1,63 @@
-<p>restaurant-form works!</p>
+<div class="wrapper d-flex align-items-stretch">
+  <div style="height: 147vh;">
+    <app-navigation-bar></app-navigation-bar>
+  </div>
+  <div class="m-3 w-100  ">
+    <div  id="restaurantForm" class="row col-md-12 w-100 pt-1 pl-auto pr-auto">
+      <form class=" shadow stil parent example-form w-100" [formGroup]="recommendForm" (ngSubmit)="recommendRestaurant()" >
+        <h1 class="mt-5">Please fill in your preferences</h1>
+        <mat-form-field appearance="outline" class="w-25 ml-5 mr-2 mt-3" >
+          <mat-label>Select cuisine</mat-label>
+          <mat-select id="cuisines" formControlName="cuisine" required >
+            <mat-option value="SERBIAN">SERBIAN</mat-option>
+            <mat-option value="ASIAN">ASIAN</mat-option>
+            <mat-option value="CHINESE">CHINESE</mat-option>
+            <mat-option value="MEXICAN">MEXICAN</mat-option>
+            <mat-option value="ITALIAN">ITALIAN</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-25 ml-5 mr-2 mt-2" >
+          <mat-label>Select occassion</mat-label>
+          <mat-select id="occassion" formControlName="occassion" required >
+            <mat-option value="CELEBRATION_DAY">Celebration by day</mat-option>
+            <mat-option value="CELEBRATION_NIGHT">Celebration by night</mat-option>
+            <mat-option value="FRIEND_MEAL">Meal with friends</mat-option>
+            <mat-option value="ROMANTIC_DATE">Romantic date</mat-option>
+            <mat-option value="FAMILY_WITH_KIDS">Family meal with kids</mat-option>
+            <mat-option value="BUSINESS_MEAL">Business meal</mat-option>
+            <mat-option value="ALONE">Alone</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-25 ml-5 mr-2 mt-2" >
+          <mat-label>Select prices</mat-label>
+          <mat-select id="prices" formControlName="prices" required  >
+            <mat-option value="EXPENSIVE">EXPENSIVE</mat-option>
+            <mat-option value="AFFORDABLE">AFFORDABLE</mat-option>
+            <mat-option value="CHEAP">CHEAP</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div class="w-25 ml-5 mr-2 mt-2">
+          <mat-checkbox formControlName="petFriendly" class="example-margin">Pet friendly</mat-checkbox>
+          <mat-checkbox formControlName="accessForDisabled" class="example-margin">Access for disabled</mat-checkbox>
+          <mat-checkbox formControlName="goingByCar" class="example-margin">Going by car</mat-checkbox>
+          <mat-checkbox formControlName="locationMatters" class="example-margin">Does it matter that the restaurant is close to you?</mat-checkbox>
+        </div>
+        <mat-form-field *ngIf="recommendForm.controls['locationMatters'].value === true"  appearance="fill" class="w-25 ml-5 mr-2 mt-2" >
+          <mat-label>Latittude</mat-label>
+          <input matInput type="number"  formControlName="lat" required>
+        </mat-form-field>
+        <mat-form-field *ngIf="recommendForm.controls['locationMatters'].value === true"  appearance="fill" class="w-25 ml-5 mr-2 mt-2" >
+          <mat-label>Longittude</mat-label>
+          <input matInput type="number" formControlName="lon" required>
+        </mat-form-field>
+        <div class="w-25 ml-5 mr-2 mt-2">
+          <button mat-raised-button color="primary" id="search" class="btn-block mb-3 " [disabled]="recommendForm.valid === false" ><mat-icon>search</mat-icon></button>
+
+        </div>
+
+
+      </form>
+
+  </div>
+
+</div>

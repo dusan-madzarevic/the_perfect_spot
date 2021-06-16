@@ -12,6 +12,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 export class FilterRestaurantsComponent implements OnInit {
 
   @Output() filterEvent: EventEmitter<FilterObject> = new EventEmitter<FilterObject>();
+  @Output() searchEvent: EventEmitter<String> = new EventEmitter<String>();
 
   availableCuisines = ['SERBIAN','ASIAN','CHINESE'];
   availablePrices = ['AFFORDABLE','EXPENSIVE','CHEAP'];
@@ -33,14 +34,15 @@ export class FilterRestaurantsComponent implements OnInit {
       cuisines: this.filterForm.controls['cuisines'].value,
       prices: this.filterForm.controls['prices'].value
     };
-    console.log(this.filterForm.controls['restName'].value)
     this.filterEvent.emit(filterParams);
   }
 
-  filterRestaurants(){
-    //this.culturalOfferService.getByPageFilter(1,this.expression,this.selectedTypes);
-    console.log(this.filterForm.controls['cuisines'].value)
+  onSearch(){
+
+    this.searchEvent.emit(this.filterForm.controls['restName'].value);
   }
+
+
 
 
 

@@ -24,6 +24,11 @@ import { FilterRestaurantsComponent } from './components/filter-restaurants/filt
 import { NgSelectModule } from "@ng-select/ng-select";
 import {MatSelectModule} from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import { StarRatingComponent } from './components/star-rating/star-rating.component';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import { RestaurantDetailsComponent } from './components/restaurant-details/restaurant-details.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +44,9 @@ import { MatInputModule } from '@angular/material/input';
     ProfileComponent,
     RestaurantComponent,
     ChangePasswordComponent,
-    FilterRestaurantsComponent
+    FilterRestaurantsComponent,
+    StarRatingComponent,
+    RestaurantDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +59,10 @@ import { MatInputModule } from '@angular/material/input';
     MatButtonModule,
     FormsModule,
     MatSelectModule,
-    MatInputModule
+    MatInputModule,
+    MatCheckboxModule,
+    MatSnackBarModule,
+    MatTooltipModule
   ],
   providers: [],
   bootstrap: [AppComponent]
