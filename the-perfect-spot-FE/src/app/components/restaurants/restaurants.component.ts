@@ -28,7 +28,6 @@ export class RestaurantsComponent implements OnInit {
   ngOnInit(): void {
     this.restService.getAll(this.pageIndex).subscribe((response) => {
       this.restaurants = response.content;
-      console.log(this.restaurants)
       this.p_length= response.totalElements;
     });
     console.log(this.restaurants)

@@ -4,6 +4,7 @@ import {StarRatingColor} from '../star-rating/star-rating.component';
 import {AuthService} from '../../services/auth.service';
 import {RestaurantService} from '../../services/restaurant.service';
 import {GradeService} from '../../services/grade.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-restaurant',
@@ -22,7 +23,7 @@ export class RestaurantComponent implements OnInit {
 
   constructor(private authService: AuthService,
               private gradeService: GradeService,
-              private restService: RestaurantService) { }
+              private route: Router) { }
 
   ngOnInit(): void {
     this.checkIfWorking();
@@ -35,7 +36,7 @@ export class RestaurantComponent implements OnInit {
   }
 
   showDetails() {
-
+    this.route.navigate(['/restaurant-details/'+this.restaurant.id]);
   }
 
   onRatingChanged(rating){

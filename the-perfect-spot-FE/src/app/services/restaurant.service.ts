@@ -57,7 +57,7 @@ export class RestaurantService {
     return this.http.post(environment.APP + this.recommendRestaurantAPI, preferences, {headers:headers});
   }
 
-  getOneById(id:number):Observable<any>{
+  getOneById(id:any):Observable<any>{
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization' : 'Bearer ' + localStorage.getItem("accessToken")

@@ -3,6 +3,8 @@ import {ImageModel} from './image.model';
 export interface RestaurantModel {
   id:number,
   name: string,
+  prices: string,
+  isServingAlcohol: boolean,
   grade: number,
   address: string,
   phone: string,

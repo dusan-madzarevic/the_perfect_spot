@@ -1,1 +1,98 @@
-<p>restaurant-details works!</p>
+<div class="wrapper d-flex align-items-stretch">
+  <div style="height: 158vh;">
+    <app-navigation-bar></app-navigation-bar>
+  </div>
+  <div class="m-3 w-100  ">
+<div class="stil parent">
+    <div class="box m-5 ">
+      <div  class="pt-3 pb-2">
+        <div class="image ">
+          <div class="trick">
+
+          </div>
+        </div>
+        <ul class="text">{{this.restaurant?.name}} </ul>
+        <div class="text1">
+          <mat-star-rating *ngIf="isUser()" [restaurantName]="restaurant?.name" [rating]="rating"  [starCount]=5 [color]="starColor" (ratingUpdated)="onRatingChanged($event)"></mat-star-rating>
+          <i class="fa fa-map-pin"></i>  {{this.restaurant?.address}}
+          <h6 ><span class="parent" title="Working hours"><mat-icon>alarm</mat-icon> {{restaurant?.workingHours}} </span></h6>
+          <h5> <i class="fa fa-star " aria-hidden="true" title="Average grade"> {{restaurant?.grade.toFixed(2)}}</i></h5>
+          <h4 class="closed" *ngIf="!isWorking"><span class="ml-2"><mat-icon>lock</mat-icon><b>CLOSED</b></span></h4>
+        </div>
+
+
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+          <div class="panel panel-default">
+
+            <div class=" " role="tabpanel" aria-labelledby="headingOne">
+              <div class="panel-body m-2">
+
+              </div>
+            </div>
+          </div>
+          <div class="panel panel-default">
+            <div class="panel-heading " role="tab" id="headingOne">
+              <h4 class="panel-title ">
+                  <div class="title  btn btn-danger btn-outline btn-lg">ABOUT US</div>
+              </h4>
+            </div>
+            <div class=" " role="tabpanel" aria-labelledby="headingOne">
+              <div class="panel-body m-2">
+                {{this.restaurant?.description}}
+              </div>
+            </div>
+          </div>
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingTwo">
+              <h4 class="panel-title">
+                  <div class="title btn btn-danger btn-outline btn-lg">WHAT WE ARE OFFERING</div>
+              </h4>
+            </div>
+            <div >
+              <div class="panel-body m-2">
+                <div class="panel-body m-2 ">
+                  <i class="fas fa-utensils " title="Cuisine"></i> {{this.restaurant?.cuisine}} CUISINE
+                </div>
+                <div class="panel-body m-2 ">
+                  <i class="fa fa-dollar-sign " title="Prices"></i> {{this.restaurant?.prices}} PRICES
+                </div>
+                <div class="panel-body m-2 " *ngIf="this.restaurant?.hasWifi">
+                  <i class="fa fa-wifi "  title="Free Wifi"></i> Free WiFi
+                </div>
+                <div class="panel-body m-2 " *ngIf="this.restaurant?.isServingAlcohol">
+                  <i class="fas fa-wine-bottle" title="Serving alcohol"></i> Serving alcohol
+                </div>
+                <div class="panel-body m-2 " *ngIf="this.restaurant?.hasWifi">
+                  <i class="fa fa-paw " ></i> We are pet firendly!
+                </div>
+                <div class="panel-body m-2 " *ngIf="this.restaurant?.hasSmokingPart">
+                  <i class="fa fa-smoking " ></i>  Smoking is allowed
+                </div>
+                <div class="panel-body m-2 " *ngIf="this.restaurant?.hasBusinessHall">
+                  <i class="fa fa-wifi" ></i> Hall for business meetings
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingThree">
+              <h4 class="panel-title">
+                  <div class="title btn btn-danger btn-outline btn-lg">CONTACT US</div>
+              </h4>
+            </div>
+            <div >
+              <div class="panel-body m-2">
+                <i class="fas fa-phone " >  {{this.restaurant?.phone}}</i>
+              </div>
+              <div class="panel-body m-2 ">
+                <i class="fab fa-internet-explorer " > <a href="http://{{ this.restaurant?.webSite}}" target="_blank"> {{this.restaurant?.webSite}}</a></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+  </div>
+</div>
+

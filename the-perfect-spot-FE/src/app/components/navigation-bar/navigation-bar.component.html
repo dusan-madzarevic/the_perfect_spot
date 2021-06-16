@@ -23,7 +23,7 @@
       </li>
 
       <li  *ngIf="isUser()" class="mt-5" style="cursor: pointer;">
-        <a (click)="logOut()" href="/login"><span class="fas fa-sign-out-alt mr-3 mt-5" ></span>Log out</a>
+        <a (click)="logOut()" ><span class="fas fa-sign-out-alt mr-3 mt-5" ></span>Log out</a>
       </li>
       <li  *ngIf="!isUser()" class="mt-5" style="cursor: pointer;">
         <a href="/login"><span class="fas fa-sign-out-alt mr-3 mt-5" ></span>Log in</a>
