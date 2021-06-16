@@ -24,14 +24,21 @@ rule "THE PERFECT Recipes"
 			$timeS: timeScore,
 			$aleS: alergyScore,
 			$gradeS: gradeScore,
-			$finalS: (alergyScore * 100 + typeScore * 10 + difficultyScore + servingScore + calorieScore + ingredientScore + timeScore + gradeScore)
+			$bGradeS: bonusGradeScore,
+			$finalS: (alergyScore * 100 + typeScore * 10 + difficultyScore + servingScore + calorieScore + ingredientScore + timeScore + gradeScore + bonusGradeScore * 10)
 			)
 		$topRecipe: Recipe(recipeId== $recId)
 	then
-		System.out.println("IngredientScore: "+$ingS);
+		System.out.println("TypeScore: "+$typeS);
 		System.out.println("DifficultyScore: "+$diffS);
+		System.out.println("ServingScore: "+$servingS);
 		System.out.println("CalorieScore: "+$calS);
-		System.out.println("Recipe "+$topRecipe.getRecipeName()+" with score "+ ($aleS * 100 + $typeS * 10 + $diffS + $servingS + $calS + $ingS + $timeS + $gradeS)+" is choosen.");
+		System.out.println("IngredientScore: "+$ingS);
+		System.out.println("TimeScore: "+$timeS);
+		System.out.println("AlergyScore: "+$aleS);
+		System.out.println("GradeScore: "+$gradeS);
+		System.out.println("BonusGradeScore: "+$bGradeS);
+		System.out.println("Recipe "+$topRecipe.getRecipeName()+" with score "+ ($aleS * 100 + $typeS * 10 + $diffS + $servingS + $calS + $ingS + $timeS + $gradeS + $bGradeS * 10)+" is choosen.");
 		topRecipes.add($topRecipe);
 	
 end

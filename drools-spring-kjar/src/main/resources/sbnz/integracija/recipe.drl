@@ -20,6 +20,7 @@ declare RecipeCompatibility
 	timeScore: double
 	alergyScore: double
 	gradeScore: double
+	bonusGradeScore: double
 end
 
 rule "Compatibility - creating recipe requirement object"
@@ -30,7 +31,7 @@ rule "Compatibility - creating recipe requirement object"
 		$re: Recipe($id: recipeId)
 	then
 		System.out.println("Scoring recipe with id: " + $id);
-		insert(new RecipeCompatibility($id, -1, 0, -1, 0, 0, 0, 0, 0));
+		insert(new RecipeCompatibility($id, -1, 0, -1, 0, 0, 0, 0, 0, 0));
 end;
 
 rule "Recipe type"
@@ -141,4 +142,61 @@ rule "Recipe difficulty - matches"
 	then
 		System.out.println("RECIPE DIFFICULTY RULE FIRED: Recipe '"+$re.getRecipeName()+"' matches desired difficulty.");
     	modify($com){setDifficultyScore(1);};
+end
+
+rule "Recipe grades"
+	agenda-group "recipe"
+	salience 1
+	when
+		$re: Recipe($id: recipeId, $grades: recipeGrades)
+		$grade: Double() from accumulate (
+			RecipeGrade(
+				$val: value
+			) from $grades,
+			average($val)
+		)
+		$com: RecipeCompatibility(recipeId == $id) @Watch(!gradeScore) 
+	then
+		System.out.println("RECIPE GRADE RULE FIRED: Recipe '"+$re.getRecipeName()+"' total average grade is: "+$grade+" .");
+		modify($com){setGradeScore($grade);};
+end
+
+rule "Recipe bonus grades - popular"
+	agenda-group "recipe"
+	salience 1
+	when
+		$re: Recipe($id: recipeId, $grades: recipeGrades)
+		$grade: Double($grade >= 4.5) from accumulate (
+			RecipeGrade(
+				$val : value,
+				date.after(java.sql.Date.valueOf(LocalDate.now().minusMonths(1))) == true
+			) from $grades,
+			average($val)
+			
+		)     
+		$com: RecipeCompatibility(recipeId == $id) @Watch(!bonusGradeScore) 
+	then
+		System.out.println("RECIPE BONUS GRADE RULE FIRED: Recipe '"+$re.getRecipeName()+"' had an average grade higher than 4.5 in the previous month.");
+		modify($com){setBonusGradeScore(1);};
+
+end
+
+rule "Recipe bonus grades - unpopular"
+	agenda-group "recipe"
+	salience 1
+	when
+		$re: Recipe($id: recipeId, $grades: recipeGrades)
+		$grade: Double($grade <= 2.5) from accumulate (
+			RecipeGrade(
+				$val : value,
+				date.after(java.sql.Date.valueOf(LocalDate.now().minusMonths(1))) == true
+			) from $grades,
+			average($val)	
+		)   
+		$com: RecipeCompatibility(recipeId == $id) @Watch(!bonusGradeScore)   
+	then
+		System.out.println("RECIPE BONUS GRADE RULE FIRED: Recipe '"+$re.getRecipeName()+"' had an average grade lower than 2.5 in the previous month.");
+		modify($com){setBonusGradeScore(-1);};
+	
+	
 end

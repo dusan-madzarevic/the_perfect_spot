@@ -1,6 +1,5 @@
 package com.ftn.uns.ac.rs.theperfectmeal.helper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;

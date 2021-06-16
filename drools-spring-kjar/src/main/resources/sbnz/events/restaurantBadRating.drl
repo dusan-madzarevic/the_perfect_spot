@@ -11,7 +11,7 @@ declare BadRatingEvent
     reason: String
 end;
 
-global LoginAlarm loginAlarm;
+global BadRatingAlarm badRatingAlarm;
 
 rule "The rating of restaurant fell bellow 2.3 "
 	agenda-group "bad-restaurant-rating"

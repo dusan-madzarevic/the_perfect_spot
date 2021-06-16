@@ -1,10 +1,7 @@
 package com.ftn.uns.ac.rs.theperfectmeal.controller;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +21,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.Errors;
@@ -40,8 +36,6 @@ import com.ftn.uns.ac.rs.theperfectmeal.dto.UserLoginDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.UserTokenStateDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.helper.RegisteredUserMapper;
 import com.ftn.uns.ac.rs.theperfectmeal.helper.UserMapper;
-import com.ftn.uns.ac.rs.theperfectmeal.model.Authority;
-import com.ftn.uns.ac.rs.theperfectmeal.model.RegisteredUser;
 import com.ftn.uns.ac.rs.theperfectmeal.model.User;
 import com.ftn.uns.ac.rs.theperfectmeal.repository.UserRepository;
 import com.ftn.uns.ac.rs.theperfectmeal.security.TokenUtils;
@@ -50,8 +44,6 @@ import com.ftn.uns.ac.rs.theperfectmeal.service.KieStatefulSessionService;
 import com.ftn.uns.ac.rs.theperfectmeal.service.RegisteredUserService;
 import com.ftn.uns.ac.rs.theperfectmeal.service.UserService;
 import com.ftn.uns.ac.rs.theperfectmeal.util.LoginAlarm;
-
-
 
 //Kontroler zaduzen za autentifikaciju korisnika
 @RestController

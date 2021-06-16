@@ -1,6 +1,5 @@
 package com.ftn.uns.ac.rs.theperfectmeal.cep;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 import org.kie.api.definition.type.Expires;

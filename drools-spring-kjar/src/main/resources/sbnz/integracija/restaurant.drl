@@ -142,16 +142,16 @@ rule "Inserting restaurants"
 		insert(new RestaurantCompatibility($id));
 end;
 
-rule "Restaurant cousine type"
+rule "Restaurant cuisine type"
 	agenda-group "restaurant"
 	salience 2
     when
-        $req: RestaurantRequirements($c: cousine)
-	    $re: Restaurant($id: id, $c == cousine)
+        $req: RestaurantRequirements($c: cuisine)
+	    $re: Restaurant($id: id, $c == cuisine)
         $com: RestaurantCompatibility(restId == $id) 
         not ( CousineScore( restId == $id) )              
     then
-    	System.out.println("Restaurant "+$re.getName()+" cousine is correct type");
+    	System.out.println("Restaurant "+$re.getName()+" cuisine is correct type");
     	insert (new CousineScore(2,$id) );
 end
 
