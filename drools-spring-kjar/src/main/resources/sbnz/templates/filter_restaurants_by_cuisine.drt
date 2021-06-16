@@ -1,21 +1,22 @@
 template header
-cuisineType
+cuisineTypes
 
 package sbnz.templates;
 
 import java.util.ArrayList;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
 
-template "restaurants-by-cuisine"
-
 global ArrayList<Restaurant> restaurants;
 
-rule "Select restaurants with @{cuisineType} cuisine"
+template "restaurants-by-cuisine"
+
+
+rule "Select restaurants with @{cuisineTypes} cuisine(s)"
 no-loop true
-	when:
-		$rest: Restaurant(cuisine == @{cuisineType})
+	when
+		$rest: Restaurant(cuisine memberOf "@{cuisineTypes}")
 		
-	then:
+	then
 		restaurants.add($rest);
 end
 end template

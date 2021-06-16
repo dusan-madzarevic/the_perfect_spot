@@ -32,6 +32,7 @@ export class LoginComponent implements OnInit {
     this.service.login(loginDto)
       .subscribe(response => {
         localStorage.setItem("accessToken", response.authenticationToken);
+        localStorage.setItem("email", response.email);
         this.route.navigate(['/']);
       }, error => {
         Swal.fire({

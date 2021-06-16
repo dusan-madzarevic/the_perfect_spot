@@ -12,7 +12,7 @@ import javax.persistence.MappedSuperclass;
 public abstract class Grade {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.TABLE)
 	@Column(name = "grade_id")
 	private Long id;
 	

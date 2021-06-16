@@ -1,0 +1,23 @@
+template header
+
+prices
+cuisines
+
+package sbnz.templates;
+
+import java.util.ArrayList;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
+
+global ArrayList<Restaurant> restaurants;
+
+template "restaurants-by-prices-and-cuisine"
+
+rule "Select restaurants with [@{prices}] prices and [@{cuisines}] cuisines"
+no-loop true
+	when
+		$rest: Restaurant(prices memberOf "@{prices}", cuisine memberOf "@{cuisines}")
+		
+	then
+		restaurants.add($rest);
+end
+end template

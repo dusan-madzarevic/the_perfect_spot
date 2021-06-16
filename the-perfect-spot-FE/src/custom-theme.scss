@@ -12,7 +12,8 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$the-perfect-spot-FE-primary: mat-palette($mat-indigo);
+$the-perfect-spot-FE-primary: mat-palette($mat-amber);
+$the-perfect-spot-FE-amber: mat-palette($mat-amber);
 $the-perfect-spot-FE-accent: mat-palette($mat-pink, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
@@ -25,6 +26,7 @@ $the-perfect-spot-FE-theme: mat-light-theme((
     primary: $the-perfect-spot-FE-primary,
     accent: $the-perfect-spot-FE-accent,
     warn: $the-perfect-spot-FE-warn,
+    amber: $the-perfect-spot-FE-amber,
   )
 ));
 

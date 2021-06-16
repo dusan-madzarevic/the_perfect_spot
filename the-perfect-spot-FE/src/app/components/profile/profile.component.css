@@ -28,3 +28,16 @@
 .inputError {
   color: crimson;
 }
+.mat-raised-button.mat-primary {
+  background-color: #60a3bc;
+}
+.mat-raised-button.mat-warn {
+  background-color: #c0392b;
+}
+.round{
+  border-radius: 25px;
+}
+
+h1 {
+  text-align: center;
+}

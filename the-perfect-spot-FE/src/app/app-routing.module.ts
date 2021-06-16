@@ -7,6 +7,8 @@ import {RestaurantsComponent} from './components/restaurants/restaurants.compone
 import {RecipesComponent} from './components/recipes/recipes.component';
 import {ProfileComponent} from './components/profile/profile.component';
 import {ChangePasswordComponent} from './components/change-password/change-password.component';
+import {RestaurantFormComponent} from './components/restaurant-form/restaurant-form.component';
+import {RestaurantDetailsComponent} from './components/restaurant-details/restaurant-details.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -16,7 +18,9 @@ const routes: Routes = [
   { path: 'restaurants', component:RestaurantsComponent},
   {path: 'recipes', component:RecipesComponent},
   {path: 'profile', component:ProfileComponent},
-  {path: 'change-password', component:ChangePasswordComponent}];
+  {path: 'change-password', component:ChangePasswordComponent},
+  {path:'restaurant-recommendation',component:RestaurantFormComponent},
+  {path:'restaurant-details/:id',component:RestaurantDetailsComponent}];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
