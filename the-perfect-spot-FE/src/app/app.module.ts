@@ -22,6 +22,7 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
 import {MatButtonModule} from '@angular/material/button';
 import { FilterRestaurantsComponent } from './components/filter-restaurants/filter-restaurants.component';
 import { NgSelectModule } from "@ng-select/ng-select";
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import {MatSelectModule} from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -29,6 +30,9 @@ import { StarRatingComponent } from './components/star-rating/star-rating.compon
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { RestaurantDetailsComponent } from './components/restaurant-details/restaurant-details.component';
+import { RecipeComponent } from './components/recipe/recipe.component';
+import { FilterRecipesComponent } from './components/filter-recipes/filter-recipes.component';
+import { RecipeDetailsComponent } from './components/recipe-details/recipe-details.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +50,10 @@ import { RestaurantDetailsComponent } from './components/restaurant-details/rest
     ChangePasswordComponent,
     FilterRestaurantsComponent,
     StarRatingComponent,
-    RestaurantDetailsComponent
+    RestaurantDetailsComponent,
+    RecipeComponent,
+    FilterRecipesComponent,
+    RecipeDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -62,7 +69,8 @@ import { RestaurantDetailsComponent } from './components/restaurant-details/rest
     MatInputModule,
     MatCheckboxModule,
     MatSnackBarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    NgMultiSelectDropDownModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

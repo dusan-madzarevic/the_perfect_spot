@@ -1,7 +1,9 @@
 package com.ftn.uns.ac.rs.theperfectmeal.helper;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeDTO;
@@ -10,6 +12,9 @@ import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
 @Component
 public class RecipeMapper implements MapperInterface<Recipe, RecipeDTO> {
 
+	@Autowired
+	private IngredientMapper ingredientMapper;
+	
 	@Override
 	public Recipe toEntity(RecipeDTO dto) {
 		// TODO Auto-generated method stub
@@ -21,12 +26,14 @@ public class RecipeMapper implements MapperInterface<Recipe, RecipeDTO> {
 		RecipeDTO dto = new RecipeDTO();
 		dto.setImage(entity.getImage());
 		dto.setPrepDuration(entity.getPrepDuration());
-		dto.setRecipeId(entity.getRecipeId());
-		dto.setRecipeName(entity.getRecipeName());
+		dto.setId(entity.getRecipeId());
+		dto.setName(entity.getRecipeName());
 		dto.setServings(entity.getServings());
 		dto.setStepsNumber(entity.getStepsNumber());
 		dto.setStepsText(entity.getStepsText());
-		dto.setType(entity.getType());
+		dto.setType(entity.getType().toString());
+		dto.setIngredients(ingredientMapper.toDtoListFromRecipe(entity.getIngredients()));
+		dto.setGrade(entity.getRecipeGrades().size() > 0 ? entity.getRecipeGrades().stream().mapToDouble(g -> g.getValue()).average().orElse(0) : 0);
 		
 		return dto;
 	}
@@ -40,8 +47,27 @@ public class RecipeMapper implements MapperInterface<Recipe, RecipeDTO> {
 
 	@Override
 	public List<RecipeDTO> toDtoList(List<Recipe> entityList) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		List<RecipeDTO> dtos = new ArrayList<RecipeDTO>();
+		
+		for (Recipe entity : entityList) {
+			
+			RecipeDTO dto = new RecipeDTO();
+			dto.setImage(entity.getImage());
+			dto.setPrepDuration(entity.getPrepDuration());
+			dto.setId(entity.getRecipeId());
+			dto.setName(entity.getRecipeName());
+			dto.setServings(entity.getServings());
+			dto.setStepsNumber(entity.getStepsNumber());
+			dto.setStepsText(entity.getStepsText());
+			dto.setType(entity.getType().toString());
+			dto.setIngredients(ingredientMapper.toDtoListFromRecipe(entity.getIngredients()));
+
+			dtos.add(dto);
+		}
+		
+		return dtos;
+		
 	}
 
 }

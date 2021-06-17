@@ -1,58 +1,52 @@
-    <div class="m-3 w-100">
-      <div class="ml-5 mr-5">
-        <form [formGroup]="recipeForm" (ngSubmit)="requestRecipes()">
-          <div class="form-group">
-            <label for="cookingSkill">Cooking skill</label>
-            <select [(ngModel)]="selectedSkill" class="form-control" name="cookingSkill" formControlName="cookingSkill" id="cookingSkill" rows="3" style="resize: none;" placeholder="Choose your cooking skill">
-              <option *ngFor="let c of cookingSkills" [ngValue]="c.id">{{c.level}}</option>
-            </select>
-            <div style="height: 20px;">
-              <div *ngIf="recipeForm.controls['cookingSkill'].invalid && recipeForm.controls['cookingSkill'].touched" class="ml-1 mt-0 mb-0">
-                <small *ngIf="recipeForm.controls['cookingSkill'].errors?.required" class="text-danger">*This field is mandatory</small>
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="lowCalorie">Low calorie count?</label>
-            <input type="checkbox" class="form-control" formControlName="lowCalorie" name="lowCalorie" id="lowCalorie">
-            <div style="height: 20px;">
-              <div *ngIf="recipeForm.controls['lowCalorie'].invalid && recipeForm.controls['lowCalorie'].touched" class="ml-1 mt-0 mb-0">
-                <small *ngIf="recipeForm.controls['lowCalorie'].errors?.required" class="text-danger">*This field is mandatory</small>
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="servings">Number of servings</label>
-            <input type="text" class="form-control" formControlName="servings" name="servings" id="servings">
-            <div style="height: 20px;">
-              <div *ngIf="recipeForm.controls['servings'].invalid && recipeForm.controls['servings'].touched" class="ml-1 mt-0 mb-0">
-                <small *ngIf="recipeForm.controls['servings'].errors?.required" class="text-danger">*This field is mandatory</small>
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="limitedTime">Do you have limited time?</label>
-            <input type="checkbox" class="form-control" formControlName="limitedTime" name="limitedTime" id="limitedTime">
-            <div style="height: 20px;">
-              <div *ngIf="recipeForm.controls['limitedTime'].invalid && recipeForm.controls['limitedTime'].touched" class="ml-1 mt-0 mb-0">
-                <small *ngIf="recipeForm.controls['limitedTime'].errors?.required" class="text-danger">*This field is mandatory</small>
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="type">Meal type</label>
-            <select [(ngModel)]="selectedType" class="form-control" name="type" formControlName="type" id="type" rows="3" style="resize: none;" placeholder="Choose the type of meal">
-              <option *ngFor="let t of types" [ngValue]="t.id">{{t.typeName}}</option>
-            </select>
-            <div style="height: 20px;">
-              <div *ngIf="recipeForm.controls['type'].invalid && recipeForm.controls['type'].touched" class="ml-1 mt-0 mb-0">
-                <small *ngIf="recipeForm.controls['type'].errors?.required" class="text-danger">*This field is mandatory</small>
-              </div>
-            </div>
-          </div>
-          <div class="text-right">
-            <button mat-raised-button color="warn" [disabled]="!recipeForm.valid">Submit request</button>
-          </div>
-        </form>
-      </div>
+<div class="wrapper d-flex align-items-stretch">
+  <div style="height: 147vh;">
+    <app-navigation-bar></app-navigation-bar>
+  </div>
+  <div class="m-3 w-100">
+    <div  id="recipeForm" class="row col-md-12 w-100 pt-1 pl-auto pr-auto">
+      <form class=" shadow stil parent example-form w-100" [formGroup]="recipeForm" (ngSubmit)="requestRecipes()" >
+        <h1 class="mt-5">Please fill in your preferences</h1>
+        <mat-form-field appearance="outline" class="w-25 ml-5 mr-2 mt-3" >
+          <mat-label>Cooking skill</mat-label>
+          <mat-select formControlName="cookingSkill" id="cookingSkill" required>
+            <mat-option value="0">Basic level</mat-option>
+            <mat-option value="1">Medium level</mat-option>
+            <mat-option value="2">High level</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-25 ml-5 mr-2 mt-3" >
+          <mat-label for="servings">Number of servings</mat-label>
+          <input matInput type="text" class="form-control" formControlName="servings" name="servings" id="servings">
+        </mat-form-field>
+        <div class="w-25 ml-5 mr-2 mt-2">
+          <mat-checkbox formControlName="lowCalorie" name="lowCalorie" id="lowCalorie">Low calorie count?</mat-checkbox>
+          <mat-checkbox formControlName="limitedTime" name="limitedTime" id="limitedTime">Do you have limited time?</mat-checkbox>
+        </div>
+        <div class="w-25 ml-5 mr-2 mt-2">
+
+          <ng-multiselect-dropdown [placeholder]="'Select ingredients'"
+  [settings]="dropdownSettings"
+  [data]="dropdownList"
+  [(ngModel)]="selectedItems"
+  [ngModelOptions]="{standalone: true}"
+  (onSelect)="onItemSelect($event)"
+  (onSelectAll)="onSelectAll($event)"
+>
+</ng-multiselect-dropdown>
+
+        </div> 
+        <mat-form-field appearance="outline" class="w-25 ml-5 mr-2 mt-3" >
+          <mat-label for="type">Meal type</mat-label>
+          <mat-select name="type" formControlName="type" id="type" rows="3" style="resize: none;" placeholder="Choose the type of meal">
+            <mat-option value="0">Appetizer</mat-option>
+            <mat-option value="1">Main dish</mat-option>
+            <mat-option value="2">Dessert</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div class="text-right">
+          <button mat-raised-button color="warn" [disabled]="!recipeForm.valid">Submit request</button>
+        </div>
+      </form>
     </div>
+  </div>
+</div>

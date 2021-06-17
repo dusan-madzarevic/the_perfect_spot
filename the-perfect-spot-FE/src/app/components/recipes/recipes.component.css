@@ -1,0 +1,23 @@
+::ng-deep .mat-paginator {
+    background-color: #f39c12;
+    border-radius: 25px;
+    bottom: 0;
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+  }
+  
+  h1 {
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .round{
+    border-radius: 25px;
+  }
+  
+  .stil{
+    background-color: white;
+  }
+  

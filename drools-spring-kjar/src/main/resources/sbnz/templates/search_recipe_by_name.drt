@@ -1,0 +1,22 @@
+template header
+searchData
+
+package sbnz.templates;
+
+import java.util.ArrayList;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
+
+
+global ArrayList<Recipe> recipes;
+
+template "recipes-by-name"
+
+
+rule "Select recipes whose name contains word [@{searchData}]_@{row.rowNumber}"
+no-loop true
+when
+	$rec: Recipe(recipeName.toLowerCase().contains("@{searchData}"))
+then
+	recipes.add($rec);
+end
+end template

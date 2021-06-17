@@ -1,0 +1,30 @@
+<div class="cardHeight cardBorder cardBackground mt-4">
+    <div class="card shadow h-25 clickable {{workingClass}}" id="card{{recipe.id}}">
+      <div (click)="showDetails()">
+        <img class="card-img-top" style="height: 150px;" [alt]="recipe.name" *ngIf="recipe.image === null" src="https://c.ndtvimg.com/2020-01/hqocblio_restaurant-_625x300_14_January_20.jpg">
+        <img class="card-img-top" style="height: 150px;" [alt]="recipe.name" *ngIf="recipe.image !== null" [src]="'data:image/png;base64,'+recipe.image.picByte">
+        <div class="card-body">
+          <div style="height: 50px;">
+            <h3 class="float-left" title="Title">{{recipe.name}}</h3>
+            <h5> <i class="fa fa-star float-right" aria-hidden="true" title="Average grade"> {{recipe.grade.toFixed(2)}}</i></h5>
+  
+          </div>
+          <mat-star-rating *ngIf="isUser()" [recipeName]="recipe.name" [rating]="rating"  [starCount]=5 [color]="starColor" (ratingUpdated)="onRatingChanged($event)"></mat-star-rating>
+        </div>
+      </div>
+      <div class="pl-2">
+    
+        <div class="float-right" *ngIf="isAdmin()">
+          <button mat-mini-fab color="warn" class="mr-2 mb-2" (click)=deleteRecipe(recipe.id) style="outline: none">
+            <mat-icon>alarm</mat-icon>
+          </button>
+        </div>
+        <div class="float-right" *ngIf="isAdmin()">
+          <button mat-mini-fab color="primary" class="mr-2 mb-2" (click)=edit(recipe) style="outline: none">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
