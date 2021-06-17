@@ -4,6 +4,7 @@ import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeRequirements;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeCalcInfo;
 import com.ftn.uns.ac.rs.theperfectmeal.util.CaloricType;
+import accumulate com.ftn.uns.ac.rs.theperfectmeal.drools_config.acc.CalorieAccumulateFunction sumCalories;
 
 import java.util.List;
 
@@ -16,11 +17,8 @@ rule "Caloric category - HIGH_CAL"
         $re: Recipe($id: recipeId, $recIng: ingredients)
         $reCalc: RecipeCalcInfo($idCalc: recipeId, $idCalc == $id)
         Number(intValue > 400) from accumulate(
-        	RecipeIngredient($t:this, $recIngId: ingredient.getIngredientId(),$calVal: ingredient.getCaloricValue(),$amount: amount) from $recIng,
-        	init(double cals = 0;),
-        	action(cals = cals + (($calVal * $amount)/100);),
-        	reverse(cals = cals - (($calVal * $amount)/100);),
-        	result(cals)
+        	$i: RecipeIngredient($t:this, $recIngId: ingredient.getIngredientId(),$calVal: ingredient.getCaloricValue(),$amount: amount) from $recIng,
+			sumCalories($i)
         )
     then
     	System.out.println("RECIPE CALORIC CATEGORY RULE FIRED: Recipe "+$re.getRecipeName()+" is HIGH_CAL category.");
@@ -35,11 +33,8 @@ rule "Caloric category - LOW_CAL"
         $re: Recipe($id: recipeId, $recIng: ingredients)
         $reCalc: RecipeCalcInfo($idCalc: recipeId, $idCalc == $id)
         Number(intValue <= 400) from accumulate(
-        	RecipeIngredient($t:this, $recIngId: ingredient.getIngredientId(),$calVal: ingredient.getCaloricValue(),$amount: amount) from $recIng,
-        	init(double cals = 0;),
-        	action(cals = cals + (($calVal * $amount)/100);),
-        	reverse(cals = cals - (($calVal * $amount)/100);),
-        	result(cals)
+        	$i: RecipeIngredient($t:this, $recIngId: ingredient.getIngredientId(),$calVal: ingredient.getCaloricValue(),$amount: amount) from $recIng,
+			sumCalories($i)
         )
     then
     	System.out.println("RECIPE CALORIC CATEGORY RULE FIRED: Recipe "+$re.getRecipeName()+" is LOW_CAL category.");

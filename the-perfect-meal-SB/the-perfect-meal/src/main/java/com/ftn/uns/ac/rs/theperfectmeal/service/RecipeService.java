@@ -2,7 +2,6 @@ package com.ftn.uns.ac.rs.theperfectmeal.service;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +27,6 @@ import com.ftn.uns.ac.rs.theperfectmeal.helper.RecipeMapper;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
 import com.ftn.uns.ac.rs.theperfectmeal.repository.RecipeRepository;
 import com.ftn.uns.ac.rs.theperfectmeal.templates.DifficultyCategoryTemplateModel;
-import com.ftn.uns.ac.rs.theperfectmeal.util.CookingSkill;
 
 @Service
 public class RecipeService {
@@ -59,6 +57,7 @@ public class RecipeService {
 		kieSession.getAgenda().getAgendaGroup("ingredients").setFocus();
 		kieSession.fireAllRules();
 		
+		/*
 		List<DifficultyCategoryTemplateModel> templateModels = new ArrayList<DifficultyCategoryTemplateModel>();
 		
 		templateModels.add(new DifficultyCategoryTemplateModel(0, 200, CookingSkill.LOW));
@@ -66,7 +65,7 @@ public class RecipeService {
 		templateModels.add(new DifficultyCategoryTemplateModel(500, 9999, CookingSkill.HIGH));
 		
 		createRecipeDifficultyRules(templateModels);
-		
+		*/
 		kieSession.getAgenda().getAgendaGroup("recipe-difficulty").setFocus();
 		kieSession.fireAllRules();
 		

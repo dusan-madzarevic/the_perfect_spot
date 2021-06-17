@@ -15,10 +15,10 @@ agenda-group "fill-restaurant-requirements"
 salience 10
 lock-on-active true
 when
-	$req: RestaurantRequirements($cousine: cuisine)
+	$req: RestaurantRequirements($cuisine: cuisine)
 then
-	System.out.println("Cousine type added - " + $cousine);
-	modify($req){setCuisine($cousine);};
+	System.out.println("Cuisine type added - " + $cuisine);
+	modify($req){setCuisine($cuisine);};
 
 end;
 
