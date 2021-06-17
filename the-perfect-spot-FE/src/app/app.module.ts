@@ -29,6 +29,8 @@ import { StarRatingComponent } from './components/star-rating/star-rating.compon
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { RestaurantDetailsComponent } from './components/restaurant-details/restaurant-details.component';
+import { MatDialogModule} from "@angular/material/dialog";
+import { RestaurantModalComponent } from './components/restaurant-modal/restaurant-modal.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +48,8 @@ import { RestaurantDetailsComponent } from './components/restaurant-details/rest
     ChangePasswordComponent,
     FilterRestaurantsComponent,
     StarRatingComponent,
-    RestaurantDetailsComponent
+    RestaurantDetailsComponent,
+    RestaurantModalComponent
   ],
   imports: [
     BrowserModule,
@@ -62,7 +65,8 @@ import { RestaurantDetailsComponent } from './components/restaurant-details/rest
     MatInputModule,
     MatCheckboxModule,
     MatSnackBarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

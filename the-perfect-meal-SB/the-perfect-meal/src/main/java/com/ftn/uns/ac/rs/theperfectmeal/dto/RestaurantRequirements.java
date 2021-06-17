@@ -40,6 +40,7 @@ public class RestaurantRequirements {
 		super();
 	}
 
+
 	public RestaurantRequirements(double lon, double lat, Cuisine cuisine, boolean petFriendly, Occassion occassion,
 			Prices prices, boolean goingByCar, boolean accessForDisabled) {
 		super();
@@ -51,33 +52,15 @@ public class RestaurantRequirements {
 		this.prices = prices;
 		this.goingByCar = goingByCar;
 		this.accessForDisabled = accessForDisabled;
-		//this.distance = Distance.NONE;
-	}
-
-	public RestaurantRequirements(double lon, double lat, Cuisine cuisine, boolean petFriendly, Occassion occassion,
-			Prices prices, boolean goingByCar, Date date, boolean accessForDisabled, boolean servingAlcohol,
-			boolean liveMusic, MusicGenre musicGenre, boolean hasBusinessHall, boolean hasWifi, boolean hasCarPark,
-			boolean hasSmokingPart, boolean hasPlayground, boolean hasGarden, boolean active) {
-		super();
-		this.lon = lon;
-		this.lat = lat;
-		this.cuisine = cuisine;
-		this.petFriendly = false;
-		this.occassion = occassion;
-		this.prices = prices;
-		this.goingByCar = false;
-		this.date = date;
-		this.accessForDisabled = false;
 		this.servingAlcohol = false;
 		this.liveMusic = false;
-		this.musicGenre = musicGenre;
+		this.musicGenre = MusicGenre.NONE;
 		this.hasBusinessHall = false;
 		this.hasWifi = false;
 		this.hasCarPark = false;
 		this.hasSmokingPart = false;
 		this.hasPlayground = false;
 		this.hasGarden = false;
-		this.active = active;
 	}
 
 	public boolean isActive() {
@@ -92,30 +75,6 @@ public class RestaurantRequirements {
 
 
 
-	public RestaurantRequirements(double lon, double lat, Cuisine cuisine, boolean petFriendly, Occassion occassion,
-			Prices prices, boolean goingByCar, Date date, boolean accessForDisabled, boolean servingAlcohol,
-			boolean liveMusic, MusicGenre musicGenre, boolean hasBusinessHall, boolean hasWifi, boolean hasCarPark,
-			boolean hasSmokingPart, boolean hasPlayground, boolean hasGarden) {
-		super();
-		this.lon = lon;
-		this.lat = lat;
-		this.cuisine = cuisine;
-		this.petFriendly = petFriendly;
-		this.occassion = occassion;
-		this.prices = prices;
-		this.goingByCar = goingByCar;
-		this.date = date;
-		this.accessForDisabled = accessForDisabled;
-		this.servingAlcohol = servingAlcohol;
-		this.liveMusic = liveMusic;
-		this.musicGenre = musicGenre;
-		this.hasBusinessHall = hasBusinessHall;
-		this.hasWifi = hasWifi;
-		this.hasCarPark = hasCarPark;
-		this.hasSmokingPart = hasSmokingPart;
-		this.hasPlayground = hasPlayground;
-		this.hasGarden = hasGarden;
-	}
 
 
 

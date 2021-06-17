@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.MessageResponse;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirements;
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirementsDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Cuisine;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Prices;
 import com.ftn.uns.ac.rs.theperfectmeal.service.RestaurantService;
@@ -35,9 +36,18 @@ public class RestaurantController {
 	
     //@PreAuthorize("hasRole('ROLE_USER')")
 	@PostMapping("/process")
-	public ResponseEntity<MessageResponse> processRequirements(@RequestBody RestaurantRequirements request){
+	public ResponseEntity<RestaurantDTO> processRequirements(@RequestBody RestaurantRequirementsDTO request){
 		System.out.println(request.getLat());
-		return ResponseEntity.ok().body(restaurantService.process(request));
+		System.out.println(request.getLon());
+		System.out.println(request.getCuisine());
+		System.out.println(request.getOccassion());
+		System.out.println(request.getPrices());
+		System.out.println(request.isAccessForDisabled());
+		System.out.println(request.isGoingByCar());
+		System.out.println(request.isPetFriendly());
+		RestaurantDTO dto = this.restaurantService.process(request);
+
+		return ResponseEntity.ok().body(dto);
 		
 	}
 	
