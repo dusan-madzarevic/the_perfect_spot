@@ -2,6 +2,7 @@ package sbnz.integracija;
 
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirements;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
+import com.ftn.uns.ac.rs.theperfectmeal.model.MusicGenre;
 import com.ftn.uns.ac.rs.theperfectmeal.model.RestaurantGrade;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Distance;
 import java.time.LocalDate;
@@ -126,6 +127,20 @@ rule "Restaurant cuisine type"
     	insert (new CousineScore(2,$id) );
 end
 
+rule "Restaurant cousine type not correct"
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($c: cuisine)
+	    $re: Restaurant($id: id, $c != cuisine)
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( CousineScore( restId == $id) )              
+    then
+    	System.out.println("Restaurant "+$re.getName()+" cousine is NOT correct type");
+    	insert (new CousineScore(0,$id) );
+end
+
+
 rule "Pet friendly"
 	agenda-group "restaurant"
 	salience 2
@@ -139,7 +154,18 @@ rule "Pet friendly"
     	insert (new PetFriendlyScore(2,$id));
 end
 
-
+rule "Not Pet friendly"
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($pet: petFriendly, $pet == true)
+	    $re: Restaurant($id: id, petFriendly == false )
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( PetFriendlyScore( restId == $id) )              
+    then
+    	System.out.println("Restaurant "+$re.getName()+" is not  pet friendly.");
+    	insert (new PetFriendlyScore(2,$id));
+end
 rule "Set pet friendly score to 0"
 	agenda-group "restaurant"
 	salience 2
@@ -165,12 +191,38 @@ rule "Prices"
     	insert (new PricesScore(2,$id));
 end
 
+rule "Prices not right type"
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($p:prices)
+	    $re: Restaurant($id: id, prices != $p )
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( PricesScore( restId == $id) )              
+    then
+    	System.out.println("Restaurant "+$re.getName()+" prices is NOT correct type");
+    	insert (new PricesScore(0,$id));
+end
+
 rule "Access for disabled"
 	agenda-group "restaurant"
 	salience 2
     when
         $req: RestaurantRequirements($disabled: accessForDisabled, $disabled == true)
 	    $re: Restaurant($id: id, accessForDisabled == $disabled )
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( DisabledScore( restId == $id) )              
+    then
+    	System.out.println("Restaurant "+$re.getName()+" has access for disabled.");
+    	insert (new DisabledScore(2,$id));
+end
+
+rule "No Access for disabled"
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($disabled: accessForDisabled, $disabled == true)
+	    $re: Restaurant($id: id, accessForDisabled == false )
         $com: RestaurantCompatibility(restId == $id) 
         not ( DisabledScore( restId == $id) )              
     then
@@ -244,13 +296,40 @@ rule "Music genre"
 	agenda-group "restaurant"
 	salience 2
     when
-        $req: RestaurantRequirements($genre: musicGenre)
+        $req: RestaurantRequirements( $genre: musicGenre)
 	    $re: Restaurant($id: id,  musicGenre == $genre  )
         $com: RestaurantCompatibility(restId == $id) 
         not ( MusicGenreScore( restId == $id) )              
     then
     	System.out.println("Restaurant "+$re.getName()+" has right music genre.");
     	insert (new MusicGenreScore(1,$id));
+end
+
+rule "Music genre set to 0"
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements( $genre: musicGenre, $genre != MusicGenre.NONE)
+	    $re: Restaurant($id: id,  musicGenre != $genre  )
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( MusicGenreScore( restId == $id) )              
+    then
+    	System.out.println("Restaurant "+$re.getName()+" has NOT right music genre.");
+    	insert (new MusicGenreScore(0,$id));
+end
+
+
+rule "Music genre-None"
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements( musicGenre == MusicGenre.NONE)
+	    $re: Restaurant($id: id )
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( MusicGenreScore( restId == $id) )              
+    then
+        System.out.println("Restaurant "+$re.getName()+" NONE genre.");
+    	insert (new MusicGenreScore(0,$id));
 end
 
 rule "Bussines hall "
@@ -270,12 +349,25 @@ rule "Set bussines hall score to 0 "
 	agenda-group "restaurant"
 	salience 2
     when
-        $req: RestaurantRequirements($hall: hasBusinessHall, $hall == false)
-        $re: Restaurant($id: id)
+         $req: RestaurantRequirements($hall: hasBusinessHall, $hall == false)
+	    $re: Restaurant($id: id)
         $com: RestaurantCompatibility(restId == $id) 
         not ( BusinessHallScore( restId == $id) )              
     then
+    	System.out.println("Restaurant "+$re.getName()+"  business hall 0.");
     	insert (new BusinessHallScore(0,$id));
+end
+
+rule "No business hall"
+	agenda-group "restaurant"
+	salience 2
+    when
+         $req: RestaurantRequirements($hall: hasBusinessHall, $hall == true)
+	    $re: Restaurant($id: id, hasBusinessHall == false)
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( BusinessHallScore( restId == $id) )              
+    then
+    	insert (new BusinessHallScore(-1,$id));
 end
 
 rule "Wifi "
@@ -316,6 +408,19 @@ rule "Parking "
     	insert (new ParkingScore(1,$id));
 end
 
+rule "No Parking "
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($park: hasCarPark, $park==true)
+	    $re: Restaurant($id: id, hasCarPark==false   )
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( ParkingScore( restId == $id) )              
+    then
+    	System.out.println("Restaurant "+$re.getName()+" has NOT parking.");
+    	insert (new ParkingScore(1,$id));
+end
+
 rule "Set parking score to 0 "
 	agenda-group "restaurant"
 	salience 2
@@ -332,8 +437,8 @@ rule "Smoking "
 	agenda-group "restaurant"
 	salience 2
     when
-        $req: RestaurantRequirements($smoking: hasSmokingPart, $smoking==true)
-	    $re: Restaurant($id: id, hasSmokingPart==$smoking  )
+        $req: RestaurantRequirements($sm: hasSmokingPart, $sm==true)
+	    $re: Restaurant($id: id, hasSmokingPart==true  )
         $com: RestaurantCompatibility(restId == $id) 
         not ( SmokingScore( restId == $id) )              
     then
@@ -341,15 +446,29 @@ rule "Smoking "
     	insert (new SmokingScore(1,$id));
 end
 
+rule "No smoking "
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($sm: hasSmokingPart, $sm== true)
+        $re: Restaurant($id: id, hasSmokingPart == false)
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( SmokingScore( restId == $id) )              
+    then
+        System.out.println("Restaurant "+$re.getName()+" smoking 0.");
+    	insert (new SmokingScore(0,$id));
+end
+
 rule "Set smoking score to 0 "
 	agenda-group "restaurant"
 	salience 2
     when
-        $req: RestaurantRequirements($smoking: hasSmokingPart, $smoking==false)
+        $req: RestaurantRequirements($sm: hasSmokingPart, $sm== false)
         $re: Restaurant($id: id)
         $com: RestaurantCompatibility(restId == $id) 
         not ( SmokingScore( restId == $id) )              
     then
+        System.out.println("Restaurant "+$re.getName()+" smoking 0.");
     	insert (new SmokingScore(0,$id));
 end
 
@@ -394,6 +513,17 @@ rule "Stimulate restaurants with better grade"
 	then
 		System.out.println("Restaurant "+$re.getName()+" got grade score. Score: " + $grade);
 		insert (new GradeScore( $grade , $id));
+end;
+rule "Restaurants with no grades"
+	agenda-group "restaurant"
+	salience 2
+	when
+		$re: Restaurant($id: id, grades.isEmpty()) 
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( GradeScore( restId == $id) )          
+	then
+		System.out.println("Restaurant "+$re.getName()+" is not graded yet.");
+		insert (new GradeScore( 0 , $id));
 end;
 
 rule "Stimulate restaurants with better grade this month"
@@ -536,7 +666,7 @@ rule "Scoring distance-FAR-by car"
 agenda-group "restaurant"
 salience 2
 when	
-	CalculatedDistance(distance > 5.5, $idRes: restId)
+	CalculatedDistance(distance > 50.5, $idRes: restId)
 	$req: RestaurantRequirements(goingByCar == true)
 	$rest: Restaurant($id: id, $id == $idRes)
 	$com: RestaurantCompatibility(restId == $id)
@@ -550,7 +680,7 @@ rule "Scoring distance-NEAR-by car"
 agenda-group "restaurant"
 salience 2
 when	
-	CalculatedDistance(distance < 5.5 && distance > 0, $idRes: restId)
+	CalculatedDistance(distance < 50.5 && distance > 0, $idRes: restId)
 	$req: RestaurantRequirements(goingByCar == true)
 	$rest: Restaurant($id: id, $id == $idRes)
 	$com: RestaurantCompatibility(restId == $id)

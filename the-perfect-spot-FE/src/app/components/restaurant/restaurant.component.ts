@@ -1,11 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Inject, Input, OnInit} from '@angular/core';
 import {RestaurantModel} from '../../model/restaurant.model';
 import {StarRatingColor} from '../star-rating/star-rating.component';
 import {AuthService} from '../../services/auth.service';
 import {RestaurantService} from '../../services/restaurant.service';
 import {GradeService} from '../../services/grade.service';
 import {Router} from '@angular/router';
-
 @Component({
   selector: 'app-restaurant',
   templateUrl: './restaurant.component.html',

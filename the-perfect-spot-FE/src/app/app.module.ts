@@ -33,6 +33,8 @@ import { RestaurantDetailsComponent } from './components/restaurant-details/rest
 import { RecipeComponent } from './components/recipe/recipe.component';
 import { FilterRecipesComponent } from './components/filter-recipes/filter-recipes.component';
 import { RecipeDetailsComponent } from './components/recipe-details/recipe-details.component';
+import { MatDialogModule} from "@angular/material/dialog";
+import { RestaurantModalComponent } from './components/restaurant-modal/restaurant-modal.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,8 @@ import { RecipeDetailsComponent } from './components/recipe-details/recipe-detai
     RestaurantDetailsComponent,
     RecipeComponent,
     FilterRecipesComponent,
-    RecipeDetailsComponent
+    RecipeDetailsComponent,
+    RestaurantModalComponent
   ],
   imports: [
     BrowserModule,
@@ -70,7 +73,8 @@ import { RecipeDetailsComponent } from './components/recipe-details/recipe-detai
     MatCheckboxModule,
     MatSnackBarModule,
     MatTooltipModule,
-    NgMultiSelectDropDownModule.forRoot()
+    NgMultiSelectDropDownModule.forRoot(),
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

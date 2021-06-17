@@ -55,11 +55,21 @@ public class RestaurantService {
 	@Autowired
 	private RestaurantMapper restaurantMapper;
 
-	public MessageResponse process(RestaurantRequirements requirements) {
+	public RestaurantDTO process(RestaurantRequirementsDTO requirements) {
 		this.kieService.releaseRulesSession();
 		KieSession kieSession = kieService.getRulesSession();
-
-		kieSession.insert(requirements);
+		RestaurantRequirements reqs = new RestaurantRequirements(
+				requirements.getLon(),
+				requirements.getLat(),
+				requirements.getCuisine(), 
+				requirements.isPetFriendly(),
+				requirements.getOccassion(),
+				requirements.getPrices(),
+				requirements.isGoingByCar(),
+				requirements.isAccessForDisabled()
+			);
+		System.out.println(reqs.isHasBusinessHall());
+		kieSession.insert(reqs);
 		for (Restaurant rest : restaurantRepository.findAll()) {
 
 			kieSession.insert(rest);
@@ -79,7 +89,8 @@ public class RestaurantService {
 		System.out.println(rules);
 
 		kieSession.dispose();
-		return new MessageResponse("Successfully");
+	
+		return this.restaurantMapper.toDto(top);
 
 	}
 

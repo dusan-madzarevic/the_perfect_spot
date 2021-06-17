@@ -12,10 +12,10 @@ end
 
 rule "Restaurant Compatibility"
 	agenda-group "calculating-restaurant-score"
-	salience ($bonus + $penal + $cousine + $playground+ $smoking + $parking + $wifi + $hall + $genre + $liveMusic+ $disabled + $prices+ $pet + $alc + $grade + $distance )
+	salience ( $cousine + $pet+$distance +  $prices + $disabled + $alc + $liveMusic + $genre + $hall + $wifi + $parking + $smoking + $playground + $grade + $bonus + $penal )
 	when
 		RestaurantCompatibility( $rest: restId)
-	    CousineScore(restId == $rest, $cousine: cousineScore) 
+	    CousineScore(restId == $rest, $cousine: cousineScore)
 		PlaygroundScore(restId == $rest, $playground: playgroundScore)
 		SmokingScore(restId == $rest, $smoking: smokingScore)
 		ParkingScore(restId == $rest, $parking: parkingScore)
@@ -27,15 +27,15 @@ rule "Restaurant Compatibility"
 		PricesScore(restId == $rest, $prices: pricesScore)
 		PetFriendlyScore(restId == $rest,$pet: petScore)
 	    AlcoholScore(restId == $rest, $alc: alcScore)
+	    MonthlyBonusScore(restId == $rest, $bonus: bonusScore)
+	    MonthlyPenalScore(restId == $rest, $penal: penalScore)
 	    GradeScore(restId == $rest, $grade: gradeScore)
 	    DistanceScore(restId == $rest, $distance: score)
-	    MonthlyPenalScore(restId == $rest, $penal: penalScore)
-	    MonthlyBonusScore(restId == $rest, $bonus: bonusScore)
 		$foundRestaurant: Restaurant(id == $rest)
-		not FoundRestaurant( )
+		not FoundRestaurant()
 	then
 		System.out.println("Restaurant with id " + $rest + " has been choosen.");
-		System.out.println("Final Score: " +  ($bonus + $penal + $cousine +$playground + $smoking + $parking + $wifi + $hall + $genre + $liveMusic+ $disabled + $prices+ $pet + $alc + $grade + $distance  )); 
+		System.out.println("Final Score: " +  ($distance + $cousine + $pet + $prices + $disabled + $alc + $liveMusic + $genre + $hall + $wifi + $parking + $smoking + $playground + $grade + $bonus + $penal  )); 
 		drools.getKnowledgeRuntime().setGlobal("foundRestaurant", $foundRestaurant);
 		insert(new FoundRestaurant());
 end;

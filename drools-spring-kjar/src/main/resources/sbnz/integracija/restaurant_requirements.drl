@@ -5,6 +5,7 @@ import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirementsDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Cuisine;
 import com.ftn.uns.ac.rs.theperfectmeal.model.MusicGenre;
+
 import com.ftn.uns.ac.rs.theperfectmeal.model.Occassion;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Prices;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Distance;
@@ -107,10 +108,33 @@ lock-on-active true
 when
 	$req: RestaurantRequirements( $occassion: occassion, $occassion == Occassion.BUSINESS_MEAL )
 then
-	System.out.println("Wifi and business hall set true.");
-	modify($req){setHasWifi(true);};
-	modify($req){setLiveMusic(false);};
+	System.out.println("Business hall set true.");
 	modify($req){setHasBusinessHall(true);};
+
+
+end;
+
+rule "Business meal 2 "
+agenda-group "fill-restaurant-requirements"
+salience 5
+lock-on-active true
+when
+	$req: RestaurantRequirements( $occassion: occassion, $occassion == Occassion.BUSINESS_MEAL )
+then
+	System.out.println("Wifi set true.");
+	modify($req){setHasWifi(true);};
+
+
+end;
+rule "Business meal 3"
+agenda-group "fill-restaurant-requirements"
+salience 5
+lock-on-active true
+when
+	$req: RestaurantRequirements( $occassion: occassion, $occassion == Occassion.BUSINESS_MEAL )
+then
+	System.out.println("Live music set false.");
+	modify($req){setLiveMusic(false);};
 
 end;
 
@@ -140,32 +164,35 @@ then
 
 end;
 
-rule "Celebration day"
+rule "Celebration"
 agenda-group "fill-restaurant-requirements"
 salience 5
 lock-on-active true
 when
 	$req: RestaurantRequirements( $occassion: occassion, $occassion == Occassion.CELEBRATION_DAY )
 then
-	System.out.println("Live music, serving alcohol smoking part and tambourines set true;");
+	System.out.println("Live music and alcohol set true;");
 	modify($req){setLiveMusic(true);};
-	modify($req){setHasSmokingPart(true);};
 	modify($req){setServingAlcohol(true);};
-	modify($req){setMusicGenre(MusicGenre.TAMBOURINES);};
+	
+	modify($req){setHasSmokingPart(true);};
+	//modify($req){setServingAlcohol(true);};
 
 end;
 
-rule "Celebration night"
-agenda-group "fill-restaurant-requirements"
-salience 5
-lock-on-active true
-when
-	$req: RestaurantRequirements( $occassion: occassion, $occassion == Occassion.CELEBRATION_NIGHT )
-then
-	System.out.println("Live music,pop, serving alcohol and smoking part set true;");
-	modify($req){setLiveMusic(true);};
-	modify($req){setHasSmokingPart(true);};
-	modify($req){setServingAlcohol(true);};
-	modify($req){setMusicGenre(MusicGenre.POP);};
 
-end;
+
+//rule "Celebration night"
+//agenda-group "fill-restaurant-requirements"
+//salience 5
+//lock-on-active true
+//when
+	//$req: RestaurantRequirements( $occassion: occassion, $occassion == Occassion.CELEBRATION_NIGHT )
+//then
+	//System.out.println("Live music,pop, serving alcohol and smoking part set true");
+	//modify($req){setLiveMusic(true);};
+	//modify($req){setHasSmokingPart(true);};
+	//modify($req){setServingAlcohol(true);};
+	//modify($req){setMusicGenre(MusicGenre.TAMBOURINES);};
+//end;
+

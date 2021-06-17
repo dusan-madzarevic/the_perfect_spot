@@ -3,6 +3,11 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {RestaurantService} from '../../services/restaurant.service';
 import {PreferencesModel} from '../../model/preferences.model';
 import Swal from 'sweetalert2';
+import {MatDialog} from '@angular/material/dialog';
+import {RestaurantComponent} from '../restaurant/restaurant.component';
+import {StarRatingColor} from '../star-rating/star-rating.component';
+import {RestaurantModel} from '../../model/restaurant.model';
+import {RestaurantModalComponent} from '../restaurant-modal/restaurant-modal.component';
 
 @Component({
   selector: 'app-restaurant-form',
@@ -23,13 +28,16 @@ export class RestaurantFormComponent implements OnInit {
     locationMatters: new FormControl(('')),
 
   });
-  constructor(private restaurantService: RestaurantService) { }
+
+  constructor(private restaurantService: RestaurantService,
+              private dialog: MatDialog) {
+  }
 
   ngOnInit(): void {
   }
 
   recommendRestaurant() {
-    let preferences : PreferencesModel = {
+    let preferences: PreferencesModel = {
       prices: this.recommendForm.controls["prices"].value,
       petFriendly: this.recommendForm.controls['petFriendly'].value,
       occassion: this.recommendForm.controls['occassion'].value,
@@ -40,16 +48,18 @@ export class RestaurantFormComponent implements OnInit {
       lon: this.recommendForm.controls['lon'].value
 
     }
+    console.log(preferences)
+    this.restaurantService.recommendRestaurant(preferences).subscribe((res) => {
 
-    this.restaurantService.recommendRestaurant(preferences).subscribe((res)=>{
-      Swal.fire({
-        position: 'center',
-        title: 'WOHOOOOOOOOOOOOOOOOOOO',
-        icon: 'success',
-        showConfirmButton: false,
-        timer: 1500
-      })
-    },error => {
+      const rest: RestaurantModel = res;
+      console.log(rest)
+      this.dialog.open(RestaurantModalComponent, {
+        width: '650px',
+        height: '480px',
+        data: rest,
+        panelClass: ['animate__animated', 'animate__heartBeat']
+      });
+    }, error => {
       Swal.fire({
         title: 'Error!',
         text: 'Old password is wrong.',
@@ -57,6 +67,6 @@ export class RestaurantFormComponent implements OnInit {
         confirmButtonColor: '#DC143C',
         confirmButtonText: 'OK'
       })
-    })
+    });
   }
 }
