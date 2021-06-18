@@ -70,7 +70,7 @@ export class CreateRestaurantComponent implements OnInit {
       hasPlayground:  this.restaurantForm.controls['hasPlayground'].value,
       hasLiveMusic: this.restaurantForm.controls['hasLiveMusic'].value,
       hasSmokingPart: this.restaurantForm.controls['hasSmokingPart'].value,
-      accessForDisabled: this.restaurantForm.controls['accessForDisabled'].value,
+      hasAccessForDisabled: this.restaurantForm.controls['accessForDisabled'].value,
       petFriendly: this.restaurantForm.controls['petFriendly'].value,
       phone: this.restaurantForm.controls['phone'].value,
       address: this.restaurantForm.controls['address'].value,

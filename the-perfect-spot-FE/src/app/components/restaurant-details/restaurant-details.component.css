@@ -2,7 +2,10 @@ h1 {
   text-align: center;
   margin-top: 10px;
 }
-
+agm-map {
+  height: 200px;
+  width: 350px;
+}
 .round{
   border-radius: 25px;
 }

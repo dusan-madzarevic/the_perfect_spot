@@ -67,6 +67,10 @@ export class RestaurantFormComponent implements OnInit {
 
     }
     console.log(preferences)
+    if(this.recommendForm.controls['locationMatters'].value == false){
+      preferences.lon = 0.0;
+      preferences.lat = 0.0;
+    }
     this.restaurantService.recommendRestaurant(preferences).subscribe((res) => {
 
       const rest: RestaurantModel = res;
@@ -80,7 +84,7 @@ export class RestaurantFormComponent implements OnInit {
     }, error => {
       Swal.fire({
         title: 'Error!',
-        text: 'Old password is wrong.',
+        text: 'Something went wrong.',
         icon: 'error',
         confirmButtonColor: '#DC143C',
         confirmButtonText: 'OK'
