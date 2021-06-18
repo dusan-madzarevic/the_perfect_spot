@@ -127,7 +127,7 @@ public class RestaurantService {
 
 		Page<Restaurant> restaurantsPage = this.restaurantRepository.findAll(pageable);
 		List<RestaurantDTO> dtoList = this.restaurantMapper.toDtoList(restaurantsPage.toList());
-		System.out.println(dtoList.get(0).isPetFriendly());
+		
 		Page<RestaurantDTO> restaurantDtoPage = new PageImpl<RestaurantDTO>(dtoList, restaurantsPage.getPageable(),
 				restaurantsPage.getTotalElements());
 		PageImplMapper<RestaurantDTO> pageMapper = new PageImplMapper<RestaurantDTO>();

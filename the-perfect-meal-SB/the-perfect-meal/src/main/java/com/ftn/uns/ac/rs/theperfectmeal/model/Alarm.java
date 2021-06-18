@@ -5,6 +5,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,9 +26,20 @@ public class Alarm {
 
 	@Column(name = "alarm_text")
 	private String alarmText;
+	
+	@Enumerated(value = EnumType.STRING)
+	@Column(name = "type")
+	private AlarmType type;
 
 	public Alarm() {
 		super();
+	}
+
+	public Alarm( String alarmText, AlarmType type) {
+		super();
+		this.timestamp = Date.from(Instant.now());
+		this.alarmText = alarmText;
+		this.type = type;
 	}
 
 	public Alarm(String alarmText) {
@@ -58,5 +71,15 @@ public class Alarm {
 	public void setAlarmText(String alarmText) {
 		this.alarmText = alarmText;
 	}
+
+	public AlarmType getType() {
+		return type;
+	}
+
+	public void setType(AlarmType type) {
+		this.type = type;
+	}
+	
+	
 
 }

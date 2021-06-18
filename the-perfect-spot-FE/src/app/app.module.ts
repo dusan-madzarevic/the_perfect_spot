@@ -7,7 +7,6 @@ import { LoginComponent } from './components/login/login.component';
 import { NavigationBarComponent } from './components/navigation-bar/navigation-bar.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
-import { HomePageComponent } from './components/home-page/home-page.component';
 import { RecipeFormComponent } from './components/recipe-form/recipe-form.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { RestaurantsComponent } from './components/restaurants/restaurants.component';
@@ -46,6 +45,7 @@ import { DateAdapter } from '@angular/material/core';
 import { AgmCoreModule } from '@agm/core';
 import { EditRestaurantComponent } from './components/edit-restaurant/edit-restaurant.component';
 import { CreateRestaurantComponent } from './components/create-restaurant/create-restaurant.component';
+import { AlarmsComponent } from './components/alarms/alarms.component';
 
 
 @NgModule({
@@ -53,7 +53,6 @@ import { CreateRestaurantComponent } from './components/create-restaurant/create
     AppComponent,
     LoginComponent,
     NavigationBarComponent,
-    HomePageComponent,
     RecipeFormComponent,
     SignUpComponent,
     RestaurantsComponent,
@@ -77,6 +76,7 @@ import { CreateRestaurantComponent } from './components/create-restaurant/create
     RestaurantReportViewComponent,
     EditRestaurantComponent,
     CreateRestaurantComponent,
+    AlarmsComponent,
   ],
   imports: [
     BrowserModule,

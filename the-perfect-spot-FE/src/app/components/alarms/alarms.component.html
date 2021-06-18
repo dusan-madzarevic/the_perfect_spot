@@ -1,0 +1,39 @@
+<div class="wrapper d-flex align-items-stretch">
+  <div style="height: 158vh;">
+    <app-navigation-bar></app-navigation-bar>
+  </div>
+  <div class="m-5 w-100 shadow round stil">
+    <h1>Alarms</h1>
+    <div>
+      <table class="table table-hover text-center">
+        <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Date</th>
+          <th scope="col">Alarm message</th>
+          <th scope="col">Alarm type</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor=" let alarm of alarms">
+          <td>{{alarm.id}}</td>
+          <td>{{alarm.timestamp}}</td>
+          <td>{{alarm.alarmText}}</td>
+          <td>{{alarm.type}}</td>
+
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mb-5 mt-5 " >
+      <mat-paginator
+        (page)="handlePageEvent($event)"
+        [length]="p_length"
+        [pageSize]="pageSize"
+        [showFirstLastButtons]="showFirstLastButtons"
+        [pageIndex]="pageIndex">
+      </mat-paginator>
+    </div>
+  </div>
+
+</div>

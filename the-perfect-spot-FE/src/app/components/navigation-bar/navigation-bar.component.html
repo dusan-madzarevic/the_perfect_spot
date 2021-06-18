@@ -3,8 +3,8 @@
   <div class="pt-4 pl-4 pr-4 ">
     <img src="assets/images/plate.png" class=" mb-3 "  width="170" height="150" alt="The perfect meal">
     <ul class="list-unstyled components mb-5">
-      <li>
-        <a routerLink="/admin-panel"><span class="fa fa-home mr-3"></span> Home</a>
+      <li *ngIf="isAdmin()">
+        <a routerLink="/alarms"><span class="fa fa-bell mr-3"></span> Alarms</a>
       </li>
       <li *ngIf=isUser()>
         <a routerLink="/profile"><span class="fas fa-user mr-3"></span> Profile</a>

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.ftn.uns.ac.rs.theperfectmeal.cep.BadRestaurantRatingEvent;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantGradeDto;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Alarm;
+import com.ftn.uns.ac.rs.theperfectmeal.model.AlarmType;
 import com.ftn.uns.ac.rs.theperfectmeal.model.RegisteredUser;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
 import com.ftn.uns.ac.rs.theperfectmeal.model.RestaurantGrade;
@@ -69,7 +70,7 @@ public class RestaurantGradeService {
 			
 			if(ratingAlarm.getRestaurantId() == dto.getRestId()) {
 				
-				Alarm alarm = new Alarm(String.format("The rating of restaurant %s fell below 2.3", rg.getRestaurant().getName()));
+				Alarm alarm = new Alarm(String.format("The rating of restaurant %s fell below 2.3", rg.getRestaurant().getName()), AlarmType.RESTAURANT_BAD_RATING);
 				this.alarmService.save(alarm);
 				
 			}
@@ -100,7 +101,7 @@ public class RestaurantGradeService {
 		
 		if(ratingAlarm.getRestaurantId() == dto.getRestId()) {
 			
-			Alarm alarm = new Alarm(String.format("The rating of restaurant %s fell below 2.3", restaurant.getName()));
+			Alarm alarm = new Alarm(String.format("The rating of restaurant %s fell below 2.3", restaurant.getName()), AlarmType.RESTAURANT_BAD_RATING);
 			this.alarmService.save(alarm);
 			
 		}

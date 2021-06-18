@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { HomePageComponent } from './components/home-page/home-page.component';
 import {LoginComponent} from './components/login/login.component';
 import {SignUpComponent} from './components/sign-up/sign-up.component';
 import {RestaurantsComponent} from './components/restaurants/restaurants.component';
@@ -14,10 +13,10 @@ import {CreateRestaurantComponent} from './components/create-restaurant/create-r
 import {RecipeDetailsComponent} from './components/recipe-details/recipe-details.component';
 import {RestaurantReportsComponent} from './components/restaurant-reports/restaurant-reports.component';
 import {RecipeFormComponent} from './components/recipe-form/recipe-form.component';
+import {AlarmsComponent} from './components/alarms/alarms.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'restaurants', pathMatch: 'full' },
-  { path: 'home', component: HomePageComponent},
   { path: 'login', component: LoginComponent },
   {path: 'sign-up', component: SignUpComponent},
   { path: 'restaurants', component:RestaurantsComponent},
@@ -30,7 +29,8 @@ const routes: Routes = [
   {path:'restaurant-details/:id',component:RestaurantDetailsComponent},
   {path:'recipe-recommendation',component:RecipeFormComponent},
   {path:'edit-restaurant/:id',component:EditRestaurantComponent},
-  {path:'add-restaurant',component:CreateRestaurantComponent},];
+  {path:'add-restaurant',component:CreateRestaurantComponent},
+  {path:'alarms',component:AlarmsComponent}];
 @NgModule({
 
   imports: [RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'})],

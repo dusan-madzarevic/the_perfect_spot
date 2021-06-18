@@ -39,7 +39,7 @@ export class ChangePasswordComponent implements OnInit {
           icon: 'success',
           showConfirmButton: false,
           timer: 1500
-        }).then(() => this.route.navigate(['/home-page']))
+        }).then(() => this.route.navigate(['/alarms']))
 
       }, error => {
         console.log(error);
@@ -57,7 +57,7 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   cancel() {
-    this.route.navigate(["/home-page"]);
+    this.route.navigate(["/alarms"]);
   }
 
 }
