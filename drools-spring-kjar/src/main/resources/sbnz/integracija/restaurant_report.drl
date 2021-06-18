@@ -1,0 +1,54 @@
+package sbnz.integracija;
+
+import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
+import com.ftn.uns.ac.rs.theperfectmeal.model.RestaurantGrade;
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantAvgGrade;
+import java.time.LocalDate;
+import java.util.List;
+
+global List<RestaurantAvgGrade> bestGradedLastMonth;
+
+global List<Restaurant> bestGraded;
+
+global List<Restaurant> mostRecommended;
+
+rule "Best graded restaurants - last month"
+	agenda-group "best-rest-last-month"
+	salience $avgGrade
+	when
+		$resAvGr: RestaurantAvgGrade($res: restaurant)
+		$rest: Restaurant($grades: grades, id == $res.getId())
+		$avgGrade : Double() from accumulate(
+	      RestaurantGrade(date.isAfter(LocalDate.now().minusMonths(1)) ,  $val: value ) from  $grades,
+	      average($val))
+	then
+	    modify($resAvGr){setAvgGrade($avgGrade);};
+		bestGradedLastMonth.add($resAvGr);
+		System.out.println($rest.getName() + ": " + $avgGrade);
+end;
+
+rule "Best graded restaurants"
+	agenda-group "best-rest"
+	salience $avgGrade
+	when
+		$resAvGr: RestaurantAvgGrade($res: restaurant)
+		$rest: Restaurant($grades: grades, id == $res.getId())
+		$avgGrade : Double() from accumulate(
+	      RestaurantGrade( $val: value ) from  $grades,
+	      average($val))
+	then
+	    modify($resAvGr){setAvgGrade($avgGrade);};
+		bestGradedLastMonth.add($resAvGr);
+		System.out.println($rest.getName() + ": " + $avgGrade);
+end;
+
+rule "Most recommended restaurants"
+	agenda-group "most-recommended-rests"
+	salience $recommendationCount
+	when
+		$rest: Restaurant($recommendationCount: recommendationCount)
+		
+	then
+		mostRecommended.add($rest);
+		System.out.println($rest.getName() + ": " + $recommendationCount);
+end;

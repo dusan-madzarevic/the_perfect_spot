@@ -1,11 +1,12 @@
 <div class="cardHeight cardBorder cardBackground mt-4">
   <div class="card shadow h-25 clickable {{workingClass}}" id="card{{restaurant.id}}">
-    <div (click)="showDetails()">
-      <img class="card-img-top" style="height: 150px;" [alt]="restaurant.name" *ngIf="restaurant.image === null" src="https://c.ndtvimg.com/2020-01/hqocblio_restaurant-_625x300_14_January_20.jpg">
-      <img class="card-img-top" style="height: 150px;" [alt]="restaurant.name" *ngIf="restaurant.image !== null" [src]="'data:image/png;base64,'+restaurant.image.picByte">
+    <div>
+      <img  (click)="showDetails()" class="card-img-top" style="height: 150px;" [alt]="restaurant.name" *ngIf="restaurant.image === null" src="https://c.ndtvimg.com/2020-01/hqocblio_restaurant-_625x300_14_January_20.jpg">
+      <img (click)="showDetails()" class="card-img-top" style="height: 150px;" [alt]="restaurant.name" *ngIf="restaurant.image !== null" [src]="'data:image/png;base64,'+restaurant.image.picByte">
       <div class="card-body">
         <div style="height: 50px;">
-          <h3 class="float-left" title="Title">{{restaurant.name}}</h3>
+          <div class="ml-3 badge-warning badge" title="Recommendation count" *ngIf="recommedationCount">{{restaurant.recommendationCount}}</div>
+          <h3 (click)="showDetails()" class="float-left" title="Title">{{restaurant.name}}</h3>
           <h4 class="float-left closed" *ngIf="!isWorking"><span class="ml-2"><mat-icon>lock</mat-icon><b>CLOSED</b></span></h4>
           <h5> <i class="fa fa-star float-right" aria-hidden="true" title="Average grade"> {{restaurant.grade.toFixed(2)}}</i></h5>
 

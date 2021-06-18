@@ -1,5 +1,6 @@
 package com.ftn.uns.ac.rs.theperfectmeal.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +16,7 @@ import com.ftn.uns.ac.rs.theperfectmeal.model.RestaurantGrade;
 import com.ftn.uns.ac.rs.theperfectmeal.repository.RegisteredUserRepository;
 import com.ftn.uns.ac.rs.theperfectmeal.repository.RestaurantGradeRepository;
 import com.ftn.uns.ac.rs.theperfectmeal.repository.RestaurantRepository;
+import com.thoughtworks.xstream.converters.time.LocalDateConverter;
 
 @Service
 public class RestaurantGradeService {
@@ -45,7 +47,7 @@ public class RestaurantGradeService {
 		RestaurantGrade rg = this.gradeRepository.findByUserIdAndRestaurantId(userId,dto.getRestId());
 		if (rg != null) {
 			//already graded, edit it
-			rg.setDate(new Date());
+			rg.setDate(LocalDate.now());
 			rg.setValue(dto.getGrade());
 			this.gradeRepository.save(rg);
 			return true;
@@ -55,7 +57,7 @@ public class RestaurantGradeService {
 		RestaurantGrade gr = new RestaurantGrade();
 		Restaurant restaurant = this.restaurantRepository.findById(dto.getRestId()).orElse(null);
 		List<RestaurantGrade> grades = restaurant.getGrades();
-		gr.setDate(new Date());
+		gr.setDate(LocalDate.now());
 		gr.setUser(loggedUser);
 		gr.setId(44);
 		gr.setRestaurant(restaurant);

@@ -21,6 +21,7 @@ public class RestaurantMapper implements MapperInterface<Restaurant, RestaurantD
 	@Override
 	public RestaurantDTO toDto(Restaurant entity) {
 		RestaurantDTO dto = new RestaurantDTO();
+		dto.setRecommendationCount(entity.getRecommendationCount());
 		dto.setAddress(entity.getAddress());
 		dto.setCuisine(entity.getCuisine());
 		dto.setDescription(entity.getDescription());

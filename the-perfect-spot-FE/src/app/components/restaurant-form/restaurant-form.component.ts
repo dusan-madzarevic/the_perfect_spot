@@ -54,7 +54,7 @@ export class RestaurantFormComponent implements OnInit {
       const rest: RestaurantModel = res;
       console.log(rest)
       this.dialog.open(RestaurantModalComponent, {
-        width: '650px',
+        width: '490px',
         height: '480px',
         data: rest,
         panelClass: ['animate__animated', 'animate__heartBeat']

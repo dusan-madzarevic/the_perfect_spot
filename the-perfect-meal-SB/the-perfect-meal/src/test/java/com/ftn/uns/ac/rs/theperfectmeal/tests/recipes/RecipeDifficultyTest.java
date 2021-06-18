@@ -3,6 +3,7 @@ package com.ftn.uns.ac.rs.theperfectmeal.tests.recipes;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -74,7 +75,7 @@ public class RecipeDifficultyTest {
 	    kieSession.setGlobal("bestGradedLastMonth", bestGradedLastMonth);
 		
 	    RecipeGrade grade1 = new RecipeGrade(r1);
-	    grade1.setDate(Date.from(Instant.now()));
+	    grade1.setDate(LocalDate.now());
 	    grade1.setId(1);
 	    grade1.setValue(5);
 	    
@@ -87,7 +88,7 @@ public class RecipeDifficultyTest {
 	    this.kieSession.insert(r1);
 	    
 	    RecipeGrade grade2 = new RecipeGrade(r1);
-	    grade2.setDate(Date.from(Instant.now()));
+	    grade2.setDate(LocalDate.now());
 	    grade2.setId(2);
 	    grade2.setValue(5);
 	    

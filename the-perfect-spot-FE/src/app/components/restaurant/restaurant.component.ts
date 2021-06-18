@@ -13,6 +13,7 @@ import {Router} from '@angular/router';
 export class RestaurantComponent implements OnInit {
 
   @Input() public restaurant: RestaurantModel;
+  @Input() public recommedationCount: boolean;
   @Input('rating') rating: number;
   @Input('starCount') starCount: number;
   @Input('color') starColor: StarRatingColor;

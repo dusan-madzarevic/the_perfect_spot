@@ -9,6 +9,7 @@ import {ProfileComponent} from './components/profile/profile.component';
 import {ChangePasswordComponent} from './components/change-password/change-password.component';
 import {RestaurantFormComponent} from './components/restaurant-form/restaurant-form.component';
 import {RestaurantDetailsComponent} from './components/restaurant-details/restaurant-details.component';
+import {RestaurantReportsComponent} from './components/restaurant-reports/restaurant-reports.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -20,7 +21,8 @@ const routes: Routes = [
   {path: 'profile', component:ProfileComponent},
   {path: 'change-password', component:ChangePasswordComponent},
   {path:'restaurant-recommendation',component:RestaurantFormComponent},
-  {path:'restaurant-details/:id',component:RestaurantDetailsComponent}];
+  {path:'restaurant-details/:id',component:RestaurantDetailsComponent},
+  {path: 'restaurant-reports',component:RestaurantReportsComponent}];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

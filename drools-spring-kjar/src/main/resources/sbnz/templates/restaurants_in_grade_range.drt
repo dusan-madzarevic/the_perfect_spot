@@ -8,19 +8,22 @@ import java.util.ArrayList;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
 import com.ftn.uns.ac.rs.theperfectmeal.model.RestaurantGrade;
 
-template "restaurants-in-grade-range"
-
 global ArrayList<Restaurant> restaurants;
 
-rule "Select restaurants with grade in range @{minGrade} - @{maxGrade} @{row.rowNumber}"
+template "restaurants-in-grade-range"
+
+
+
+rule "Select restaurants with grade in range [@{minGrade} - @{maxGrade}] @{row.rowNumber}"
 no-loop true
-	when:
+	when
 		$rest: Restaurant()
-		Number(doubleValue >= @(minGrade}, doubleValue <= @{maxGrade}) from accumulate(
+		$avgGr: Number(doubleValue >= @{minGrade}, doubleValue <= @{maxGrade}) from accumulate(
 		RestaurantGrade($g: value) from $rest.getGrades(),
 		average($g)
 		);
-	then:
+	then
 		restaurants.add($rest);
+		System.out.println($rest.getName() + " " + $avgGr );
 end
 end template

@@ -31,6 +31,13 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import { RestaurantDetailsComponent } from './components/restaurant-details/restaurant-details.component';
 import { MatDialogModule} from "@angular/material/dialog";
 import { RestaurantModalComponent } from './components/restaurant-modal/restaurant-modal.component';
+import { RestaurantReportsComponent } from './components/restaurant-reports/restaurant-reports.component';
+import { RestaurantReportViewComponent } from './components/restaurant-report-view/restaurant-report-view.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { DateAdapter } from '@angular/material/core';
+
+
 
 @NgModule({
   declarations: [
@@ -49,7 +56,9 @@ import { RestaurantModalComponent } from './components/restaurant-modal/restaura
     FilterRestaurantsComponent,
     StarRatingComponent,
     RestaurantDetailsComponent,
-    RestaurantModalComponent
+    RestaurantModalComponent,
+    RestaurantReportsComponent,
+    RestaurantReportViewComponent
   ],
   imports: [
     BrowserModule,
@@ -66,7 +75,10 @@ import { RestaurantModalComponent } from './components/restaurant-modal/restaura
     MatCheckboxModule,
     MatSnackBarModule,
     MatTooltipModule,
-    MatDialogModule
+    MatDialogModule,
+    MatDatepickerModule,
+    MatNativeDateModule
+
   ],
   providers: [],
   bootstrap: [AppComponent]

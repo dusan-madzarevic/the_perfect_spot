@@ -38,6 +38,14 @@ export class AuthService {
   }
 
   isAdmin(): boolean {
+    let authorities = this.getUserAuthorities();
+    let role = "ROLE_ADMIN";
+
+    for(let a of authorities) {
+      if(role === a.name)
+        return true;
+    }
+
 
     return false;
   }
@@ -45,7 +53,7 @@ export class AuthService {
   isUser(): boolean {
     let authorities = this.getUserAuthorities();
     let role = "ROLE_USER";
-
+    console.log(authorities)
     for(let a of authorities) {
       if(role === a.name)
         return true;

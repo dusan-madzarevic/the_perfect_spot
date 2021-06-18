@@ -18,14 +18,17 @@
       <li>
         <a routerLink="/restaurants"><span class="fas fa-utensils mr-3"></span> Restaurants</a>
       </li>
+      <li *ngIf="isAdmin()">
+        <a routerLink="/restaurant-reports"><span class="fas fa-file-alt mr-3"></span> Reports </a>
+      </li>
       <li *ngIf="isUser()">
         <a routerLink="/restaurant-recommendation" class="ml-5">Restaurant recommendation</a>
       </li>
 
-      <li  *ngIf="isUser()" class="mt-5" style="cursor: pointer;">
+      <li  *ngIf="isUser()||isAdmin()" class="mt-5" style="cursor: pointer;">
         <a (click)="logOut()" ><span class="fas fa-sign-out-alt mr-3 mt-5" ></span>Log out</a>
       </li>
-      <li  *ngIf="!isUser()" class="mt-5" style="cursor: pointer;">
+      <li  *ngIf="isLoggedIn()" class="mt-5" style="cursor: pointer;">
         <a href="/login"><span class="fas fa-sign-out-alt mr-3 mt-5" ></span>Log in</a>
       </li>
     </ul>

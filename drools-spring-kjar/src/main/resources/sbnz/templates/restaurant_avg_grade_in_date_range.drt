@@ -1,0 +1,31 @@
+template header
+dateFrom
+dateTo
+
+package sbnz.templates;
+
+import java.util.ArrayList;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
+import com.ftn.uns.ac.rs.theperfectmeal.model.RestaurantGrade;
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantAvgGrade;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
+
+global ArrayList<RestaurantAvgGrade> restaurants;
+
+template "avg-grade-restaurants-in-data-range"
+
+rule "Rest average grade in data range [@{dateFrom} - @{dateTo}] @{row.rowNumber}"
+	when
+		$resAvGr: RestaurantAvgGrade($res: restaurant)
+		$rest: Restaurant($id:id, id == $res.getId(), $grades: grades)
+		$avgGrade : Double() from accumulate(
+	      RestaurantGrade(date.isAfter(LocalDate.parse("@{dateFrom}")) , date.isBefore(LocalDate.parse("@{dateTo}")), $val: value ) from  $grades,
+	      average($val))
+	then
+	    modify($resAvGr){setAvgGrade($avgGrade);};
+		restaurants.add($resAvGr);
+		System.out.println($id+" "+ $avgGrade);
+end
+end template

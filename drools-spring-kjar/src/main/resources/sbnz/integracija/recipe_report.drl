@@ -15,7 +15,7 @@ rule "Best graded recepies - last month"
 	when
 		$recipe: Recipe($grades: recipeGrades)
 		$total : Double() from accumulate(
-	         RecipeGrade(date.after(java.sql.Date.valueOf(LocalDate.now().minusMonths(1))) == true ,  $val: value ) from  $grades,
+	         RecipeGrade(date.isAfter(LocalDate.now().minusMonths(1)) == true ,  $val: value ) from  $grades,
 	       	 average($val))
 	then
 		bestGradedLastMonth.add($recipe);

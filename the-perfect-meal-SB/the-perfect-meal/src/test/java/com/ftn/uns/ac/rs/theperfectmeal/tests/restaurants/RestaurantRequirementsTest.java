@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,7 +81,7 @@ public class RestaurantRequirementsTest {
 		user1.setLastLoginAttempt(0L);
 		user1.setLoginCooldown(false);
 		g1.setValue(5);
-		g1.setDate(sdf.parse("2021-05-23"));
+		g1.setDate(LocalDate.now());
 		g1.setUser(user1);
 		g1.setId(1);
 		grades1.add(g1);
@@ -111,7 +112,7 @@ public class RestaurantRequirementsTest {
 		RestaurantGrade g2 = new RestaurantGrade();
 		
 		g2.setValue(5);
-		g2.setDate(sdf.parse("2021-05-23"));
+		g2.setDate(LocalDate.now());
 		g2.setUser(user1);
 		g2.setId(1);
 		grades2.add(g2);

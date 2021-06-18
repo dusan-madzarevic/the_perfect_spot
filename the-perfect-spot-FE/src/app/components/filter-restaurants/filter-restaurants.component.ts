@@ -14,19 +14,12 @@ export class FilterRestaurantsComponent implements OnInit {
   @Output() filterEvent: EventEmitter<FilterObject> = new EventEmitter<FilterObject>();
   @Output() searchEvent: EventEmitter<String> = new EventEmitter<String>();
 
-  availableCuisines = ['SERBIAN','ASIAN','CHINESE'];
-  availablePrices = ['AFFORDABLE','EXPENSIVE','CHEAP'];
-  selectedCuisines: Array<any> = [];
-  selectedPrices: Array<any> = [];
-  //name = '';
-  filteredRestaurants: Array<RestaurantModel> = [];
 
   filterForm = new FormGroup({
     restName: new FormControl(''),
     cuisines: new FormControl(''),
     prices: new FormControl(('')),
   });
-  constructor(private service: FilterRestaurantService) { }
 
   onApplyFilter(){
     let filterParams: FilterObject = {
@@ -38,17 +31,10 @@ export class FilterRestaurantsComponent implements OnInit {
   }
 
   onSearch(){
-
     this.searchEvent.emit(this.filterForm.controls['restName'].value);
   }
 
-
-
-
-
   ngOnInit(): void {
-
   }
-
 
 }

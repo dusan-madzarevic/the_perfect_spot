@@ -5,6 +5,7 @@ export interface RestaurantModel {
   name: string,
   prices: string,
   isServingAlcohol: boolean,
+  recommendationCount: number,
   grade: number,
   address: string,
   phone: string,
