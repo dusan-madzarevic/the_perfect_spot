@@ -1,0 +1,24 @@
+<div class="w-100 mt-3 mb-3">
+    <form class=" shadow  stil parent example-form w-100" [formGroup]="filterForm" >
+      <mat-form-field appearance="outline" class="w-25 ml-5 mr-2 mt-2">
+        <mat-label>Select dish type(s)</mat-label>
+        <mat-select id="dishTypes" formControlName="dishTypes" multiple >
+            <mat-option value="0">Appetizer</mat-option>
+            <mat-option value="1">Main dish</mat-option>
+            <mat-option value="2">Dessert</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-raised-button color="primary" id="applyFilter" class="btn-block mr-4 ml-3" [disabled]="filterForm.controls['dishTypes'].value == '' " (click)="onApplyFilter()">Apply filter</button>
+  
+      <mat-form-field appearance="fill" class="w-50 ml-2 mr-4 mt-2">
+        <mat-label>Search recipes</mat-label>
+        <input matInput id="recipeName" class="mr-5" formControlName="recipeName" type="text" >
+      </mat-form-field>
+      <button mat-raised-button color="primary" id="search" class="btn-block mr-5" [disabled]="filterForm.controls['recipeName'].value == ''"  (click)="onSearch()"><mat-icon>search</mat-icon></button>
+  
+  
+    </form>
+  
+  </div>
+  
+  

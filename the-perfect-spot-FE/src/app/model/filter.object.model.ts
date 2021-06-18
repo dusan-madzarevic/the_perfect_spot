@@ -3,3 +3,8 @@ export interface FilterObject{
   cuisines: string[];
   prices: string[];
 }
+
+export interface FilterObjectRecipe{
+  name: string;
+  dishTypes: string[];
+}

@@ -15,18 +15,36 @@ import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 import org.drools.template.ObjectDataCompiler;
+import org.kie.api.builder.Message;
+import org.kie.api.builder.Results;
+import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieSession;
+import org.kie.internal.utils.KieHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ftn.uns.ac.rs.theperfectmeal.dto.MessageResponse;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeCalcInfo;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeRequirements;
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.helper.RecipeMapper;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
 import com.ftn.uns.ac.rs.theperfectmeal.repository.RecipeRepository;
 import com.ftn.uns.ac.rs.theperfectmeal.templates.DifficultyCategoryTemplateModel;
+import com.ftn.uns.ac.rs.theperfectmeal.templates.FilterByCuisinePricesTemplateModel;
+import com.ftn.uns.ac.rs.theperfectmeal.templates.FilterByCuisinesTemplateModel;
+import com.ftn.uns.ac.rs.theperfectmeal.templates.FilterByDishTypesTemplateModel;
+import com.ftn.uns.ac.rs.theperfectmeal.templates.FilterByPricesTemplateModel;
+import com.ftn.uns.ac.rs.theperfectmeal.templates.SearchRecipesByNameTemplateModel;
+import com.ftn.uns.ac.rs.theperfectmeal.templates.SearchRestaurantsByNameTemplateModel;
+import com.ftn.uns.ac.rs.theperfectmeal.util.PageImplMapper;
+import com.ftn.uns.ac.rs.theperfectmeal.util.PageImplementation;
+import com.ftn.uns.ac.rs.theperfectmeal.util.RecipeType;
 
 @Service
 public class RecipeService {
@@ -173,6 +191,111 @@ public class RecipeService {
 		invoker.execute(request);
 		return true;
 		
+	}
+
+	private KieSession createKieSessionFromDRL(String drl) {
+		KieHelper kieHelper = new KieHelper();
+		kieHelper.addContent(drl, ResourceType.DRL);
+
+		Results results = kieHelper.verify();
+
+		if (results.hasMessages(Message.Level.WARNING, Message.Level.ERROR)) {
+			List<Message> messages = results.getMessages(Message.Level.WARNING, Message.Level.ERROR);
+			for (Message message : messages) {
+				System.out.println("Error: " + message.getText());
+			}
+
+			throw new IllegalStateException("Compilation errors were found. Check the logs.");
+		}
+
+		return kieHelper.build().newKieSession();
+	}
+	
+	public PageImplementation<RecipeDTO> findAll(Pageable pageable) {
+		
+		Page<Recipe> restaurantsPage = this.recipeRepository.findAll(pageable);
+		List<RecipeDTO> dtoList = this.recipeMapper.toDtoList(restaurantsPage.toList());
+		Page<RecipeDTO> recipeDtoPage = new PageImpl<RecipeDTO>(dtoList, restaurantsPage.getPageable(),
+				restaurantsPage.getTotalElements());
+		PageImplMapper<RecipeDTO> pageMapper = new PageImplMapper<RecipeDTO>();
+		PageImplementation<RecipeDTO> pageImpl = pageMapper.toPageImpl(recipeDtoPage);
+
+		return pageImpl;
+	}
+
+	public RecipeDTO getOne(long id) {
+		Recipe r = this.recipeRepository.findById(id).orElse(null);
+		RecipeDTO dto = this.recipeMapper.toDto(r);
+		return dto;
+	}
+
+	public PageImplementation<RecipeDTO> filter(Pageable pageable, ArrayList<RecipeType> dishTypes) {
+		List<Recipe> result = new ArrayList<Recipe>();
+
+			InputStream template;
+			try {
+				template = RecipeService.class
+						.getResourceAsStream("/sbnz/templates/filter_recipes_by_dish_type.drt");
+				FilterByDishTypesTemplateModel dto = new FilterByDishTypesTemplateModel();
+			
+				dto.setDishTypes(dishTypes);
+				List<FilterByDishTypesTemplateModel> arguments = new ArrayList<FilterByDishTypesTemplateModel>();
+				arguments.add(dto);
+				ObjectDataCompiler compiler = new ObjectDataCompiler();
+				String drl = compiler.compile(arguments, template);
+				System.out.println("\n\n" + drl + "\n\n");
+				KieSession kieSession = createKieSessionFromDRL(drl);
+				List<Recipe> recipes = this.recipeRepository.findAll();
+				for (Recipe r : recipes) {
+					kieSession.insert(r);
+				}
+				kieSession.setGlobal("recipes", result);
+				kieSession.fireAllRules();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		List<RecipeDTO> dtoList = this.recipeMapper.toDtoList(result);
+		Page<RecipeDTO> recipeDtoPage = new PageImpl<RecipeDTO>(dtoList, pageable, result.size());
+		PageImplMapper<RecipeDTO> pageMapper = new PageImplMapper<RecipeDTO>();
+		PageImplementation<RecipeDTO> pageImpl = pageMapper.toPageImpl(recipeDtoPage);
+		return pageImpl;
+	}
+
+	public PageImplementation<RecipeDTO> search(Pageable pageable, String recipeName) {
+		List<Recipe> result = new ArrayList<Recipe>();
+
+		if (!recipeName.equalsIgnoreCase("")) {
+			InputStream template;
+			try {
+				template = RestaurantService.class.getResourceAsStream("/sbnz/templates/search_recipe_by_name.drt");
+
+				SearchRecipesByNameTemplateModel dto = new SearchRecipesByNameTemplateModel();
+				dto.setSearchData(recipeName);
+				List<SearchRecipesByNameTemplateModel> arguments = new ArrayList<>();
+				arguments.add(dto);
+				ObjectDataCompiler compiler = new ObjectDataCompiler();
+				String drl = compiler.compile(arguments, template);
+
+				System.out.println("\n\n" + drl + "\n\n");
+				KieSession kieSession = createKieSessionFromDRL(drl);
+				List<Recipe> recipes = this.recipeRepository.findAll();
+				for (Recipe r : recipes) {
+					kieSession.insert(r);
+				}
+				kieSession.setGlobal("recipes", result);
+				kieSession.fireAllRules();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+		List<RecipeDTO> dtoList = this.recipeMapper.toDtoList(result);
+		Page<RecipeDTO> recipeDtoPage = new PageImpl<RecipeDTO>(dtoList, pageable, result.size());
+		PageImplMapper<RecipeDTO> pageMapper = new PageImplMapper<RecipeDTO>();
+		PageImplementation<RecipeDTO> pageImpl = pageMapper.toPageImpl(recipeDtoPage);
+		return pageImpl;
 	}
 
 }

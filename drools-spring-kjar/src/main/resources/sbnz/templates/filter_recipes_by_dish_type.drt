@@ -1,0 +1,22 @@
+template header
+dishTypes
+
+package sbnz.templates;
+
+import java.util.ArrayList;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
+
+global ArrayList<Recipe> recipes;
+
+template "recipes-by-dish-type"
+
+
+rule "Select restaurants with @{dishTypes} dish type(s)"
+no-loop true
+	when
+		$rec: Recipe(type memberOf "@{cuisineTypes}")
+		
+	then
+		recipes.add($rec);
+end
+end template

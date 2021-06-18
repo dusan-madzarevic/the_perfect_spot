@@ -1,9 +1,30 @@
 <div class="wrapper d-flex align-items-stretch">
-  <div style="height: 100vh;">
+  <div style="height: 158vh;">
     <app-navigation-bar></app-navigation-bar>
   </div>
-  <div class="m-3">
-    <h1>Recipes</h1>
-    <app-recipe-form *ngIf="isUser()"></app-recipe-form>
+  <div class="m-5 w-100 shadow round stil">
+      <h1>Recipes</h1>
+    <div  id="recipes" class="row col-md-12 w-100 pt-1 pl-auto pr-auto">
+
+      <app-filter-recipes (filterEvent)="filterRecipes($event)" (searchEvent)="searchRecipes($event)"></app-filter-recipes>
+      <app-recipe class="col-md-4"
+                      *ngFor="let recipe of getAllRecipes()"
+                      [recipe]="recipe"
+      >
+      </app-recipe>
+      <div id="noRestDiv" class="row col-md-12 w-100 pt-1 pl-auto pr-auto" *ngIf="getAllRecipes().length === 0">
+        <h4 class="m-5 align-self-center">There are no recipes to show.</h4>
+      </div>
+    </div>
+    <div class="mb-5 mt-5 " >
+      <mat-paginator
+        (page)="handlePageEvent($event)"
+        [length]="p_length"
+        [pageSize]="pageSize"
+        [showFirstLastButtons]="showFirstLastButtons"
+        [pageIndex]="pageIndex">
+      </mat-paginator>
+    </div>
   </div>
+
 </div>

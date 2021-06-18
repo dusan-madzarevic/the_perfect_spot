@@ -22,6 +22,7 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
 import {MatButtonModule} from '@angular/material/button';
 import { FilterRestaurantsComponent } from './components/filter-restaurants/filter-restaurants.component';
 import { NgSelectModule } from "@ng-select/ng-select";
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import {MatSelectModule} from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -29,6 +30,9 @@ import { StarRatingComponent } from './components/star-rating/star-rating.compon
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { RestaurantDetailsComponent } from './components/restaurant-details/restaurant-details.component';
+import { RecipeComponent } from './components/recipe/recipe.component';
+import { FilterRecipesComponent } from './components/filter-recipes/filter-recipes.component';
+import { RecipeDetailsComponent } from './components/recipe-details/recipe-details.component';
 import { MatDialogModule} from "@angular/material/dialog";
 import { RestaurantModalComponent } from './components/restaurant-modal/restaurant-modal.component';
 import { RestaurantReportsComponent } from './components/restaurant-reports/restaurant-reports.component';
@@ -56,10 +60,11 @@ import { DateAdapter } from '@angular/material/core';
     FilterRestaurantsComponent,
     StarRatingComponent,
     RestaurantDetailsComponent,
-    RestaurantModalComponent,
+    RestaurantModalComponent	RecipeComponent,
+    FilterRecipesComponent,
+    RecipeDetailsComponent,
     RestaurantReportsComponent,
-    RestaurantReportViewComponent
-  ],
+    RestaurantReportViewComponent  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -75,11 +80,9 @@ import { DateAdapter } from '@angular/material/core';
     MatCheckboxModule,
     MatSnackBarModule,
     MatTooltipModule,
-    MatDialogModule,
-    MatDatepickerModule,
-    MatNativeDateModule
-
-  ],
+  NgMultiSelectDropDownModule.forRoot(),
+    MatDialogModule   MatDatepickerModule,
+    MatNativeDateModule  ],
   providers: [],
   bootstrap: [AppComponent]
 })
