@@ -1,0 +1,65 @@
+package sbnz.events;
+
+import com.ftn.uns.ac.rs.theperfectmeal.cep.PopularRecipeEvent;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
+import com.ftn.uns.ac.rs.theperfectmeal.model.RecipeGrade;
+import com.ftn.uns.ac.rs.theperfectmeal.util.PopularRecipeAlarm;
+import com.ftn.uns.ac.rs.theperfectmeal.util.PopularBadRatedRecipeAlarm;
+
+
+declare PopularEvent
+    @role(event)
+    @expires(24h)
+    recipe: Recipe
+    reason: String
+end;
+
+declare PopularBadRatedEvent
+    @role(event)
+    @expires(24h)
+    recipe: Recipe
+    reason: String
+end;
+
+global PopularRecipeAlarm popularRecipeAlarm;
+global PopularBadRatedRecipeAlarm popularBadRatedRecipeAlarm;
+
+rule "Recipe was recommended to 5 different people in 24h"
+	agenda-group "popular-recipe"
+	when
+		$pre1: PopularRecipeEvent($recId: recipe.getRecipeId(), $userId: user.getId(), $rec: recipe)
+		List(size > 0) from accumulate (
+			$pre2: PopularRecipeEvent(recipe.getRecipeId() == $recId, $uid: user.getId(), $uid != $userId ) over window:time(24h),
+			$idSet: collectSet($uid)
+		)
+		eval($idSet.size() >= 4)
+		not (PopularEvent(recipe.getRecipeId() == $recId, 
+        	reason == "Recipe was recommended to 5 different people in 24h"))
+	then
+    	String reason = "Recipe was recommended to 5 different people in 24h";
+        insert(new PopularEvent($rec, reason));
+        System.out.println("Recipe was recommended to 5 different people in 24h " + $rec.getRecipeName());
+        popularRecipeAlarm.setRecipeId($recId);
+end;
+
+rule "Recipe was recommended to 5 different people in 24h but is rated less than 2.3"
+	agenda-group "popular-recipe"
+	when
+		$pre1: PopularRecipeEvent($recId: recipe.getRecipeId(), $userId: user.getId(), $rec: recipe)
+		Number(doubleValue < 2.3) from accumulate (
+			RecipeGrade($val: value) from $rec.getRecipeGrades(),
+			average($val) 
+		)
+		List(size > 0) from accumulate (
+			$pre2: PopularRecipeEvent(recipe.getRecipeId() == $recId, $uid: user.getId(), $uid != $userId ) over window:time(24h),
+			$idSet: collectSet($uid)
+		)
+		eval($idSet.size() >= 4)
+		not (PopularBadRatedEvent(recipe.getRecipeId() == $recId, 
+        	reason == "Recipe was recommended to 5 different people in 24h"))
+	then
+    	String reason = "Recipe was recommended to 5 different people in 24h but is rated less than 2.3";
+        insert(new PopularBadRatedEvent($rec, reason));
+        System.out.println("Recipe was recommended to 5 different people in 24h but is rated less than 2.3 " + $rec.getRecipeName());
+        popularBadRatedRecipeAlarm.setRecipeId($recId);
+end;
