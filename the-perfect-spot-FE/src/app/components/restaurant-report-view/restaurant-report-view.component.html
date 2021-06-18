@@ -1,0 +1,26 @@
+<div class="cardHeight cardBorder cardBackground mt-4">
+  <div class="card shadow h-25 clickable " id="card{{restaurantAvg.restaurant.id}}">
+    <div>
+      <img  (click)="showDetails()" class="card-img-top" style="height: 150px;" [alt]="restaurantAvg.restaurant.name" *ngIf="restaurantAvg.restaurant.image === null" src="https://c.ndtvimg.com/2020-01/hqocblio_restaurant-_625x300_14_January_20.jpg">
+      <img (click)="showDetails()" class="card-img-top" style="height: 150px;" [alt]="restaurantAvg.restaurant.name" *ngIf="restaurantAvg.restaurant.image !== null" [src]="'data:image/png;base64,'+restaurant.image.picByte">
+      <div class="card-body">
+        <div style="height: 50px;">
+          <h3 (click)="showDetails()" class="float-left" title="Title">{{restaurantAvg.restaurant.name}}</h3>
+          <h5> <i class="fa fa-star badge-warning badge float-right" aria-hidden="true" title="Average grade for last month"> {{restaurantAvg.avgGrade.toFixed(2)}}</i></h5>
+
+        </div>
+        <p class="card-text excerpt" title="Description"><small>{{restaurantAvg.restaurant.description}}</small></p>
+      </div>
+    </div>
+    <div class="pl-2">
+      <h6 class="float-left"><span class="badge badge-light float-left" title="Working hours"><mat-icon>alarm</mat-icon> {{restaurantAvg.restaurant.workingHours}} </span></h6>
+
+      <h6 *ngIf="restaurantAvg.restaurant.hasWifi" class="float-right mr-1"><span class="badge badge-light float-left" title="Has wifi"><mat-icon>wifi</mat-icon></span></h6>
+      <h6 *ngIf="restaurantAvg.restaurant.hasSmokingPart" class="float-right mr-1"><span class="badge badge-light float-left" title="Smoking allowed"><mat-icon>smoking_rooms</mat-icon></span></h6>
+      <h6 *ngIf="!restaurantAvg.restaurant.hasSmokingPart" class="float-right mr-1"><span class="badge badge-light float-left" title="Smoking free"><mat-icon>smoke_free</mat-icon></span></h6>
+      <h6 *ngIf="restaurantAvg.restaurant.petFriendly" class="float-right mr-1"><span class="badge badge-light float-left " title="Pet friendly"><i class="fas fa-paw"></i> </span></h6>
+
+
+    </div>
+  </div>
+</div>

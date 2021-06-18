@@ -38,6 +38,13 @@ import { MatDialogModule} from "@angular/material/dialog";
 import { RestaurantModalComponent } from './components/restaurant-modal/restaurant-modal.component';
 import { StarRatingRecipeComponent } from './components/star-rating-recipe/star-rating-recipe.component';
 import { RecipeModalComponent } from './components/recipe-modal/recipe-modal.component';
+import { RestaurantReportsComponent } from './components/restaurant-reports/restaurant-reports.component';
+import { RestaurantReportViewComponent } from './components/restaurant-report-view/restaurant-report-view.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { DateAdapter } from '@angular/material/core';
+
+
 
 @NgModule({
   declarations: [
@@ -56,13 +63,15 @@ import { RecipeModalComponent } from './components/recipe-modal/recipe-modal.com
     FilterRestaurantsComponent,
     StarRatingComponent,
     RestaurantDetailsComponent,
+    RestaurantModalComponent,	
     RecipeComponent,
     FilterRecipesComponent,
     RecipeDetailsComponent,
     RestaurantModalComponent,
     StarRatingRecipeComponent,
-    RecipeModalComponent
-  ],
+    RecipeModalComponent,
+    RestaurantReportsComponent,
+    RestaurantReportViewComponent  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -80,8 +89,10 @@ import { RecipeModalComponent } from './components/recipe-modal/recipe-modal.com
     MatTooltipModule,
     NgMultiSelectDropDownModule.forRoot(),
     MatDialogModule,
-    MatListModule
-  ],
+    MatListModule,
+    MatDialogModule,   
+    MatDatepickerModule,
+    MatNativeDateModule  ],
   providers: [],
   bootstrap: [AppComponent]
 })

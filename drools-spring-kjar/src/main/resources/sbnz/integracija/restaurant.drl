@@ -534,7 +534,7 @@ rule "Stimulate restaurants with better grade this month"
 		$grade: Double($grade >= 4.5) from accumulate (
 			RestaurantGrade(
 				$val : value,
-				date.after(java.sql.Date.valueOf(LocalDate.now().minusMonths(1))) == true
+				date.isAfter(LocalDate.now().minusMonths(1))
 			) from $grades,
 			average($val)
 		)     
@@ -555,7 +555,7 @@ rule "Destimulate restaurants that have bad grades this month"
 		$grade: Double($grade <= 2.5) from accumulate (
 			RestaurantGrade(
 				$val : value,
-				date.after(java.sql.Date.valueOf(LocalDate.now().minusMonths(1))) == true
+				date.isAfter(LocalDate.now().minusMonths(1))
 			) from $grades,
 			average($val)
 			
@@ -577,7 +577,7 @@ rule "No bonus-no penal for last month"
 		 from accumulate (
 			RestaurantGrade(
 				$val : value,
-				date.after(java.sql.Date.valueOf(LocalDate.now().minusMonths(1))) == true
+				date.isAfter(LocalDate.now().minusMonths(1))  
 			) from $grades,
 			average($val))
 		
@@ -598,7 +598,7 @@ rule "No bonus-no penal for last month-not graded last month"
 		 from accumulate (
 			RestaurantGrade(
 				$val : value,
-				date.after(java.sql.Date.valueOf(LocalDate.now().minusMonths(1))) == true
+				date.isAfter(LocalDate.now().minusMonths(1)) 
 			) from $grades,
 			count($val))
 		

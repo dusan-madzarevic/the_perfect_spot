@@ -24,7 +24,7 @@ public class RestaurantGradeController {
 	@Autowired
 	private RestaurantGradeService gradeService;
 	
-   // @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(value = "/by-restaurant")
 	public ResponseEntity<Integer> getByRestaurantAndUser(@RequestParam("restId") int restId, @RequestParam("email") String email){
 
@@ -33,7 +33,7 @@ public class RestaurantGradeController {
 		return new ResponseEntity<>(grade, HttpStatus.OK);
 	}
 
-   // @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping(value = "/grade")
     public ResponseEntity<Boolean> save(@RequestBody RestaurantGradeDto dto){
     	boolean ok = this.gradeService.save(dto);

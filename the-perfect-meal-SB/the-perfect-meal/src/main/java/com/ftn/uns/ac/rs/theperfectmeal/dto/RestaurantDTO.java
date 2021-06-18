@@ -31,16 +31,19 @@ public class RestaurantDTO {
 	private boolean isServingAlcohol;
 	private boolean hasSmokingPart;
 	private boolean hasAccessForDisabled;
+	private int recommendationCount;
 	
 	public RestaurantDTO() {
 		super();
 	}
 
+	
+
 	public RestaurantDTO(long id, String name, String webSite, String workingHours, String description, Cuisine cuisine,
 			double grade, Prices prices, String phone, String address, double lat, double lon, byte[] image,
 			MusicGenre musicGenre, boolean hasGarden, boolean hasWifi, boolean hasBusinessHall, boolean hasLiveMusic,
 			boolean hasCarPark, boolean hasPlayground, boolean isPetFriendly, boolean isServingAlcohol,
-			boolean hasSmokingPart, boolean hasAccessForDisabled) {
+			boolean hasSmokingPart, boolean hasAccessForDisabled, int recommendationCount) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -66,7 +69,22 @@ public class RestaurantDTO {
 		this.isServingAlcohol = isServingAlcohol;
 		this.hasSmokingPart = hasSmokingPart;
 		this.hasAccessForDisabled = hasAccessForDisabled;
+		this.recommendationCount = recommendationCount;
 	}
+
+
+
+	public int getRecommendationCount() {
+		return recommendationCount;
+	}
+
+
+
+	public void setRecommendationCount(int recommendationCount) {
+		this.recommendationCount = recommendationCount;
+	}
+
+
 
 	public long getId() {
 		return id;

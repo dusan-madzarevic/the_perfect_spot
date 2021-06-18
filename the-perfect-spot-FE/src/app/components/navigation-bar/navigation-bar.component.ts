@@ -24,4 +24,12 @@ export class NavigationBarComponent implements OnInit {
   isUser() {
     return this.service.isUser();
   }
+
+  isAdmin(){
+    return this.service.isAdmin();
+  }
+
+  isLoggedIn() {
+    return !(this.isAdmin() || this.isUser())
+  }
 }

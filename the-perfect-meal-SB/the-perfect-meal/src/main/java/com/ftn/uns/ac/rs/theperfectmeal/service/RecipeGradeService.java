@@ -1,5 +1,6 @@
 package com.ftn.uns.ac.rs.theperfectmeal.service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class RecipeGradeService {
 		RecipeGrade rg = this.gradeRepository.findByUserIdAndRecipeRecipeId(userId,dto.getRecipeId());
 		if (rg != null) {
 			//already graded, edit it
-			rg.setDate(new Date());
+			rg.setDate(LocalDate.now());
 			rg.setValue(dto.getGrade());
 			this.gradeRepository.save(rg);
 			return true;
@@ -53,7 +54,7 @@ public class RecipeGradeService {
 		RecipeGrade gr = new RecipeGrade();
 		Recipe recipe = this.recipeRepository.findById(dto.getRecipeId()).orElse(null);
 		List<RecipeGrade> grades = recipe.getRecipeGrades();
-		gr.setDate(new Date());
+		gr.setDate(LocalDate.now());
 		gr.setUser(loggedUser);
 		gr.setId(44);
 		gr.setRecipe(recipe);
