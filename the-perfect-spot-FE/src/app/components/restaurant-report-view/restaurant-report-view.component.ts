@@ -31,7 +31,13 @@ export class RestaurantReportViewComponent implements OnInit {
     hasPlayground:false,
     petFriendly:false,
     prices:'',
-    recommendationCount:0
+    recommendationCount:0,
+    accessForDisabled:false,
+    end:'',
+    lat:0,
+    lon:0,
+    musicGenre:'',
+    start:''
   }
 
 

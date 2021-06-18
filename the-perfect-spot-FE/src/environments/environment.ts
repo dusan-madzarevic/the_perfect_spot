@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   APP: "http://localhost:8080/"
+
 };
 
 /*

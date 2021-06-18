@@ -7,4 +7,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'the-perfect-spot-FE';
+
+  lat = 13;
+  lng = 80;
 }

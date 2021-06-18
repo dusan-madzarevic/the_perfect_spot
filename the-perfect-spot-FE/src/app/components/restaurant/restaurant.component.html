@@ -17,22 +17,22 @@
     </div>
     <div class="pl-2">
       <h6 class="float-left"><span class="badge badge-light float-left" title="Working hours"><mat-icon>alarm</mat-icon> {{restaurant.workingHours}} </span></h6>
-
       <h6 *ngIf="restaurant.hasWifi" class="float-right mr-1"><span class="badge badge-light float-left" title="Has wifi"><mat-icon>wifi</mat-icon></span></h6>
       <h6 *ngIf="restaurant.hasSmokingPart" class="float-right mr-1"><span class="badge badge-light float-left" title="Smoking allowed"><mat-icon>smoking_rooms</mat-icon></span></h6>
       <h6 *ngIf="!restaurant.hasSmokingPart" class="float-right mr-1"><span class="badge badge-light float-left" title="Smoking free"><mat-icon>smoke_free</mat-icon></span></h6>
       <h6 *ngIf="restaurant.petFriendly" class="float-right mr-1"><span class="badge badge-light float-left " title="Pet friendly"><i class="fas fa-paw"></i> </span></h6>
-
-      <div class="float-right" *ngIf="isAdmin()">
-        <button mat-mini-fab color="warn" class="mr-2 mb-2" (click)=deleteRestaurant(restaurant.id) style="outline: none">
-          <mat-icon>alarm</mat-icon>
-        </button>
-      </div>
-      <div class="float-right" *ngIf="isAdmin()">
-        <button mat-mini-fab color="primary" class="mr-2 mb-2" (click)=edit(restaurant) style="outline: none">
-          <mat-icon>edit</mat-icon>
-        </button>
-      </div>
+    </div>
+    <div class="pl-2">
+    <div  class="float-left mb-5" *ngIf="isAdmin()">
+      <button mat-mini-fab color="warn" class="mr-2 mb-2" (click)=deleteRestaurant(restaurant.id) style="outline: none">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    <div class="float-left" *ngIf="isAdmin()">
+      <button mat-mini-fab color="primary" class="mr-2 mb-2" (click)=edit(restaurant.id) style="outline: none">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
     </div>
   </div>
 </div>

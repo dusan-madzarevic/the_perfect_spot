@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.MessageResponse;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantAvgGradeDto;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantDTO;
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantEditDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirements;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirementsDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Cuisine;
@@ -118,5 +119,25 @@ public class RestaurantController {
 		Pageable pageable = PageRequest.of(pageNum, 6);
 		PageImplementation<RestaurantDTO> pageImpl = this.restaurantService.search(pageable, restName);
 		return new ResponseEntity<PageImplementation<RestaurantDTO>>(pageImpl, HttpStatus.OK);
+	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PostMapping
+	public ResponseEntity<HttpStatus> create(@RequestBody RestaurantDTO restaurant) throws FileNotFoundException {
+		boolean ok = this.restaurantService.create(restaurant);
+		if(ok)
+			return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
+		
+	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PostMapping(value = "/{id}")
+	public ResponseEntity<HttpStatus> update(@PathVariable long id, @RequestBody RestaurantEditDTO restaurant) throws FileNotFoundException {
+		boolean ok = this.restaurantService.update(restaurant);
+		if(ok)
+			return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
+		
 	}
 }

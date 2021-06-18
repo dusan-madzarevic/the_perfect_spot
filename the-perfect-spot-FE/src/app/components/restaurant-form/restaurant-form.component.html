@@ -27,6 +27,7 @@
             <mat-option value="ALONE">Alone</mat-option>
           </mat-select>
         </mat-form-field>
+
         <mat-form-field appearance="outline" class="w-25 ml-5 mr-2 mt-2" >
           <mat-label>Select prices</mat-label>
           <mat-select id="prices" formControlName="prices" required  >
@@ -39,16 +40,16 @@
           <mat-checkbox formControlName="petFriendly" class="example-margin">Pet friendly</mat-checkbox>
           <mat-checkbox formControlName="accessForDisabled" class="example-margin">Access for disabled</mat-checkbox>
           <mat-checkbox formControlName="goingByCar" class="example-margin">Going by car</mat-checkbox>
-          <mat-checkbox formControlName="locationMatters" class="example-margin">Does it matter that the restaurant is close to you?</mat-checkbox>
+          <mat-checkbox formControlName="locationMatters" class="example-margin" (click)="showMap()">Does it matter that the restaurant is close to you?</mat-checkbox>
         </div>
-        <mat-form-field *ngIf="recommendForm.controls['locationMatters'].value === true"  appearance="fill" class="w-25 ml-5 mr-2 mt-2" >
-          <mat-label>Latittude</mat-label>
-          <input matInput type="number"  formControlName="lat" required>
-        </mat-form-field>
-        <mat-form-field *ngIf="recommendForm.controls['locationMatters'].value === true"  appearance="fill" class="w-25 ml-5 mr-2 mt-2" >
-          <mat-label>Longittude</mat-label>
-          <input matInput type="number" formControlName="lon" required>
-        </mat-form-field>
+        <div class="w-25 ml-5 mr-2 mt-2"  *ngIf="recommendForm.controls['locationMatters'].value === true" >
+          <agm-map [latitude]="lat" [longitude]="lng" >
+            <agm-marker [markerDraggable]="true" (dragEnd)="markerDragEnd($event)" [latitude]="lat" [longitude]="lng"></agm-marker>
+          </agm-map>
+          <p class="ml-2">Lat: {{this.lat.toFixed(4)}}, Lon: {{this.lng.toFixed(4)}}</p>
+        </div>
+
+
         <div class="w-25 ml-5 mr-2 mt-2">
           <button mat-raised-button color="primary" id="search" class="btn-block mb-3 " [disabled]="recommendForm.valid === false" ><mat-icon>search</mat-icon></button>
 

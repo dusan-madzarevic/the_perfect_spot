@@ -48,7 +48,7 @@ public class RestaurantRequirementsTest {
 		rest1.setAccessForDisabled(true);
 		rest1.setAddress("Kralja Petra I 23");
 		rest1.setCuisine(Cuisine.SERBIAN);
-		rest1.setDateOfLastGrade(sdf.parse("2021-05-23"));
+		rest1.setDateOfLastGrade(LocalDate.now());
 		rest1.setPrices(Prices.CHEAP);
 		rest1.setPhoneNumber("020294583");
 		rest1.setHasBusinessHall(false);
@@ -94,7 +94,7 @@ public class RestaurantRequirementsTest {
 		rest2.setAccessForDisabled(false);
 		rest2.setAddress("Kumanovska 43");
 		rest2.setCuisine(Cuisine.SERBIAN);
-		rest2.setDateOfLastGrade(sdf.parse("2021-05-29"));
+		rest2.setDateOfLastGrade(LocalDate.now());
 		rest2.setHasBusinessHall(false);
 		rest2.setHasCarPark(false);
 		rest2.setHasGarden(true);

@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {FilterObject} from '../model/filter.object.model';
 import {PreferencesModel} from '../model/preferences.model';
+import {EditRestaurantModel} from '../model/edit.restaurant.model';
+import {RestaurantModel} from '../model/restaurant.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +15,8 @@ export class RestaurantService {
 
   private readonly requestRestaurantAPI: string = "restaurant/process";
   private readonly restaurantAPI: string = "restaurant/by-page/";
+  private readonly editRestaurantAPI: string = "restaurant/";
+  private readonly addRestaurantAPI: string = "restaurant";
   private readonly oneRestaurantAPI: string = "restaurant/";
   private readonly restaurantFilterAPI: string = "restaurant/filter/by-page/";
   private readonly restaurantSearchAPI: string = "restaurant/search/by-page/";
@@ -66,4 +70,21 @@ export class RestaurantService {
     return this.http.get(environment.APP+ this.oneRestaurantAPI + id, {headers:headers});
   }
 
+  update(restaurant: EditRestaurantModel, id:any):Observable<any>{
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization' : 'Bearer ' + localStorage.getItem("accessToken")
+    });
+
+    return this.http.post(environment.APP + this.editRestaurantAPI + id,restaurant, {headers:headers});
+  }
+
+  create(restaurant: RestaurantModel):Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization' : 'Bearer ' + localStorage.getItem("accessToken")
+    });
+
+    return this.http.post(environment.APP + this.addRestaurantAPI , restaurant, {headers:headers});
+  }
 }

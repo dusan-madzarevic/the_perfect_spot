@@ -1,17 +1,15 @@
 import {ImageModel} from './image.model';
 
-export interface RestaurantModel {
+export interface EditRestaurantModel{
   id:number,
   name: string,
   prices: string,
   isServingAlcohol: boolean,
-  accessForDisabled: boolean,
-  recommendationCount: number,
-  grade: number,
   address: string,
   phone: string,
   webSite: string,
-  workingHours: string,
+  start: string,
+  end: string,
   petFriendly: boolean,
   hasCarPark: boolean,
   hasWifi: boolean,
@@ -19,12 +17,12 @@ export interface RestaurantModel {
   hasPlayground: boolean,
   hasLiveMusic: boolean,
   hasSmokingPart: boolean,
+  accessForDisabled: boolean,
+
   description: string,
   cuisine: string,
   image: ImageModel,
-  start: string,
-  end: string,
+  lat: number,
+  lon:number,
   musicGenre: string,
-  lat:number,
-  lon:number
 }

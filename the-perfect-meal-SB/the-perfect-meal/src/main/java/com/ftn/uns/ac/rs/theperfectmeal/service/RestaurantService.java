@@ -34,6 +34,7 @@ import com.ftn.uns.ac.rs.theperfectmeal.dto.MessageResponse;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantAvgGrade;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantAvgGradeDto;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantDTO;
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantEditDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantGradeDto;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirements;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantRequirementsDTO;
@@ -474,5 +475,48 @@ public class RestaurantService {
 			dtos.add(d);
 		}
 		return dtos;
+	}
+	
+	public boolean create(RestaurantDTO dto) {
+		Restaurant r = this.restaurantRepository.save(this.restaurantMapper.toEntity(dto));
+		if (r != null) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean update(RestaurantEditDTO dto) {
+		
+		Restaurant r = this.restaurantRepository.findById(dto.getId()).orElse(null);
+	
+		if (r != null) {
+			r.setName(dto.getName());
+			r.setWebSite(dto.getWebSite());
+			r.setDescription(dto.getDescription());
+			r.setCuisine(dto.getCuisine());
+			r.setPrices(dto.getPrices());
+			r.setPhoneNumber(dto.getPhone());
+			r.setAddress(dto.getAddress());
+			r.setLat(dto.getLat());
+			r.setLon(dto.getLon());
+			r.setImage(dto.getImage());
+			r.setMusicGenre(dto.getMusicGenre());
+			r.setHasGarden(dto.isHasGarden());
+			r.setHasWifi(dto.isHasWifi());
+			r.setHasBusinessHall(dto.isHasBusinessHall());
+			r.setLiveMusic(dto.isHasLiveMusic());
+			r.setHasCarPark(dto.isHasCarPark());
+			r.setHasPlayground(dto.isHasPlayground());
+			r.setPetFriendly(dto.isPetFriendly());
+			r.setServingAlcohol(dto.isServingAlcohol());
+			r.setHasSmokingPart(dto.isHasSmokingPart());
+			r.setAccessForDisabled(dto.isHasAccessForDisabled());
+			r.setWorkingHoursStart(dto.getStart());
+			r.setWorkingHoursEnd(dto.getEnd());
+			Restaurant saved = this.restaurantRepository.save(r);
+			if(saved != null)
+				return true;
+		}
+		return false;
 	}
 }

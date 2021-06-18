@@ -40,7 +40,9 @@ import { RestaurantReportViewComponent } from './components/restaurant-report-vi
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { DateAdapter } from '@angular/material/core';
-
+import { AgmCoreModule } from '@agm/core';
+import { EditRestaurantComponent } from './components/edit-restaurant/edit-restaurant.component';
+import { CreateRestaurantComponent } from './components/create-restaurant/create-restaurant.component';
 
 
 @NgModule({
@@ -60,11 +62,15 @@ import { DateAdapter } from '@angular/material/core';
     FilterRestaurantsComponent,
     StarRatingComponent,
     RestaurantDetailsComponent,
-    RestaurantModalComponent	RecipeComponent,
+    RestaurantModalComponent,
+    RecipeComponent,
     FilterRecipesComponent,
     RecipeDetailsComponent,
     RestaurantReportsComponent,
-    RestaurantReportViewComponent  ],
+    RestaurantReportViewComponent,
+    EditRestaurantComponent,
+    CreateRestaurantComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -81,8 +87,13 @@ import { DateAdapter } from '@angular/material/core';
     MatSnackBarModule,
     MatTooltipModule,
   NgMultiSelectDropDownModule.forRoot(),
-    MatDialogModule   MatDatepickerModule,
-    MatNativeDateModule  ],
+    MatDialogModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyCTaSOkeIFqklyhUJHBfNSGLiBs5GN6a10'
+    })
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

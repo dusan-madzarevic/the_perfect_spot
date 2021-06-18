@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.lang.Math;
+import java.time.LocalDate;
 
 @Entity
 public class Restaurant {
@@ -45,8 +46,8 @@ public class Restaurant {
 	@Column(nullable = false)
 	private String address;
 
-	@Column(name = "date_of_last_grade", nullable = false)
-	private Date dateOfLastGrade;
+	@Column(name = "date_of_last_grade", nullable = true)
+	private LocalDate dateOfLastGrade;
 
 	@Column(name = "web_site")
 	private String webSite;
@@ -115,7 +116,7 @@ public class Restaurant {
 	
 
 	public Restaurant(long id, int recommendationCount, String name, String description, List<RestaurantGrade> grades,
-			List<RestaurantTable> tables, List<Reservation> reservations, String address, Date dateOfLastGrade,
+			List<RestaurantTable> tables, List<Reservation> reservations, String address, LocalDate dateOfLastGrade,
 			String webSite, Cuisine cuisine, Prices prices, String phoneNumber, String workingHoursStart,
 			String workingHoursEnd, boolean hasGarden, boolean hasPlayground, boolean hasCarPark,
 			boolean hasSmokingPart, byte[] image, MusicGenre musicGenre, boolean liveMusic, boolean servingAlcohol,
@@ -156,7 +157,7 @@ public class Restaurant {
 
 
 	public Restaurant(long id, String name, String description, List<RestaurantGrade> grades,
-			List<RestaurantTable> tables, List<Reservation> reservations, String address, Date dateOfLastGrade,
+			List<RestaurantTable> tables, List<Reservation> reservations, String address, LocalDate dateOfLastGrade,
 			String webSite, Cuisine cuisine, Prices prices, String phoneNumber, String workingHoursStart,
 			String workingHoursEnd, boolean hasGarden, boolean hasPlayground, boolean hasCarPark,
 			boolean hasSmokingPart, byte[] image, MusicGenre musicGenre, boolean liveMusic, boolean servingAlcohol,
@@ -193,7 +194,7 @@ public class Restaurant {
 		this.lat = lat;
 	}
 
-	public Restaurant(long id, String name, List<RestaurantGrade> grades, String address, Date dateOfLastGrade,
+	public Restaurant(long id, String name, List<RestaurantGrade> grades, String address, LocalDate dateOfLastGrade,
 			String webSite, Cuisine cousine, Prices prices, String phoneNumber, String workingHoursStart,
 			String workingHoursEnd, boolean hasGarden, boolean hasPlayground, boolean hasCarPark,
 			boolean hasSmokingPart, byte[] image, MusicGenre musicGenre, boolean liveMusic, boolean servingAlcohol,
@@ -227,7 +228,7 @@ public class Restaurant {
 		this.lat = lat;
 	}
 
-	public Restaurant(long id, String name, List<RestaurantGrade> grades, String address, Date dateOfLastGrade,
+	public Restaurant(long id, String name, List<RestaurantGrade> grades, String address, LocalDate dateOfLastGrade,
 			String webSite, Cuisine cousine, Prices prices, String phoneNumber, String workingHoursStart,
 			String workingHoursEnd, boolean hasGarden, boolean hasPlayground, boolean hasCarPark,
 			boolean hasSmokingPart, byte[] image, MusicGenre musicGenre, boolean liveMusic, boolean servingAlcohol,
@@ -290,11 +291,11 @@ public class Restaurant {
 		this.address = address;
 	}
 
-	public Date getDateOfLastGrade() {
+	public LocalDate getDateOfLastGrade() {
 		return dateOfLastGrade;
 	}
 
-	public void setDateOfLastGrade(Date dateOfLastGrade) {
+	public void setDateOfLastGrade(LocalDate dateOfLastGrade) {
 		this.dateOfLastGrade = dateOfLastGrade;
 	}
 

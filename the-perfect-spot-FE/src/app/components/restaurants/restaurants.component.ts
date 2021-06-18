@@ -4,6 +4,7 @@ import {RestaurantModel} from '../../model/restaurant.model';
 import {RestaurantService} from '../../services/restaurant.service';
 import {PageEvent} from "@angular/material/paginator";
 import {FilterObject} from '../../model/filter.object.model';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-restaurants',
@@ -23,7 +24,8 @@ export class RestaurantsComponent implements OnInit {
   showFirstLastButtons = true;
 
   constructor(private authService: AuthService,
-              private restService: RestaurantService ) { }
+              private restService: RestaurantService,
+              private route: Router) { }
 
   ngOnInit(): void {
     this.restService.getAll(this.pageIndex).subscribe((response) => {
@@ -73,4 +75,12 @@ export class RestaurantsComponent implements OnInit {
     )
   }
 
+  isAdmin() {
+    return this.authService.isAdmin();
+
+  }
+
+  openAddRestaurantForm() {
+    this.route.navigate(['/add-restaurant']);
+  }
 }

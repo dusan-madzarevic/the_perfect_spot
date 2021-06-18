@@ -27,12 +27,13 @@ export class RestaurantComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkIfWorking();
-    this.gradeService.getGradeForRestaurantByLoggedUser(this.restaurant.id).subscribe((res)=>
-    {
-      this.rating = res;
-      console.log(res)
-    })
-    this.starColor = StarRatingColor.primary
+    if (this.isUser()) {
+      this.gradeService.getGradeForRestaurantByLoggedUser(this.restaurant.id).subscribe((res) => {
+        this.rating = res;
+        console.log(res)
+      })
+      this.starColor = StarRatingColor.primary
+    }
   }
 
   showDetails() {
@@ -82,14 +83,15 @@ export class RestaurantComponent implements OnInit {
   }
 
   isAdmin() {
+    return this.authService.isAdmin();
 
   }
 
-  deleteRestaurant(id: number) {
+  deleteRestaurant(id:number) {
 
   }
 
-  edit(restaurant: RestaurantModel) {
-
+  edit(id: number) {
+    this.route.navigate(['/edit-restaurant/'+ id]);
   }
 }

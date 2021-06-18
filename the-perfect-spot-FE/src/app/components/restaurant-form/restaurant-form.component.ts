@@ -8,6 +8,7 @@ import {RestaurantComponent} from '../restaurant/restaurant.component';
 import {StarRatingColor} from '../star-rating/star-rating.component';
 import {RestaurantModel} from '../../model/restaurant.model';
 import {RestaurantModalComponent} from '../restaurant-modal/restaurant-modal.component';
+import { MapsAPILoader } from '@agm/core';
 
 @Component({
   selector: 'app-restaurant-form',
@@ -19,8 +20,6 @@ export class RestaurantFormComponent implements OnInit {
   recommendForm = new FormGroup({
     cuisine: new FormControl(''),
     prices: new FormControl(''),
-    lat: new FormControl(('')),
-    lon: new FormControl(('')),
     goingByCar: new FormControl(('')),
     occassion: new FormControl(('')),
     accessForDisabled: new FormControl(('')),
@@ -28,24 +27,43 @@ export class RestaurantFormComponent implements OnInit {
     locationMatters: new FormControl(('')),
 
   });
+  lat: number =  45.267136;
+  lng: number = 19.833549;
+
+
 
   constructor(private restaurantService: RestaurantService,
               private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
+    this.setCurrentLocation();
   }
+
+
+  showMap(){
+
+  }
+  private setCurrentLocation() {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.lat = position.coords.latitude;
+        this.lng = position.coords.longitude;
+      });
+    }
+  }
+
 
   recommendRestaurant() {
     let preferences: PreferencesModel = {
       prices: this.recommendForm.controls["prices"].value,
       petFriendly: this.recommendForm.controls['petFriendly'].value,
       occassion: this.recommendForm.controls['occassion'].value,
-      lat: this.recommendForm.controls['lat'].value,
+      lat: this.lat,
       goingByCar: this.recommendForm.controls["goingByCar"].value,
       cuisine: this.recommendForm.controls['cuisine'].value,
       accessForDisabled: this.recommendForm.controls['accessForDisabled'].value,
-      lon: this.recommendForm.controls['lon'].value
+      lon: this.lng
 
     }
     console.log(preferences)
@@ -68,5 +86,14 @@ export class RestaurantFormComponent implements OnInit {
         confirmButtonText: 'OK'
       })
     });
+  }
+
+
+
+  markerDragEnd($event: google.maps.MouseEvent) {
+    console.log($event.latLng.lat());
+    this.lng = $event.latLng.lng();
+    this.lat = $event.latLng.lat();
+
   }
 }

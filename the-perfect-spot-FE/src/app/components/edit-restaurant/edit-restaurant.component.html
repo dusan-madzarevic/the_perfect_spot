@@ -1,0 +1,94 @@
+<div class="wrapper d-flex align-items-stretch">
+  <div style="height: 147vh;">
+    <app-navigation-bar></app-navigation-bar>
+  </div>
+  <div class="m-3 w-100  ">
+    <div  id="restaurantForm" class="row col-md-12 w-100 pt-1 pl-auto pr-auto">
+      <form class=" shadow stil parent example-form w-100" [formGroup]="restaurantForm" (ngSubmit)="edit()" >
+        <h1 class="mt-5">Edit restaurant "{{restaurant.name}}"</h1>
+        <mat-form-field  appearance="outline" class="w-50 ml-5 mr-2 mt-2">
+          <mat-label>Name</mat-label>
+          <input matInput type="text" formControlName="name" required >
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-50 ml-5 mr-2 mt-3" >
+          <mat-label>Select cuisine</mat-label>
+          <mat-select id="cuisines" formControlName="cuisine" required >
+            <mat-option value="SERBIAN">SERBIAN</mat-option>
+            <mat-option value="ASIAN">ASIAN</mat-option>
+            <mat-option value="CHINESE">CHINESE</mat-option>
+            <mat-option value="MEXICAN">MEXICAN</mat-option>
+            <mat-option value="ITALIAN">ITALIAN</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-50 ml-5 mr-2 mt-2" >
+          <mat-label>Select music genre</mat-label>
+          <mat-select id="occassion" formControlName="musicGenre" required >
+            <mat-option value="FOLK">Folk</mat-option>
+            <mat-option value="POP">Pop</mat-option>
+            <mat-option value="ROCK">Rock</mat-option>
+            <mat-option value="PIANO">Piano</mat-option>
+            <mat-option value="TAMBOURINES">Tambourines</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-50 ml-5 mr-2 mt-2" >
+          <mat-label>Select prices</mat-label>
+          <mat-select id="prices" formControlName="prices" required  >
+            <mat-option value="EXPENSIVE">EXPENSIVE</mat-option>
+            <mat-option value="AFFORDABLE">AFFORDABLE</mat-option>
+            <mat-option value="CHEAP">CHEAP</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field  appearance="outline" class="w-50 ml-5 mr-2 mt-2">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" required></textarea>
+        </mat-form-field>
+        <mat-form-field  appearance="outline" class="w-50 ml-5 mr-2 mt-2">
+          <mat-label>Address</mat-label>
+          <input matInput type="text" formControlName="address" required>
+        </mat-form-field>
+        <mat-form-field  appearance="outline" class="w-50 ml-5 mr-2 mt-2">
+          <mat-label>Phone</mat-label>
+          <input matInput type="tel" formControlName="phone" required>
+        </mat-form-field>
+        <mat-form-field  appearance="outline" class="w-50 ml-5 mr-2 mt-2">
+          <mat-label>Web site</mat-label>
+          <input matInput type="url" formControlName="webSite" >
+        </mat-form-field>
+        <mat-form-field  appearance="outline" class="w-50 ml-5 mr-2 mt-2">
+          <mat-label>Start working hours</mat-label>
+          <input matInput type="url" formControlName="start" required >
+        </mat-form-field>
+        <mat-form-field  appearance="outline" class="w-50 ml-5 mr-2 mt-2">
+          <mat-label>End working hours</mat-label>
+          <input matInput type="url" formControlName="end" required >
+        </mat-form-field>
+        <div class="w-50 row ml-5 mr-2 mt-2 ">
+          <mat-checkbox formControlName="petFriendly" class="example-margin">Pet friendly</mat-checkbox>
+          <mat-checkbox formControlName="accessForDisabled" class="example-margin">Access for disabled</mat-checkbox>
+          <mat-checkbox formControlName="hasSmokingPart" class="example-margin">Has smoking part</mat-checkbox>
+          <mat-checkbox formControlName="hasLiveMusic" class="example-margin">Has live music</mat-checkbox>
+          <mat-checkbox formControlName="hasPlayground" class="example-margin">Has playground</mat-checkbox>
+          <mat-checkbox formControlName="hasBusinessHall" class="example-margin">Has business hall</mat-checkbox>
+          <mat-checkbox formControlName="hasWifi" class="example-margin">Has wifi</mat-checkbox>
+          <mat-checkbox formControlName="hasCarPark" class="example-margin">Has car park</mat-checkbox>
+          <mat-checkbox formControlName="isServingAlcohol" class="example-margin">Is serving alcohol</mat-checkbox>
+        </div>
+        <div class="w-50 parent mr-2 mt-2" >
+          <agm-map [latitude]="lat" [longitude]="lng" >
+            <agm-marker [markerDraggable]="true" (dragEnd)="markerDragEnd($event)" [latitude]="lat" [longitude]="lng"></agm-marker>
+          </agm-map>
+          <p class="ml-2">Lat: {{this.lat.toFixed(4)}}, Lon: {{this.lng.toFixed(4)}}</p>
+        </div>
+
+
+        <div class="w-25 ml-5 mr-2 mt-2">
+          <button mat-raised-button color="primary" id="search" class="btn-block mb-3 " [disabled]="restaurantForm.valid === false" >Save</button>
+
+        </div>
+
+
+      </form>
+
+    </div>
+
+  </div>
