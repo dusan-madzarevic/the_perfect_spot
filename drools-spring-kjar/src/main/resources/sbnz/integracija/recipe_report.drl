@@ -29,10 +29,7 @@ rule "Best graded recepies - all the time"
 		$recipe: Recipe($grades: recipeGrades)
 		$total : Double() from accumulate(
 	         RecipeGrade( $val: value ) from  $grades,
-	         init( double total = 0; ),
-	         action( total = total + $val; ),
-	         reverse( total = total - ( $val ); ),
-	         result( new Double( total / $grades.size() ) ) )
+			 average($val))
 	then
 		bestGraded.add($recipe);
 		System.out.println($recipe.getRecipeName() + ": " + $total);

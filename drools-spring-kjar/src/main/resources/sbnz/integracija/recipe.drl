@@ -280,7 +280,7 @@ rule "Recipe bonus grades - neutral"
 		$grade: Double($grade > 2.5 && $grade <4.5) from accumulate (
 			RecipeGrade(
 				$val : value,
-				date.after(java.sql.Date.valueOf(LocalDate.now().minusMonths(1))) == true
+				date.isAfter(LocalDate.now().minusMonths(1)) == true
 			) from $grades,
 			average($val)	
 		)   

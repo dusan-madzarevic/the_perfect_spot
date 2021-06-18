@@ -109,7 +109,6 @@ public class AuthenticationController {
 					user.setLoginCooldown(false);
 					user.setLastLoginAttempt(Instant.now().toEpochMilli());
 					userRepository.save(user);
-					userRepository.save(user);
 					return ResponseEntity.ok(new UserTokenStateDTO(jwt, expiresIn, email));
 				}else {
 					System.out.println("LOGIN COOLDOWN ACTIVE!");
