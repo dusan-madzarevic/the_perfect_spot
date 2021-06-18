@@ -19,12 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ftn.uns.ac.rs.theperfectmeal.dto.MessageResponse;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeRequirements;
-import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantDTO;
-import com.ftn.uns.ac.rs.theperfectmeal.model.Cuisine;
-import com.ftn.uns.ac.rs.theperfectmeal.model.Prices;
 import com.ftn.uns.ac.rs.theperfectmeal.service.RecipeService;
 import com.ftn.uns.ac.rs.theperfectmeal.util.PageImplementation;
 import com.ftn.uns.ac.rs.theperfectmeal.util.RecipeType;
@@ -38,7 +34,7 @@ public class RecipeController {
 	
 	@CrossOrigin
 	@PostMapping("/process")
-	public ResponseEntity<MessageResponse> processRequirements(@RequestBody RecipeRequirements request) throws IOException, MavenInvocationException{
+	public ResponseEntity<RecipeDTO> processRequirements(@RequestBody RecipeRequirements request) throws IOException, MavenInvocationException{
 		
 		return ResponseEntity.ok().body(recipeService.process(request));
 		

@@ -6,6 +6,9 @@ import { SkillLevel } from 'src/app/util/skill-enum';
 import Swal from 'sweetalert2';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { IngredientService } from 'src/app/services/ingredient.service';
+import { MatDialog } from '@angular/material/dialog';
+import { RecipeModalComponent } from '../recipe-modal/recipe-modal.component';
+import { RecipeModel } from 'src/app/model/recipe.model';
 
 @Component({
   selector: 'app-recipe-form',
@@ -48,7 +51,7 @@ export class RecipeFormComponent implements OnInit {
     console.log(items);
   }
 
-  constructor(private recipeService: RecipeService, private route: ActivatedRoute, private ingredientService: IngredientService) { }
+  constructor(private recipeService: RecipeService, private route: ActivatedRoute, private ingredientService: IngredientService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
 
@@ -90,11 +93,15 @@ export class RecipeFormComponent implements OnInit {
 
 
     this.recipeService.getRecipes(request).subscribe((response) =>{
-      Swal.fire({
-        icon: 'success',
-        title: 'Success!',
-        text: 'Request was successful!'
-      })
+
+      const rec: RecipeModel = response;
+
+      this.dialog.open(RecipeModalComponent, {
+        width: '650px',
+        height: '480px',
+        data: rec,
+        panelClass: ['animate__animated', 'animate__heartBeat']
+      });
     }, error => {
       Swal.fire({
         icon: 'error',

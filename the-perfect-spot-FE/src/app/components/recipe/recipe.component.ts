@@ -63,7 +63,7 @@ export class RecipeComponent implements OnInit {
 
   }
 
-  edit(restaurant: RecipeModel) {
+  edit(recipe: RecipeModel) {
 
   }
 

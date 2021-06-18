@@ -26,22 +26,15 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.ftn.uns.ac.rs.theperfectmeal.dto.MessageResponse;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeCalcInfo;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeRequirements;
-import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.helper.RecipeMapper;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
-import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
 import com.ftn.uns.ac.rs.theperfectmeal.repository.RecipeRepository;
 import com.ftn.uns.ac.rs.theperfectmeal.templates.DifficultyCategoryTemplateModel;
-import com.ftn.uns.ac.rs.theperfectmeal.templates.FilterByCuisinePricesTemplateModel;
-import com.ftn.uns.ac.rs.theperfectmeal.templates.FilterByCuisinesTemplateModel;
 import com.ftn.uns.ac.rs.theperfectmeal.templates.FilterByDishTypesTemplateModel;
-import com.ftn.uns.ac.rs.theperfectmeal.templates.FilterByPricesTemplateModel;
 import com.ftn.uns.ac.rs.theperfectmeal.templates.SearchRecipesByNameTemplateModel;
-import com.ftn.uns.ac.rs.theperfectmeal.templates.SearchRestaurantsByNameTemplateModel;
 import com.ftn.uns.ac.rs.theperfectmeal.util.PageImplMapper;
 import com.ftn.uns.ac.rs.theperfectmeal.util.PageImplementation;
 import com.ftn.uns.ac.rs.theperfectmeal.util.RecipeType;
@@ -58,7 +51,7 @@ public class RecipeService {
 	@Autowired
 	private RecipeMapper recipeMapper;
 
-	public MessageResponse process(RecipeRequirements requirements) throws IOException, MavenInvocationException {
+	public RecipeDTO process(RecipeRequirements requirements) throws IOException, MavenInvocationException {
 
 		this.kieService.releaseRulesSession();
 		KieSession kieSession = kieService.getRulesSession();
@@ -87,26 +80,15 @@ public class RecipeService {
 		kieSession.getAgenda().getAgendaGroup("recipe-difficulty").setFocus();
 		kieSession.fireAllRules();
 		
-
-
-		Recipe topRecipe = new Recipe();
-		kieSession.setGlobal("topRecipe",topRecipe);
 		kieSession.getAgenda().getAgendaGroup("recipe").setFocus();
 		kieSession.fireAllRules();
 
-	
-		System.out.println(topRecipe.getRecipeName());
-
-		
-		 List<Recipe> topRecipes = new ArrayList<Recipe>();
-		 kieSession.setGlobal("topRecipes", topRecipes);
-		 kieSession.getAgenda().getAgendaGroup("Calculating recipe score").setFocus();
-		 kieSession.fireAllRules();
-		 for(Recipe r: topRecipes)
-			 System.out.println(r.getRecipeName());
+		kieSession.getAgenda().getAgendaGroup("Calculating recipe score").setFocus();
+		kieSession.fireAllRules();
+		Recipe top = (Recipe) kieSession.getGlobal("topRecipe");
 		 
 		kieSession.dispose();
-		return new MessageResponse("Successfully");
+		return recipeMapper.toDto(top);
 
 	}
 

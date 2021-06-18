@@ -1,22 +1,24 @@
 package com.ftn.uns.ac.rs.theperfectmeal.service;
 
+import java.time.Instant;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.ftn.uns.ac.rs.theperfectmeal.cep.BadRestaurantRatingEvent;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantGradeDto;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Alarm;
 import com.ftn.uns.ac.rs.theperfectmeal.model.RegisteredUser;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
 import com.ftn.uns.ac.rs.theperfectmeal.model.RestaurantGrade;
 import com.ftn.uns.ac.rs.theperfectmeal.repository.RegisteredUserRepository;
 import com.ftn.uns.ac.rs.theperfectmeal.repository.RestaurantGradeRepository;
 import com.ftn.uns.ac.rs.theperfectmeal.repository.RestaurantRepository;
-import com.thoughtworks.xstream.converters.time.LocalDateConverter;
+import com.ftn.uns.ac.rs.theperfectmeal.util.BadRatingAlarm;
 
 @Service
 public class RestaurantGradeService {
@@ -29,6 +31,12 @@ public class RestaurantGradeService {
 	
 	@Autowired
 	private RestaurantRepository restaurantRepository;
+	
+	@Autowired
+	KieStatefulSessionService kieSessionService;
+	
+	@Autowired
+	private AlarmService alarmService;
 	
 	public int getByRestaurantAndUser(long restId, String email) {
 
@@ -50,6 +58,22 @@ public class RestaurantGradeService {
 			rg.setDate(LocalDate.now());
 			rg.setValue(dto.getGrade());
 			this.gradeRepository.save(rg);
+			
+			BadRestaurantRatingEvent event = new BadRestaurantRatingEvent(rg ,Date.from(Instant.now()));
+			KieSession kieSession = kieSessionService.getEventsSession();
+			kieSession.getAgenda().getAgendaGroup("bad-restaurant-rating").setFocus();
+			BadRatingAlarm ratingAlarm = new BadRatingAlarm();
+			kieSession.setGlobal("badRatingAlarm", ratingAlarm);
+			kieSession.insert(event);
+			kieSession.fireAllRules();	
+			
+			if(ratingAlarm.getRestaurantId() == dto.getRestId()) {
+				
+				Alarm alarm = new Alarm(String.format("The rating of restaurant %s fell below 2.3", rg.getRestaurant().getName()));
+				this.alarmService.save(alarm);
+				
+			}
+			
 			return true;
 		}
 		
@@ -65,6 +89,22 @@ public class RestaurantGradeService {
 		grades.add(gr);
 		//this.gradeRepository.save(gr);
 		this.restaurantRepository.save(restaurant);
+		
+		BadRestaurantRatingEvent event = new BadRestaurantRatingEvent(gr ,Date.from(Instant.now()));
+		KieSession kieSession = kieSessionService.getEventsSession();
+		kieSession.getAgenda().getAgendaGroup("bad-restaurant-rating").setFocus();
+		BadRatingAlarm ratingAlarm = new BadRatingAlarm();
+		kieSession.setGlobal("badRatingAlarm", ratingAlarm);
+		kieSession.insert(event);
+		kieSession.fireAllRules();
+		
+		if(ratingAlarm.getRestaurantId() == dto.getRestId()) {
+			
+			Alarm alarm = new Alarm(String.format("The rating of restaurant %s fell below 2.3", restaurant.getName()));
+			this.alarmService.save(alarm);
+			
+		}
+		
 		return true;		
 	}
 }

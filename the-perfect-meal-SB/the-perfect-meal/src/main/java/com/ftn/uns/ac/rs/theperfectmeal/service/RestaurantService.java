@@ -364,8 +364,11 @@ public class RestaurantService {
 
 		List<RestaurantDTO> dtos = new ArrayList<RestaurantDTO>();
 		for (int i = 0; i < 3; i++) {
-			if(bestGradedLM.get(i) != null)
-				dtos.add(this.restaurantMapper.toDto(bestGradedLM.get(i).getRestaurant()));
+			if(bestGradedLM.size() > i) {
+				
+				if(bestGradedLM.get(i) != null)
+					dtos.add(this.restaurantMapper.toDto(bestGradedLM.get(i).getRestaurant()));
+			}
 		}
 		return dtos;
 	}
@@ -389,8 +392,10 @@ public class RestaurantService {
 		kieSession.dispose();
 		List<RestaurantDTO> topThree = new ArrayList<RestaurantDTO>();
 		for(int i = 0; i < 3; i++) {
-			if(mostRecommended.get(i) != null)
-				topThree.add(this.restaurantMapper.toDto(mostRecommended.get(i)));
+			if(mostRecommended.size() > i) {
+				if(mostRecommended.get(i) != null)
+					topThree.add(this.restaurantMapper.toDto(mostRecommended.get(i)));
+			}
 		}
 		return topThree;
 	}

@@ -1,5 +1,9 @@
 package com.ftn.uns.ac.rs.theperfectmeal.controller;
 
+import java.time.Instant;
+import java.util.Date;
+
+import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,8 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ftn.uns.ac.rs.theperfectmeal.cep.BadRestaurantRatingEvent;
+import com.ftn.uns.ac.rs.theperfectmeal.cep.WrongCredentialsEvent;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RestaurantGradeDto;
+import com.ftn.uns.ac.rs.theperfectmeal.service.KieStatefulSessionService;
 import com.ftn.uns.ac.rs.theperfectmeal.service.RestaurantGradeService;
+import com.ftn.uns.ac.rs.theperfectmeal.util.LoginAlarm;
 
 @RestController
 @RequestMapping(path = "/restaurant-grade")
@@ -23,6 +31,7 @@ public class RestaurantGradeController {
 	
 	@Autowired
 	private RestaurantGradeService gradeService;
+	
 	
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(value = "/by-restaurant")

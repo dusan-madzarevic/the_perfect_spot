@@ -9,7 +9,7 @@
       <app-filter-recipes (filterEvent)="filterRecipes($event)" (searchEvent)="searchRecipes($event)"></app-filter-recipes>
       <app-recipe class="col-md-4"
                       *ngFor="let recipe of getAllRecipes()"
-                      [recipe]="recipe"
+                      [recipe]="recipe" [rating]="recipe.grade"
       >
       </app-recipe>
       <div id="noRestDiv" class="row col-md-12 w-100 pt-1 pl-auto pr-auto" *ngIf="getAllRecipes().length === 0">

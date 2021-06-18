@@ -12,7 +12,7 @@ import {AuthService} from '../../services/auth.service';
 })
 export class RecipesComponent implements OnInit {
 
-  private restaurants: Array<RecipeModel> = [];
+  private recipes: Array<RecipeModel> = [];
   public filterObj: FilterObjectRecipe = { name: '', dishTypes: [] };
   public isFilter: boolean = false;
   public isSearch: boolean = false;
@@ -27,10 +27,11 @@ export class RecipesComponent implements OnInit {
 
   ngOnInit(): void {
     this.recipeService.getAll(this.pageIndex).subscribe((response) => {
-      this.restaurants = response.content;
+      this.recipes = response.content;
       this.p_length= response.totalElements;
+      console.log(this.recipes)
     });
-    console.log(this.restaurants)
+    
   }
 
   isUser() {
@@ -38,7 +39,7 @@ export class RecipesComponent implements OnInit {
   }
 
   getAllRecipes() {
-    return this.restaurants || [];
+    return this.recipes || [];
   }
 
   handlePageEvent(event: PageEvent) {
@@ -46,7 +47,7 @@ export class RecipesComponent implements OnInit {
     this.pageIndex = event.pageIndex;
 
     this.recipeService.getAll(this.pageIndex).subscribe((response) => {
-      this.restaurants = response.content;
+      this.recipes = response.content;
       this.p_length = response.totalElements;
     })}
 
@@ -56,7 +57,7 @@ export class RecipesComponent implements OnInit {
     this.filterObj = data;
     this.recipeService.getByPageFilter(this.pageIndex, data.dishTypes).subscribe(
       (res) => {
-        this.restaurants = res.content;
+        this.recipes = res.content;
         console.log(res)
       }
       )
@@ -68,7 +69,7 @@ export class RecipesComponent implements OnInit {
     this.restName = data;
     this.recipeService.getByPageSearch(this.pageIndex, data).subscribe(
       (res) => {
-        this.restaurants = res.content;
+        this.recipes = res.content;
       }
     )
   }

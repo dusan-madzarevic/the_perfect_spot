@@ -1,7 +1,6 @@
 package com.ftn.uns.ac.rs.theperfectmeal.templates;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class DateRangeTemplateModel {
 	private LocalDate dateFrom;

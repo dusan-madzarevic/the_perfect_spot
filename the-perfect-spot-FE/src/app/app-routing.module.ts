@@ -12,8 +12,12 @@ import {RestaurantDetailsComponent} from './components/restaurant-details/restau
 import {RestaurantReportsComponent} from './components/restaurant-reports/restaurant-reports.component';
 import { RecipeFormComponent } from './components/recipe-form/recipe-form.component';
 import { RecipeDetailsComponent } from './components/recipe-details/recipe-details.component';
+import {RestaurantReportsComponent} from './components/restaurant-reports/restaurant-reports.component';
+import { RecipeFormComponent } from './components/recipe-form/recipe-form.component';
+import { RecipeDetailsComponent } from './components/recipe-details/recipe-details.component';
 import {EditRestaurantComponent} from './components/edit-restaurant/edit-restaurant.component';
 import {CreateRestaurantComponent} from './components/create-restaurant/create-restaurant.component';
+
 const routes: Routes = [
   { path: '', redirectTo: 'restaurants', pathMatch: 'full' },
   { path: 'home', component: HomePageComponent},
@@ -24,13 +28,14 @@ const routes: Routes = [
   {path: 'profile', component:ProfileComponent},
   {path: 'change-password', component:ChangePasswordComponent},
   {path:'restaurant-recommendation',component:RestaurantFormComponent},
+{path: 'restaurant-reports',component:RestaurantReportsComponent},
+ {path:'recipe-details/:id',component:RecipeDetailsComponent}];
   {path:'recipe-recommendation',component:RecipeFormComponent},
-  {path: 'restaurant-reports',component:RestaurantReportsComponent},
-  {path: 'restaurant-details/:id',component:RestaurantDetailsComponent},
-  {path:'recipe-details/:id',component:RecipeDetailsComponent},
+
   {path:'edit-restaurant/:id',component:EditRestaurantComponent},
   {path:'add-restaurant',component:CreateRestaurantComponent},];
 @NgModule({
+ 
   imports: [RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'})],
   exports: [RouterModule]
 })

@@ -1,0 +1,24 @@
+<h1>We recommend you</h1>
+<div class="cardHeight cardBorder cardBackground mt-4">
+  <div class="pyro">
+
+
+    <div class="before"></div>
+  <div class="card shadow h-25 clickable " id="card{{recipe.id}}">
+
+    <div (click)="showDetails()" >
+      <img class="card-img-top" style="height: 150px;" [alt]="recipe.name" *ngIf="recipe.image === null" src="https://www.thespruceeats.com/thmb/-eFb_9SMgWh2xcuVhH6Q60nMv6k=/2048x1152/smart/filters:no_upscale()/easy-homemade-vegetable-soup-3377947-31_preview-5afc8602119fa80037e24fa2.jpeg">
+      <img class="card-img-top" style="height: 150px;" [alt]="recipe.name" *ngIf="recipe.image !== null" [src]="'data:image/png;base64,'+recipe.image.picByte">
+      <div class="card-body">
+        <div style="height: 50px;">
+          <h3 class="float-left" title="Title">{{recipe.name}}</h3>
+          <h5> <i class="fa fa-star float-right" aria-hidden="true" title="Average grade"> {{recipe.grade.toFixed(2)}}</i></h5>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="after"></div>
+  </div>
+</div>
+</div>

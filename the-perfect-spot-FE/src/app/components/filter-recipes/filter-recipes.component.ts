@@ -36,7 +36,7 @@ export class FilterRecipesComponent implements OnInit {
 
   onSearch(){
 
-    this.searchEvent.emit(this.filterForm.controls['recipeName'].value);
+    this.searchEvent.emit(this.filterForm.controls['recipeName'].value.toLowerCase());
   }
 
 
