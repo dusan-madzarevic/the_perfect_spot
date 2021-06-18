@@ -20,7 +20,8 @@ const routes: Routes = [
   {path: 'profile', component:ProfileComponent},
   {path: 'change-password', component:ChangePasswordComponent},
   {path:'restaurant-recommendation',component:RestaurantFormComponent},
-{path: 'restaurant-reports',component:RestaurantReportsComponent}]; {path:'recipe-details/:id',component:RecipeDetailsComponent}];
+{path: 'restaurant-reports',component:RestaurantReportsComponent}, 
+{path:'recipe-details/:id',component:RecipeDetailsComponent}];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
