@@ -5,6 +5,7 @@ import {AuthService} from '../../services/auth.service';
 import {RestaurantService} from '../../services/restaurant.service';
 import {GradeService} from '../../services/grade.service';
 import {Router} from '@angular/router';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-restaurant',
   templateUrl: './restaurant.component.html',
@@ -23,7 +24,8 @@ export class RestaurantComponent implements OnInit {
 
   constructor(private authService: AuthService,
               private gradeService: GradeService,
-              private route: Router) { }
+              private route: Router,
+              private restaurantService: RestaurantService) { }
 
   ngOnInit(): void {
     this.checkIfWorking();
@@ -55,8 +57,6 @@ export class RestaurantComponent implements OnInit {
   }
 
   checkIfWorking(){
-    const id = "card"+this.restaurant.id;
-    const fadeTarget = document.getElementById(id);
     const start = new Date();
     const end = new Date();
     const now = new Date();
@@ -88,7 +88,27 @@ export class RestaurantComponent implements OnInit {
   }
 
   deleteRestaurant(id:number) {
+    this.restaurantService.delete(id).subscribe((res) =>{
+      Swal.fire({
+        title: 'Restaurant deleted successfully!',
+        icon: 'success',
+        showConfirmButton: false,
+        position: 'center',
+        timer:2000,
 
+      }).then(() => {
+        window.location.reload();
+      });
+    },error => {
+      Swal.fire({
+        title: 'Unable to delete restaurant.',
+        icon: 'error',
+        showConfirmButton: false,
+        position: 'center',
+        timer:2000,
+
+      });
+    })
   }
 
   edit(id: number) {

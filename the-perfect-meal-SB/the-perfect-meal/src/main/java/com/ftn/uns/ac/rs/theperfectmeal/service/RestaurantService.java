@@ -490,6 +490,17 @@ public class RestaurantService {
 		return false;
 	}
 	
+	public boolean delete(long id) {
+		Restaurant r = this.restaurantRepository.findById(id).orElse(null);
+		
+		if (r != null) {
+			 this.restaurantRepository.delete(r);
+			 return true;
+		}
+		return false;
+	}
+	
+	
 	public boolean update(RestaurantEditDTO dto) {
 		
 		Restaurant r = this.restaurantRepository.findById(dto.getId()).orElse(null);

@@ -87,4 +87,13 @@ export class RestaurantService {
 
     return this.http.post(environment.APP + this.addRestaurantAPI , restaurant, {headers:headers});
   }
+
+  delete(id: number):Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization' : 'Bearer ' + localStorage.getItem("accessToken")
+    });
+
+    return this.http.delete(environment.APP + this.editRestaurantAPI + id , {headers:headers});
+  }
 }

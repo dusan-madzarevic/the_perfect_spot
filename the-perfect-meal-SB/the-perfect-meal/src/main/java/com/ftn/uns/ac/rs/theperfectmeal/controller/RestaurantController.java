@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -135,6 +136,16 @@ public class RestaurantController {
 	@PostMapping(value = "/{id}")
 	public ResponseEntity<HttpStatus> update(@PathVariable long id, @RequestBody RestaurantEditDTO restaurant) throws FileNotFoundException {
 		boolean ok = this.restaurantService.update(restaurant);
+		if(ok)
+			return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
+		
+	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<HttpStatus> delete(@PathVariable long id) throws FileNotFoundException {
+		boolean ok = this.restaurantService.delete(id);
 		if(ok)
 			return new ResponseEntity<>(HttpStatus.OK);
 		return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);

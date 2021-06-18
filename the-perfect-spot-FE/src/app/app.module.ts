@@ -66,7 +66,7 @@ import { CreateRestaurantComponent } from './components/create-restaurant/create
     StarRatingComponent,
     RestaurantDetailsComponent,
 
-    RestaurantModalComponent,	
+    RestaurantModalComponent,
     RecipeComponent,
     FilterRecipesComponent,
     RecipeDetailsComponent,
@@ -93,13 +93,14 @@ import { CreateRestaurantComponent } from './components/create-restaurant/create
     MatCheckboxModule,
     MatSnackBarModule,
     MatTooltipModule,
-    MatNativeDateModule  ],
+    MatNativeDateModule,
     MatDialogModule,
     MatListModule,
-    MatDialogModule,   
+    MatDialogModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyCTaSOkeIFqklyhUJHBfNSGLiBs5GN6a10'
-    })
+    }),
+    NgMultiSelectDropDownModule
   ],
   providers: [],
   bootstrap: [AppComponent]
