@@ -25,6 +25,7 @@ import { NgSelectModule } from "@ng-select/ng-select";
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import {MatSelectModule} from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
+import {MatListModule} from '@angular/material/list';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { StarRatingComponent } from './components/star-rating/star-rating.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
@@ -35,6 +36,8 @@ import { FilterRecipesComponent } from './components/filter-recipes/filter-recip
 import { RecipeDetailsComponent } from './components/recipe-details/recipe-details.component';
 import { MatDialogModule} from "@angular/material/dialog";
 import { RestaurantModalComponent } from './components/restaurant-modal/restaurant-modal.component';
+import { StarRatingRecipeComponent } from './components/star-rating-recipe/star-rating-recipe.component';
+import { RecipeModalComponent } from './components/recipe-modal/recipe-modal.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +59,9 @@ import { RestaurantModalComponent } from './components/restaurant-modal/restaura
     RecipeComponent,
     FilterRecipesComponent,
     RecipeDetailsComponent,
-    RestaurantModalComponent
+    RestaurantModalComponent,
+    StarRatingRecipeComponent,
+    RecipeModalComponent
   ],
   imports: [
     BrowserModule,
@@ -74,7 +79,8 @@ import { RestaurantModalComponent } from './components/restaurant-modal/restaura
     MatSnackBarModule,
     MatTooltipModule,
     NgMultiSelectDropDownModule.forRoot(),
-    MatDialogModule
+    MatDialogModule,
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]

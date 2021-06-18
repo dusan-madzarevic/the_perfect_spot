@@ -24,7 +24,10 @@ public class RecipeMapper implements MapperInterface<Recipe, RecipeDTO> {
 	@Override
 	public RecipeDTO toDto(Recipe entity) {
 		RecipeDTO dto = new RecipeDTO();
-		dto.setImage(entity.getImage());
+		if(entity.getImage() == null)
+			dto.setImage(null);
+		else
+			dto.setImage(entity.getImage());
 		dto.setPrepDuration(entity.getPrepDuration());
 		dto.setId(entity.getRecipeId());
 		dto.setName(entity.getRecipeName());
@@ -62,7 +65,9 @@ public class RecipeMapper implements MapperInterface<Recipe, RecipeDTO> {
 			dto.setStepsText(entity.getStepsText());
 			dto.setType(entity.getType().toString());
 			dto.setIngredients(ingredientMapper.toDtoListFromRecipe(entity.getIngredients()));
+			dto.setGrade(entity.getRecipeGrades().size() > 0 ? entity.getRecipeGrades().stream().mapToDouble(g -> g.getValue()).average().orElse(0) : 0);
 
+			
 			dtos.add(dto);
 		}
 		

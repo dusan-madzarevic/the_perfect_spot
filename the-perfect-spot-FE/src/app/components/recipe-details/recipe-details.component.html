@@ -13,41 +13,46 @@
           </div>
           <ul class="text">{{this.recipe?.name}} </ul>
           <div class="text1">
-            <mat-star-rating *ngIf="isUser()" [recipeName]="recipe?.name" [rating]="rating"  [starCount]=5 [color]="starColor" (ratingUpdated)="onRatingChanged($event)"></mat-star-rating>
-            <h5> <i class="fa fa-star " aria-hidden="true" title="Average grade"> {{recipe?.grade.toFixed(2)}}</i></h5>
+            <mat-star-rating-recipe *ngIf="isUser()" [recipeName]="recipe?.name" [rating]="rating"  [starCount]=5 [color]="starColor" (ratingUpdated)="onRatingChanged($event)"></mat-star-rating-recipe>
           </div>
-  
+          <div class="st">
+            <h5> <i class="fa fa-star " aria-hidden="true" title="Average grade"> {{recipe?.grade.toFixed(2)}}</i></h5>
+            <mat-divider vertical style="height:25px; margin-left: 5px;margin-right: 5px;"></mat-divider><div><h5><mat-icon> local_dining</mat-icon>{{this.recipe?.servings}} servings  </h5>  </div><mat-divider vertical style="height:25px; margin-left: 5px;margin-right: 5px;"></mat-divider> <div><h5> <mat-icon>access_alarm</mat-icon> {{this.recipe?.prepDuration}} min </h5></div>
+          </div>
   
           <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
             <div class="panel panel-default">
-  
+              <div class="panel-heading " role="tab" id="headingOne">
+                <h4 class="panel-title ">
+                    <div class="title  btn btn-danger btn-outline btn-lg">Recipe ingredients </div>
+                </h4>
+              </div>
               <div class=" " role="tabpanel" aria-labelledby="headingOne">
                 <div class="panel-body m-2">
-  
+                  <mat-list>
+                    <mat-list-item *ngFor="let ingredient of recipe.ingredients">
+                      <h3 matLine> {{ingredient.name}} </h3>
+                      <p matLine>
+                        <span> Amount needed: {{ingredient.amount}} g </span>
+                      </p>
+                      <p matLine>
+                        <span> Caloric value: {{ingredient.calories}} cal </span>
+                      </p>
+                      <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+                    </mat-list-item>
+                  </mat-list>
                 </div>
               </div>
             </div>
             <div class="panel panel-default">
               <div class="panel-heading " role="tab" id="headingOne">
                 <h4 class="panel-title ">
-                    <div class="title  btn btn-danger btn-outline btn-lg">About this recipe</div>
+                    <div class="title  btn btn-danger btn-outline btn-lg">Preparation steps </div>
                 </h4>
               </div>
               <div class=" " role="tabpanel" aria-labelledby="headingOne">
                 <div class="panel-body m-2">
-                  {{this.recipe?.stepText}}
-                </div>
-              </div>
-            </div>
-            <div class="panel panel-default">
-              <div class="panel-heading" role="tab" id="headingTwo">
-                <h4 class="panel-title">
-                    <div class="title btn btn-danger btn-outline btn-lg">WHAT WE ARE OFFERING</div>
-                </h4>
-              </div>
-              <div >
-                <div class="panel-body m-2">
-                    
+                  {{this.recipe?.stepsText}}
                 </div>
               </div>
             </div>

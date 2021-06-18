@@ -46,8 +46,19 @@ h1 {
     text-align: center;
     margin-top: -20px;
     color: #000;
+    
   }
   
+  .st{
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center; /* for centering 3 blocks in the center */
+    font-size: 21px;
+    text-align: center;
+    color: #000;
+  }
+
   .image {
     text-align: center;
     width: 200px;
@@ -57,7 +68,7 @@ h1 {
     -webkit-border-radius: 75%;
     -moz-border-radius: 75%;
     box-shadow: 0 0 0 1px #eee;
-    background: url("https://c.ndtvimg.com/2020-01/hqocblio_restaurant-_625x300_14_January_20.jpg") center center no-repeat;
+    background: url("https://www.thespruceeats.com/thmb/-eFb_9SMgWh2xcuVhH6Q60nMv6k=/2048x1152/smart/filters:no_upscale()/easy-homemade-vegetable-soup-3377947-31_preview-5afc8602119fa80037e24fa2.jpeg") center center no-repeat;
     background-size: cover;
     margin: auto;
     margin-top: 20px;
@@ -311,3 +322,6 @@ h1 {
     background-color: #ccc;
   }
   
+  #st{
+    display: inline-block;
+  }

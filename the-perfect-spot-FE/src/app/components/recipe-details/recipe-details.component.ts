@@ -35,8 +35,9 @@ export class RecipeDetailsComponent implements OnInit {
         console.log(res)
       })
       this.starColor = StarRatingColor.primary
+      console.log(this.recipe)
     })
-    console.log(this.recipe)
+    
 
 
   }
