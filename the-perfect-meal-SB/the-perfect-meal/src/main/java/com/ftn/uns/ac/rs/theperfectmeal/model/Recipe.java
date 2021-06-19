@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import com.ftn.uns.ac.rs.theperfectmeal.util.RecipeType;
 
 @Entity
@@ -23,6 +25,10 @@ public class Recipe {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "recipe_id", nullable = false)
 	private long recipeId;
+
+	@Column(nullable = false)
+	@ColumnDefault("0")
+	private int recommendationCount;
 
 	@Column(name = "recipe_name", nullable = false)
 	private String recipeName;
@@ -41,17 +47,17 @@ public class Recipe {
 
 	@Column(name = "image")
 	private byte[] image;
-	
+
 	@Enumerated(value = EnumType.STRING)
 	@Column(name = "type")
 	private RecipeType type;
 
-	@OneToMany(cascade = {CascadeType.ALL}, mappedBy = "recipe")
+	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "recipe")
 	private List<RecipeGrade> recipeGrades;
-	
-	@OneToMany(cascade = {CascadeType.ALL}, mappedBy = "recipe", orphanRemoval = true)
+
+	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "recipe", orphanRemoval = true)
 	private List<RecipeIngredient> ingredients;
-	
+
 	public Recipe() {
 		super();
 	}
@@ -74,6 +80,14 @@ public class Recipe {
 
 	public void setRecipeId(long recipeId) {
 		this.recipeId = recipeId;
+	}
+
+	public int getRecommendationCount() {
+		return recommendationCount;
+	}
+
+	public void setRecommendationCount(int recommendationCount) {
+		this.recommendationCount = recommendationCount;
 	}
 
 	public String getRecipeName() {

@@ -1,0 +1,31 @@
+template header
+dateFrom
+dateTo
+
+package sbnz.templates;
+
+import java.util.ArrayList;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
+import com.ftn.uns.ac.rs.theperfectmeal.model.RecipeGrade;
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeAvgGrade;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
+
+global ArrayList<RecipeAvgGrade> recipes;
+
+template "avg-grade-recipes-in-data-range"
+
+rule "Recipe average grade in data range [@{dateFrom} - @{dateTo}] @{row.rowNumber}"
+	when
+		$recAvGr: RecipeAvgGrade($rec: recipe)
+		$recip: Recipe($id:id, id == $rec.getId(), $grades: grades)
+		$avgGrade : Double() from accumulate(
+	      RecipeGrade(date.isAfter(LocalDate.parse("@{dateFrom}")) , date.isBefore(LocalDate.parse("@{dateTo}")), $val: value ) from  $grades,
+	      average($val))
+	then
+	    modify($recAvGr){setAvgGrade($avgGrade);};
+		recipes.add($recAvGr);
+		System.out.println($id+" "+ $avgGrade);
+end
+end template

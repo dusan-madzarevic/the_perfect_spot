@@ -15,7 +15,8 @@ export class IngredientService {
 
   getAllIngredients(): Observable<any>{
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
     });
 
     return this.http.get(environment.APP+ this.getIngredients, {headers:headers});
