@@ -52,7 +52,7 @@ public class Recipe {
 	@Column(name = "type")
 	private RecipeType type;
 
-	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "recipe")
+	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "recipe", orphanRemoval = true)
 	private List<RecipeGrade> recipeGrades;
 
 	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "recipe", orphanRemoval = true)

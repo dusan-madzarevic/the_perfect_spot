@@ -102,7 +102,7 @@ public class RecipeController {
 	}
 	
 	@GetMapping(value = "/filter/by-page/{pageNum}")
-	public ResponseEntity<PageImplementation<RecipeDTO>> filter(@PathVariable int pageNum, @RequestParam("dishTypes") ArrayList<RecipeType> dishTypes) throws FileNotFoundException{
+	public ResponseEntity<PageImplementation<RecipeDTO>> filter(@PathVariable int pageNum, @RequestParam("dishTypes") ArrayList<String> dishTypes) throws FileNotFoundException{
 		Pageable pageable = PageRequest.of(pageNum, 6);
 		PageImplementation<RecipeDTO> pageImpl = this.recipeService.filter(pageable, dishTypes);
 		return new ResponseEntity<PageImplementation<RecipeDTO>>(pageImpl, HttpStatus.OK);

@@ -14,7 +14,7 @@ template "recipes-by-dish-type"
 rule "Select restaurants with @{dishTypes} dish type(s)"
 no-loop true
 	when
-		$rec: Recipe(type memberOf "@{cuisineTypes}")
+		$rec: Recipe(type memberOf "@{dishTypes}")
 		
 	then
 		recipes.add($rec);

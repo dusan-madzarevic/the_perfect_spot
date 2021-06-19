@@ -105,6 +105,7 @@ import { EditRecipeComponent } from './components/edit-recipe/edit-recipe.compon
     MatDialogModule,
     MatListModule,
     MatDialogModule,
+    MatDatepickerModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyCTaSOkeIFqklyhUJHBfNSGLiBs5GN6a10'
     }),

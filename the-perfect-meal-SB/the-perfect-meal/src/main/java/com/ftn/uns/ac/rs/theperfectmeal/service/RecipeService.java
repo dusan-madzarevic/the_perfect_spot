@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.DefaultInvoker;
 import org.apache.maven.shared.invoker.InvocationRequest;
@@ -268,7 +270,7 @@ public class RecipeService {
 		return dto;
 	}
 
-	public PageImplementation<RecipeDTO> filter(Pageable pageable, ArrayList<RecipeType> dishTypes) {
+	public PageImplementation<RecipeDTO> filter(Pageable pageable, ArrayList<String> dishTypes) {
 		List<Recipe> result = new ArrayList<Recipe>();
 
 			InputStream template;
@@ -277,7 +279,13 @@ public class RecipeService {
 						.getResourceAsStream("/sbnz/templates/filter_recipes_by_dish_type.drt");
 				FilterByDishTypesTemplateModel dto = new FilterByDishTypesTemplateModel();
 			
-				dto.setDishTypes(dishTypes);
+				ArrayList<RecipeType> types = new ArrayList<RecipeType>();
+				
+				for (String string : dishTypes) {
+					types.add(RecipeType.values()[Integer.parseInt(string)]);
+				}
+				
+				dto.setDishTypes(types);
 				List<FilterByDishTypesTemplateModel> arguments = new ArrayList<FilterByDishTypesTemplateModel>();
 				arguments.add(dto);
 				ObjectDataCompiler compiler = new ObjectDataCompiler();
@@ -458,6 +466,7 @@ public class RecipeService {
 		return false;
 	}
 
+	@Transactional
 	public boolean update(RecipeEditDTO recipe) {
 		Recipe r = this.recipeRepository.findById(recipe.getRecipeId()).orElse(null);
 		
@@ -469,13 +478,14 @@ public class RecipeService {
 			r.setStepsText(recipe.getStepsText());
 			r.setStepsNumber(recipe.getStepsNumber());
 			r.setType(RecipeType.values()[Integer.parseInt(recipe.getType())]);
-			List<RecipeIngredient> ings = new ArrayList<RecipeIngredient>();
+			
+			r.getIngredients().clear();
+			
 			for (IngredientAmount ingredient : recipe.getIngredients()) {
 				Ingredient ing = ingredientRepository.getOne(ingredient.getIngredientId());
 				RecipeIngredient recIng = new RecipeIngredient(new RecipeIngredientKey(r.getRecipeId(), ing.getIngredientId()), r, ing, ingredient.getAmount()); 
-				ings.add(recIng);
+				r.getIngredients().add(recIng);
 			}
-			r.setIngredients(ings);
 			r.setImage(recipe.getImage());
 			Recipe saved = this.recipeRepository.save(r);
 			if(saved != null)
