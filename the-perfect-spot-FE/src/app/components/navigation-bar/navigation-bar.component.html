@@ -19,7 +19,10 @@
         <a routerLink="/restaurants"><span class="fas fa-utensils mr-3"></span> Restaurants</a>
       </li>
       <li *ngIf="isAdmin()">
-        <a routerLink="/restaurant-reports"><span class="fas fa-file-alt mr-3"></span> Reports </a>
+        <a routerLink="/restaurant-reports"><span class="fas fa-file-alt mr-3"></span> Restaurant reports </a>
+      </li>
+      <li *ngIf="isAdmin()">
+        <a routerLink="/recipe-reports"><span class="fas fa-file-alt mr-3"></span> Recipe reports </a>
       </li>
       <li *ngIf="isUser()">
         <a routerLink="/restaurant-recommendation"  class="ml-5">Restaurant recommendation</a>

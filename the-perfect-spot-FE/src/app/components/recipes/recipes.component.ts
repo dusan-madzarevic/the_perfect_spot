@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
+import { Router } from '@angular/router';
 import { FilterObjectRecipe } from 'src/app/model/filter.object.model';
 import { RecipeModel } from 'src/app/model/recipe.model';
 import { RecipeService } from 'src/app/services/recipe.service';
@@ -23,7 +24,8 @@ export class RecipesComponent implements OnInit {
   showFirstLastButtons = true;
 
   constructor(private authService: AuthService,
-              private recipeService: RecipeService ) { }
+              private recipeService: RecipeService,
+              private route: Router ) { }
 
   ngOnInit(): void {
     this.recipeService.getAll(this.pageIndex).subscribe((response) => {
@@ -72,5 +74,14 @@ export class RecipesComponent implements OnInit {
         this.recipes = res.content;
       }
     )
+  }
+
+  isAdmin() {
+    return this.authService.isAdmin();
+
+  }
+
+  openAddRecipeForm() {
+    this.route.navigate(['/add-recipe']);
   }
 }

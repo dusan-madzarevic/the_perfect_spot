@@ -16,6 +16,7 @@ export interface RecipeModel {
     stepsNumber: number,
     stepsText: string,
     prepDuration: number,
+    type: string,
     ingredients: IngredientModel[],
     grade: number,
     image: ImageModel,

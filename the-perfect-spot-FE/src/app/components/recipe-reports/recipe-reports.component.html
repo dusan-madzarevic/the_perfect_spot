@@ -1,0 +1,110 @@
+<div class="wrapper d-flex align-items-stretch">
+    <div style="height: 158vh;">
+      <app-navigation-bar></app-navigation-bar>
+    </div>
+    <div class="m-5 w-100 shadow round stilIza">
+      <h1>Recipe reports</h1>
+      <div  id="recipes" class=" row col-md-12 w-100 pt-1 pl-auto pr-auto">
+        <div class="w-100 mt-3 mb-3">
+          <form class=" shadow  stil parent example-form w-100" [formGroup]="reportsForm" >
+            <mat-form-field appearance="outline" class="col-md-4 ml-5 mr-2 mt-2" >
+              <mat-label>Select report</mat-label>
+              <mat-select id="cuisines" formControlName="report" [(ngModel)]="report" required="true" >
+                <mat-option value="best">Best graded recipes</mat-option>
+                <mat-option value="bestLastMonth">Best graded recipes for last month</mat-option>
+                <mat-option value="dateRange">Recipe average grade in given date range</mat-option>
+                <mat-option value="mostRecomm">Most recommended recipes</mat-option>
+                <mat-option value="gradeRange">Recipes in given grade range</mat-option>
+              </mat-select>
+            </mat-form-field>
+  
+            <mat-form-field appearance="fill" class="w-25 ml-2 mr-4 mt-2" *ngIf="report==='dateRange'">
+              <mat-label>Enter a date range</mat-label>
+              <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                <input matStartDate formControlName="start" placeholder="Start date">
+                <input matEndDate formControlName="end" placeholder="End date">
+              </mat-date-range-input>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker></mat-date-range-picker>
+  
+              <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+              <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+            </mat-form-field>
+  
+            <mat-form-field appearance="fill" class="w-25 ml-2 mr-4 mt-2" *ngIf="report==='gradeRange'" >
+              <mat-label>From</mat-label>
+              <input matInput id="minGrade" class="mr-5" formControlName="minGrade" type="number" required="true">
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="w-25 ml-2 mr-4 mt-2" *ngIf="report==='gradeRange'" >
+              <mat-label>To</mat-label>
+              <input matInput id="maxGrade" class="mr-5" formControlName="maxGrade" type="number" required="true">
+            </mat-form-field>
+            <button mat-raised-button color="primary" id="search" class="btn-block mr-5" [disabled]="!reportsForm.valid"  (click)="getReport()"><mat-icon>search</mat-icon></button>
+          </form>
+        </div>
+        <div *ngIf="showRecipes && report=='best'" class="row col-md-12 w-100 pt-1 pl-auto pr-auto" >
+          <app-recipe class="col-md-4"
+                          *ngFor="let recipe of recipes"
+                          [recipe]="recipe"
+                          [recommedationCount] = false
+          >
+          </app-recipe>
+  
+          <div id="noRestDiv3" class="row col-md-12 w-100 pt-1 pl-auto pr-auto" *ngIf="recipes.length === 0">
+            <h4 class="m-5 align-self-center">There are no recipes to show.</h4>
+          </div>
+        </div>
+        <div *ngIf="showRecipes && report=='mostRecomm'" class="row col-md-12 w-100 pt-1 pl-auto pr-auto" >
+          <app-recipe class="col-md-4"
+                          *ngFor="let recipe of recipes"
+                          [recipe]="recipe"
+                          [recommedationCount] = false
+          >
+          </app-recipe>
+  
+        <div id="noRestDiv" class="row col-md-12 w-100 pt-1 pl-auto pr-auto" *ngIf="recipes.length === 0">
+          <h4 class="m-5 align-self-center">There are no recipes to show.</h4>
+        </div>
+        </div>
+        <div *ngIf="showRecipes && report=='gradeRange'" class="row col-md-12 w-100 pt-1 pl-auto pr-auto" >
+            <app-recipe class="col-md-4"
+                *ngFor="let recipe of recipes"
+                [recipe]="recipe"
+                [recommedationCount] = false
+            >
+            </app-recipe>
+  
+          <div id="noRestDiv31" class="row col-md-12 w-100 pt-1 pl-auto pr-auto" *ngIf="recipes.length === 0">
+            <h4 class="m-5 align-self-center">There are no recipes to show.</h4>
+          </div>
+        </div>
+        <div *ngIf="showRecipes && report=='bestLastMonth'" class="row col-md-12 w-100 pt-1 pl-auto pr-auto" >
+          <app-recipe class="col-md-4"
+                          *ngFor="let recipe of recipes"
+                          [recipe]="recipe"
+                          [recommedationCount] = false
+          >
+          </app-recipe>
+  
+          <div id="noRestDive1" class="row col-md-12 w-100 pt-1 pl-auto pr-auto" *ngIf="recipes.length === 0">
+            <h4 class="m-5 align-self-center">There are no recipes to show.</h4>
+          </div>
+        </div>
+        <div *ngIf="showRecipes && report=='dateRange'" class="row col-md-12 w-100 pt-1 pl-auto pr-auto" >
+          <app-restaurant-report-view class="col-md-4"
+                                      *ngFor="let recipe of recipeAvgs"
+                                      [recipeAvg] ="recipe"
+  
+          >
+          </app-restaurant-report-view>
+  
+          <div id="noRestDiv1" class="row col-md-12 w-100 pt-1 pl-auto pr-auto" *ngIf="recipeAvgs.length === 0">
+            <h4 class="m-5 align-self-center">There are no recipes to show.</h4>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  
+  </div>
+  

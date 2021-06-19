@@ -3,7 +3,9 @@
     <app-navigation-bar></app-navigation-bar>
   </div>
   <div class="m-5 w-100 shadow round stil">
-      <h1>Recipes</h1>
+    <h1>Recipes
+      <button *ngIf="isAdmin()" class="clickable ml-2 badge badge-warning" title="Create new recipe" (click)="openAddRecipeForm()">+</button>
+    </h1>
     <div  id="recipes" class="row col-md-12 w-100 pt-1 pl-auto pr-auto">
 
       <app-filter-recipes (filterEvent)="filterRecipes($event)" (searchEvent)="searchRecipes($event)"></app-filter-recipes>

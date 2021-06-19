@@ -16,11 +16,11 @@
     
         <div class="float-right" *ngIf="isAdmin()">
           <button mat-mini-fab color="warn" class="mr-2 mb-2" (click)=deleteRecipe(recipe.id) style="outline: none">
-            <mat-icon>alarm</mat-icon>
+            <mat-icon>delete</mat-icon>
           </button>
         </div>
         <div class="float-right" *ngIf="isAdmin()">
-          <button mat-mini-fab color="primary" class="mr-2 mb-2" (click)=edit(recipe) style="outline: none">
+          <button mat-mini-fab color="primary" class="mr-2 mb-2" (click)=edit(recipe.id) style="outline: none">
             <mat-icon>edit</mat-icon>
           </button>
         </div>

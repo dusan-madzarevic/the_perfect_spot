@@ -6,8 +6,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ftn.uns.ac.rs.theperfectmeal.dto.IngredientAmount;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeDTO;
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeIngredientDTO;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Ingredient;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
+import com.ftn.uns.ac.rs.theperfectmeal.model.RecipeIngredient;
+import com.ftn.uns.ac.rs.theperfectmeal.model.RecipeIngredientKey;
+import com.ftn.uns.ac.rs.theperfectmeal.repository.IngredientRepository;
+import com.ftn.uns.ac.rs.theperfectmeal.util.RecipeType;
 
 @Component
 public class RecipeMapper implements MapperInterface<Recipe, RecipeDTO> {
@@ -15,10 +22,21 @@ public class RecipeMapper implements MapperInterface<Recipe, RecipeDTO> {
 	@Autowired
 	private IngredientMapper ingredientMapper;
 	
+	@Autowired
+	private IngredientRepository ingredientRepository;
+	
 	@Override
 	public Recipe toEntity(RecipeDTO dto) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Recipe recipe = new Recipe();
+		recipe.setRecipeName(dto.getName());
+		recipe.setStepsText(dto.getStepsText());
+		recipe.setStepsNumber(dto.getStepsNumber());
+		recipe.setServings(dto.getServings());
+		recipe.setPrepDuration(dto.getPrepDuration());
+		recipe.setType(RecipeType.values()[Integer.parseInt(dto.getType())]);
+
+		return recipe;
 	}
 
 	@Override

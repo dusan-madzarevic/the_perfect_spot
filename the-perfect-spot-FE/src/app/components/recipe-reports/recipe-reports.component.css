@@ -1,0 +1,28 @@
+
+.parent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+  }
+  
+  .stil {
+    background-color: #60a3bc;
+    margin-left: 15px;
+    margin-right: 30px;
+    border-radius: 25px;
+  }
+  h1 {
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .round{
+    border-radius: 25px;
+  }
+  
+  .stilIza{
+    background-color: white;
+  
+  }
+  

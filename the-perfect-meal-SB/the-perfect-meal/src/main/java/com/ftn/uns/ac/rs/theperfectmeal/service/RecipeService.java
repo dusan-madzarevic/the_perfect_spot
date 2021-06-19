@@ -5,10 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
@@ -30,20 +29,29 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.ftn.uns.ac.rs.theperfectmeal.cep.PopularRecipeEvent;
-import com.ftn.uns.ac.rs.theperfectmeal.cep.WrongCredentialsEvent;
+import com.ftn.uns.ac.rs.theperfectmeal.dto.IngredientAmount;
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeAvgGrade;
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeAvgGradeDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeCalcInfo;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeDTO;
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeEditDTO;
+import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeIngredientDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeRequirements;
 import com.ftn.uns.ac.rs.theperfectmeal.helper.RecipeMapper;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Alarm;
 import com.ftn.uns.ac.rs.theperfectmeal.model.AlarmType;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Ingredient;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
+import com.ftn.uns.ac.rs.theperfectmeal.model.RecipeIngredient;
+import com.ftn.uns.ac.rs.theperfectmeal.model.RecipeIngredientKey;
 import com.ftn.uns.ac.rs.theperfectmeal.model.RegisteredUser;
+import com.ftn.uns.ac.rs.theperfectmeal.repository.IngredientRepository;
 import com.ftn.uns.ac.rs.theperfectmeal.repository.RecipeRepository;
+import com.ftn.uns.ac.rs.theperfectmeal.templates.DateRangeTemplateModel;
 import com.ftn.uns.ac.rs.theperfectmeal.templates.DifficultyCategoryTemplateModel;
 import com.ftn.uns.ac.rs.theperfectmeal.templates.FilterByDishTypesTemplateModel;
+import com.ftn.uns.ac.rs.theperfectmeal.templates.GradeRangeTemplateModel;
 import com.ftn.uns.ac.rs.theperfectmeal.templates.SearchRecipesByNameTemplateModel;
-import com.ftn.uns.ac.rs.theperfectmeal.util.LoginAlarm;
 import com.ftn.uns.ac.rs.theperfectmeal.util.PageImplMapper;
 import com.ftn.uns.ac.rs.theperfectmeal.util.PageImplementation;
 import com.ftn.uns.ac.rs.theperfectmeal.util.PopularBadRatedRecipeAlarm;
@@ -64,6 +72,9 @@ public class RecipeService {
 	
 	@Autowired
 	private AlarmService alarmService;
+	
+	@Autowired
+	private IngredientRepository ingredientRepository;
 
 	public RecipeDTO process(RecipeRequirements requirements) throws IOException, MavenInvocationException {
 
@@ -178,8 +189,6 @@ public class RecipeService {
 		}
 	    List<Recipe> bestGradedLastMonth = new  ArrayList<>(); 
 	    session.setGlobal("bestGradedLastMonth", bestGradedLastMonth);
-		
-
 		
 	   session.getAgenda().getAgendaGroup("best-graded-report-lastMonth").setFocus();
 	   session.fireAllRules(); 
@@ -326,6 +335,163 @@ public class RecipeService {
 		PageImplMapper<RecipeDTO> pageMapper = new PageImplMapper<RecipeDTO>();
 		PageImplementation<RecipeDTO> pageImpl = pageMapper.toPageImpl(recipeDtoPage);
 		return pageImpl;
+	}
+
+	public List<RecipeDTO> getRecipesInGradeRange(double minGrade, double maxGrade) {
+		List<Recipe> result = new ArrayList<Recipe>();
+
+		InputStream template;
+		try {
+			template = RestaurantService.class.getResourceAsStream("/sbnz/templates/recipes_in_grade_range.drt");
+
+			GradeRangeTemplateModel dto = new GradeRangeTemplateModel();
+			dto.setMinGrade(minGrade);
+			dto.setMaxGrade(maxGrade);
+			List<GradeRangeTemplateModel> arguments = new ArrayList<>();
+			arguments.add(dto);
+			ObjectDataCompiler compiler = new ObjectDataCompiler();
+			String drl = compiler.compile(arguments, template);
+
+			System.out.println("\n\n" + drl + "\n\n");
+			KieSession kieSession = createKieSessionFromDRL(drl);
+			List<Recipe> recipes = this.recipeRepository.findAll();
+			for (Recipe r : recipes) {
+				kieSession.insert(r);
+			}
+			kieSession.setGlobal("recipes", result);
+			kieSession.fireAllRules();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		List<RecipeDTO> dtoList = this.recipeMapper.toDtoList(result);
+
+		return dtoList;
+	}
+
+	public List<RecipeAvgGradeDTO> getAvgGradeInDateRange(LocalDate dateFrom, LocalDate dateTo) {
+		List<RecipeAvgGrade> result = new ArrayList<RecipeAvgGrade>();
+
+		InputStream template;
+		try {
+			template = RestaurantService.class.getResourceAsStream("/sbnz/templates/recipe_avg_grade_in_date_range.drt");
+
+			DateRangeTemplateModel dto = new DateRangeTemplateModel();
+			dto.setDateFrom(dateFrom);
+			dto.setDateTo(dateTo);
+			List<DateRangeTemplateModel> arguments = new ArrayList<>();
+			arguments.add(dto);
+			ObjectDataCompiler compiler = new ObjectDataCompiler();
+			String drl = compiler.compile(arguments, template);
+
+			System.out.println("\n\n" + drl + "\n\n");
+			KieSession kieSession = createKieSessionFromDRL(drl);
+			List<Recipe> recipes = this.recipeRepository.findAll();
+			for (Recipe rec : recipes) {
+				RecipeAvgGrade rag = new RecipeAvgGrade();
+				rag.setRecipe(rec);
+				rag.setAvgGrade(0);
+				kieSession.insert(rag);
+				kieSession.insert(rec);
+			}
+			kieSession.setGlobal("recipes", result);
+			int a = kieSession.fireAllRules();
+			System.out.println(a);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+
+		List<RecipeAvgGradeDTO> dtos = new ArrayList<RecipeAvgGradeDTO>();
+		for (RecipeAvgGrade rag : result) {
+			RecipeAvgGradeDTO d = new RecipeAvgGradeDTO();
+			d.setRecipe(this.recipeMapper.toDto(rag.getRecipe()));
+			d.setAvgGrade(rag.getAvgGrade());
+			dtos.add(d);
+		}
+		return dtos;
+	}
+
+	public List<RecipeDTO> mostRecommended() {
+		this.kieService.releaseRulesSession();
+		KieSession kieSession = kieService.getRulesSession();
+
+		List<Recipe> mostRecommended = new ArrayList<Recipe>();
+		kieSession.setGlobal("mostRecommended", mostRecommended);
+
+		for (Recipe rest : recipeRepository.findAll()) {
+
+			kieSession.insert(rest);
+
+		}
+
+		kieSession.getAgenda().getAgendaGroup("most-recommended-recipes").setFocus();
+		kieSession.fireAllRules();
+
+		kieSession.dispose();
+		List<RecipeDTO> topThree = new ArrayList<RecipeDTO>();
+		for(int i = 0; i < 3; i++) {
+			if(mostRecommended.size() > i) {
+				if(mostRecommended.get(i) != null)
+					topThree.add(this.recipeMapper.toDto(mostRecommended.get(i)));
+			}
+		}
+		return topThree;
+	}
+
+	public boolean create(RecipeDTO recipe) {
+		Recipe r = this.recipeRepository.save(this.recipeMapper.toEntity(recipe));
+		if (r != null) {
+			List<RecipeIngredient> ings = new ArrayList<RecipeIngredient>();
+			for (RecipeIngredientDTO ingredient : recipe.getIngredients()) {
+				Ingredient ing = ingredientRepository.getOne(ingredient.getId());
+				RecipeIngredient recIng = new RecipeIngredient(new RecipeIngredientKey(r.getRecipeId(), ing.getIngredientId()), r, ing, 10); 
+				ings.add(recIng);
+			}
+			r.setIngredients(ings);
+			r = this.recipeRepository.save(r);
+			return true;
+		}
+		return false;
+	}
+
+	public boolean update(RecipeEditDTO recipe) {
+		Recipe r = this.recipeRepository.findById(recipe.getRecipeId()).orElse(null);
+		
+		if (r != null) {
+			
+			r.setRecipeName(recipe.getRecipeName());
+			r.setServings(recipe.getServings());
+			r.setPrepDuration(recipe.getPrepDuration());
+			r.setStepsText(recipe.getStepsText());
+			r.setStepsNumber(recipe.getStepsNumber());
+			r.setType(RecipeType.values()[Integer.parseInt(recipe.getType())]);
+			List<RecipeIngredient> ings = new ArrayList<RecipeIngredient>();
+			for (IngredientAmount ingredient : recipe.getIngredients()) {
+				Ingredient ing = ingredientRepository.getOne(ingredient.getIngredientId());
+				RecipeIngredient recIng = new RecipeIngredient(new RecipeIngredientKey(r.getRecipeId(), ing.getIngredientId()), r, ing, ingredient.getAmount()); 
+				ings.add(recIng);
+			}
+			r.setIngredients(ings);
+			r.setImage(recipe.getImage());
+			Recipe saved = this.recipeRepository.save(r);
+			if(saved != null)
+				return true;
+		}
+		return false;
+	}
+
+	public boolean delete(long id) {
+		Recipe r = this.recipeRepository.findById(id).orElse(null);
+		
+		if (r != null) {
+			 this.recipeRepository.delete(r);
+			 return true;
+		}
+		return false;
 	}
 
 }

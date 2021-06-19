@@ -1,0 +1,62 @@
+<div class="wrapper d-flex align-items-stretch">
+    <div style="height: 147vh;">
+      <app-navigation-bar></app-navigation-bar>
+    </div>
+    <div class="m-3 w-100  ">
+      <div  id="recipeForm" class="row col-md-12 w-100 pt-1 pl-auto pr-auto">
+        <form class=" shadow stil parent example-form w-100" [formGroup]="recipeForm" (ngSubmit)="update()" >
+          <h1 class="mt-5">Edit recipe "{{recipe.name}}" </h1>
+          <mat-form-field  appearance="outline" class="w-50 ml-5 mr-2 mt-2">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" formControlName="name"required >
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="w-50 ml-5 mr-2 mt-3" >
+            <mat-label>Select meal type</mat-label>
+            <mat-select id="types" formControlName="types" required >
+                <mat-option value="0">Appetizer</mat-option>
+                <mat-option value="1">Main dish</mat-option>
+                <mat-option value="2">Dessert</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field  appearance="outline" class="w-50 ml-5 mr-2 mt-2">
+            <mat-label>Preparation description</mat-label>
+            <textarea matInput formControlName="stepsText" required></textarea>
+          </mat-form-field>
+          <mat-form-field  appearance="outline" class="w-50 ml-5 mr-2 mt-2">
+            <mat-label>Number of steps</mat-label>
+            <input matInput type="number" formControlName="stepsNo" required>
+          </mat-form-field>
+          <mat-form-field  appearance="outline" class="w-50 ml-5 mr-2 mt-2">
+            <mat-label>Number of servings</mat-label>
+            <input matInput type="number" formControlName="servings" required>
+          </mat-form-field>
+          <mat-form-field  appearance="outline" class="w-50 ml-5 mr-2 mt-2">
+            <mat-label>Preparation duration (min)</mat-label>
+            <input matInput type="number" formControlName="prepTime" required>
+          </mat-form-field>
+          <div class="w-25 ml-5 mr-2 mt-2">
+
+            <ng-multiselect-dropdown [placeholder]="'Select ingredients'"
+    [settings]="dropdownSettings"
+    [data]="dropdownList"
+    [(ngModel)]="selectedItems"
+    [ngModelOptions]="{standalone: true}"
+    (onSelect)="onItemSelect($event)"
+    (onSelectAll)="onSelectAll($event)"
+  >
+  </ng-multiselect-dropdown>
+  
+  </div>
+  
+          <div class="w-25 ml-5 mr-2 mt-2">
+            <button mat-raised-button color="primary" id="search" class="btn-block mb-3 " [disabled]="recipeForm.valid === false" >Create recipe</button>
+  
+          </div>
+  
+  
+        </form>
+  
+      </div>
+  
+    </div>
+  

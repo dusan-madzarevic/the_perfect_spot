@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { EditRecipeModel } from '../model/edit.recipe.model';
+import { RecipeModel } from '../model/recipe.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +16,9 @@ export class RecipeService {
   private readonly oneRecipe: string = "recipe/";
   private readonly recipeFilter: string = "recipe/filter/by-page/";
   private readonly recipeSearch: string = "recipe/search/by-page/";
+
+  private readonly editRecipe: string = "recipe/";
+  private readonly addRecipe: string = "recipe";
 
   constructor(private http: HttpClient, private route: Router) { }
 
@@ -62,6 +67,33 @@ export class RecipeService {
     });
 
     return this.http.get(environment.APP+ this.oneRecipe + id, {headers:headers});
+  }
+
+  update(recipe: EditRecipeModel, id:any):Observable<any>{
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization' : 'Bearer ' + localStorage.getItem("accessToken")
+    });
+
+    return this.http.post(environment.APP + this.editRecipe + id,recipe, {headers:headers});
+  }
+
+  create(recipe: RecipeModel):Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization' : 'Bearer ' + localStorage.getItem("accessToken")
+    });
+
+    return this.http.post(environment.APP + this.addRecipe , recipe, {headers:headers});
+  }
+
+  delete(id: number):Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization' : 'Bearer ' + localStorage.getItem("accessToken")
+    });
+
+    return this.http.delete(environment.APP + this.editRecipe + id , {headers:headers});
   }
 
 }

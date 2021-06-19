@@ -19,11 +19,11 @@ no-loop true
 	when
 		$rec: Recipe()
 		$avgGr: Number(doubleValue >= @{minGrade}, doubleValue <= @{maxGrade}) from accumulate(
-		RecipeGrade($g: value) from $rest.getRecipeGrades(),
+		RecipeGrade($g: value) from $rec.getRecipeGrades(),
 		average($g)
 		);
 	then
-		recipes.add($rest);
-		System.out.println($rec.getName() + " " + $avgGr );
+		recipes.add($rec);
+		System.out.println($rec.getRecipeName() + " " + $avgGr );
 end
 end template

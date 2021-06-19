@@ -14,6 +14,9 @@ import {RecipeDetailsComponent} from './components/recipe-details/recipe-details
 import {RestaurantReportsComponent} from './components/restaurant-reports/restaurant-reports.component';
 import {RecipeFormComponent} from './components/recipe-form/recipe-form.component';
 import {AlarmsComponent} from './components/alarms/alarms.component';
+import { RecipeReportsComponent } from './components/recipe-reports/recipe-reports.component';
+import { CreateRecipeComponent } from './components/create-recipe/create-recipe.component';
+import { EditRecipeComponent } from './components/edit-recipe/edit-recipe.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'restaurants', pathMatch: 'full' },
@@ -25,11 +28,14 @@ const routes: Routes = [
   {path: 'change-password', component:ChangePasswordComponent},
   {path:'restaurant-recommendation',component:RestaurantFormComponent},
   {path: 'restaurant-reports',component:RestaurantReportsComponent},
+  {path: 'recipe-reports',component:RecipeReportsComponent},
   {path:'recipe-details/:id',component:RecipeDetailsComponent},
   {path:'restaurant-details/:id',component:RestaurantDetailsComponent},
   {path:'recipe-recommendation',component:RecipeFormComponent},
   {path:'edit-restaurant/:id',component:EditRestaurantComponent},
   {path:'add-restaurant',component:CreateRestaurantComponent},
+  {path:'edit-recipe/:id',component:EditRecipeComponent},
+  {path:'add-recipe',component:CreateRecipeComponent},
   {path:'alarms',component:AlarmsComponent}];
 @NgModule({
 

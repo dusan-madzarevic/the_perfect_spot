@@ -46,6 +46,10 @@ import { AgmCoreModule } from '@agm/core';
 import { EditRestaurantComponent } from './components/edit-restaurant/edit-restaurant.component';
 import { CreateRestaurantComponent } from './components/create-restaurant/create-restaurant.component';
 import { AlarmsComponent } from './components/alarms/alarms.component';
+import { RecipeReportsComponent } from './components/recipe-reports/recipe-reports.component';
+import { RecipeReportViewComponent } from './components/recipe-report-view/recipe-report-view.component';
+import { CreateRecipeComponent } from './components/create-recipe/create-recipe.component';
+import { EditRecipeComponent } from './components/edit-recipe/edit-recipe.component';
 
 
 @NgModule({
@@ -77,6 +81,10 @@ import { AlarmsComponent } from './components/alarms/alarms.component';
     EditRestaurantComponent,
     CreateRestaurantComponent,
     AlarmsComponent,
+    RecipeReportsComponent,
+    RecipeReportViewComponent,
+    CreateRecipeComponent,
+    EditRecipeComponent,
   ],
   imports: [
     BrowserModule,

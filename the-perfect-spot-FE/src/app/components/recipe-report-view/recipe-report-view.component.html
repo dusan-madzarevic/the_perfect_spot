@@ -1,0 +1,17 @@
+<div class="cardHeight cardBorder cardBackground mt-4">
+    <div class="card shadow h-25 clickable " id="card{{recipeAvg.recipe.id}}">
+      <div>
+        <img  (click)="showDetails()" class="card-img-top" style="height: 150px;" [alt]="recipeAvg.recipe.name" *ngIf="recipeAvg.recipe.image === null" src="https://c.ndtvimg.com/2020-01/hqocblio_restaurant-_625x300_14_January_20.jpg">
+        <img (click)="showDetails()" class="card-img-top" style="height: 150px;" [alt]="recipeAvg.recipe.name" *ngIf="recipeAvg.recipe.image !== null" [src]="'data:image/png;base64,'+recipe.image.picByte">
+        <div class="card-body">
+          <div style="height: 50px;">
+            <h3 (click)="showDetails()" class="float-left" title="Title">{{recipeAvg.recipe.name}}</h3>
+            <h5> <i class="fa fa-star badge-warning badge float-right" aria-hidden="true" title="Average grade for last month"> {{recipeAvg.avgGrade.toFixed(2)}}</i></h5>
+  
+          </div>
+          <p class="card-text excerpt" title="Description"><small>{{recipeAvg.recipe.stepsText}}</small></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  

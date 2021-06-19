@@ -9,6 +9,8 @@ global List<Recipe> bestGradedLastMonth;
 
 global List<Recipe> bestGraded;
 
+global List<Recipe> mostRecommended;
+
 rule "Best graded recepies - last month"
 	agenda-group "best-graded-report-lastMonth"
 	salience $total
@@ -19,7 +21,7 @@ rule "Best graded recepies - last month"
 	       	 average($val))
 	then
 		bestGradedLastMonth.add($recipe);
-		System.out.println($recipe.getRecipeName() + ": " + $total);
+		System.out.println($recipe.getRecipeName() + " last month: " + $total);
 end;
 
 rule "Best graded recepies - all the time"
@@ -33,4 +35,15 @@ rule "Best graded recepies - all the time"
 	then
 		bestGraded.add($recipe);
 		System.out.println($recipe.getRecipeName() + ": " + $total);
+end;
+
+rule "Most recommended recipes"
+	agenda-group "most-recommended-recipes"
+	salience $recommendationCount
+	when
+		$rec: Recipe($recommendationCount: recommendationCount)
+		
+	then
+		mostRecommended.add($rec);
+		System.out.println($rec.getRecipeName() + ": " + $recommendationCount);
 end;

@@ -50,7 +50,7 @@ public class RestaurantController {
 
 	}
 	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	//@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping("/report/best-graded-last-month")
 	public ResponseEntity<List<RestaurantAvgGradeDto>> bestGradedLastMonth() {
 		List<RestaurantAvgGradeDto> dtos = new ArrayList<RestaurantAvgGradeDto>();
@@ -58,7 +58,7 @@ public class RestaurantController {
 		return new ResponseEntity<List<RestaurantAvgGradeDto>>(dtos, HttpStatus.OK);
 	}
 	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	//@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping("/report/best-graded")
 	public ResponseEntity<List<RestaurantDTO>> bestGraded() {
 		List<RestaurantDTO> dtos = new ArrayList<RestaurantDTO>();
@@ -66,7 +66,7 @@ public class RestaurantController {
 		return new ResponseEntity<List<RestaurantDTO>>(dtos, HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	//@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping("/report/most-recommended")
 	public ResponseEntity<List<RestaurantDTO>> mostRecommended() {
 		List<RestaurantDTO> dtos = new ArrayList<RestaurantDTO>();
@@ -74,7 +74,7 @@ public class RestaurantController {
 		return new ResponseEntity<List<RestaurantDTO>>(dtos, HttpStatus.OK);
 	}
 	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	//@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping("/report/in-grade-range")
 	public ResponseEntity<List<RestaurantDTO>> inGradeRange(@RequestParam("minGrade") double minGrade, @RequestParam("maxGrade") double maxGrade) throws FileNotFoundException {
 		List<RestaurantDTO> dtos = new ArrayList<RestaurantDTO>();
@@ -82,7 +82,7 @@ public class RestaurantController {
 		return new ResponseEntity<List<RestaurantDTO>>(dtos, HttpStatus.OK);
 	}
 	
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping("/report/average-grade-in-data-range")
 	public ResponseEntity<List<RestaurantAvgGradeDto>> avgGradeInDataRange(@RequestParam("dateFrom") String dateFrom, @RequestParam("dateTo") String dateTo) throws FileNotFoundException, ParseException {
 		List<RestaurantAvgGradeDto> dtos = new ArrayList<RestaurantAvgGradeDto>();

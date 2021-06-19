@@ -34,6 +34,20 @@
 >
 </ng-multiselect-dropdown>
 
+</div> 
+
+<div class="w-25 ml-5 mr-2 mt-2">
+
+          <ng-multiselect-dropdown [placeholder]="'Select alergies'"
+  [settings]="dropdownSettings"
+  [data]="dropdownList"
+  [(ngModel)]="selectedAlergies"
+  [ngModelOptions]="{standalone: true}"
+  (onSelect)="onItemSelect($event)"
+  (onSelectAll)="onSelectAll($event)"
+>
+</ng-multiselect-dropdown>
+
         </div> 
         <mat-form-field appearance="outline" class="w-25 ml-5 mr-2 mt-3" >
           <mat-label for="type">Meal type</mat-label>

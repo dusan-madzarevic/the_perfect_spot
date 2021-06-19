@@ -41,7 +41,9 @@ export class RecipeFormComponent implements OnInit {
   });
 
   dropdownList = [];
+  alergyList = [];
   selectedItems = [];
+  selectedAlergies = [];
   dropdownSettings = {};
 
   onItemSelect(item: any) {
@@ -58,6 +60,7 @@ export class RecipeFormComponent implements OnInit {
     this.ingredientService.getAllIngredients().subscribe((response) =>{
 
       this.dropdownList = response;
+      this.alergyList = response;
 
       this.dropdownSettings = {
         singleSelection: false,
@@ -83,6 +86,7 @@ export class RecipeFormComponent implements OnInit {
       lowCalorie: this.recipeForm.get('lowCalorie').value,
       servings: this.recipeForm.get('servings').value,
       ingredients: [],
+      alergies: [],
       limitedTime: this.recipeForm.get('limitedTime').value,
       type: this.recipeForm.get('type').value
     }
@@ -91,6 +95,9 @@ export class RecipeFormComponent implements OnInit {
       request.ingredients.push({ingredientId: element.id, amount: 0});
     });
 
+    this.selectedAlergies.forEach(element => {
+      request.alergies.push(element.id);
+    });
 
     this.recipeService.getRecipes(request).subscribe((response) =>{
 
