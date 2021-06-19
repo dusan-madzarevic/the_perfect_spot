@@ -1,5 +1,8 @@
 package com.ftn.uns.ac.rs.theperfectmeal.cep;
 
+import java.time.Instant;
+import java.util.Date;
+
 import org.kie.api.definition.type.Expires;
 import org.kie.api.definition.type.Role;
 import org.kie.api.definition.type.Timestamp;
@@ -14,6 +17,7 @@ public class PopularRecipeEvent {
 
 	private RegisteredUser user;
 	private Recipe recipe;
+	private Date timestamp;
 
 	public PopularRecipeEvent() {
 		super();
@@ -23,6 +27,7 @@ public class PopularRecipeEvent {
 		super();
 		this.user = user;
 		this.recipe = recipe;
+		this.timestamp = Date.from(Instant.now());
 	}
 
 	public RegisteredUser getUser() {
@@ -39,6 +44,14 @@ public class PopularRecipeEvent {
 
 	public void setRecipe(Recipe recipe) {
 		this.recipe = recipe;
+	}
+
+	public Date getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
 	}
 
 }

@@ -5,8 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
@@ -24,19 +26,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.ftn.uns.ac.rs.theperfectmeal.cep.PopularRecipeEvent;
+import com.ftn.uns.ac.rs.theperfectmeal.cep.WrongCredentialsEvent;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeCalcInfo;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.RecipeRequirements;
 import com.ftn.uns.ac.rs.theperfectmeal.helper.RecipeMapper;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Alarm;
+import com.ftn.uns.ac.rs.theperfectmeal.model.AlarmType;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
+import com.ftn.uns.ac.rs.theperfectmeal.model.RegisteredUser;
 import com.ftn.uns.ac.rs.theperfectmeal.repository.RecipeRepository;
 import com.ftn.uns.ac.rs.theperfectmeal.templates.DifficultyCategoryTemplateModel;
 import com.ftn.uns.ac.rs.theperfectmeal.templates.FilterByDishTypesTemplateModel;
 import com.ftn.uns.ac.rs.theperfectmeal.templates.SearchRecipesByNameTemplateModel;
+import com.ftn.uns.ac.rs.theperfectmeal.util.LoginAlarm;
 import com.ftn.uns.ac.rs.theperfectmeal.util.PageImplMapper;
 import com.ftn.uns.ac.rs.theperfectmeal.util.PageImplementation;
+import com.ftn.uns.ac.rs.theperfectmeal.util.PopularBadRatedRecipeAlarm;
+import com.ftn.uns.ac.rs.theperfectmeal.util.PopularRecipeAlarm;
 import com.ftn.uns.ac.rs.theperfectmeal.util.RecipeType;
 
 @Service
@@ -50,9 +61,14 @@ public class RecipeService {
 
 	@Autowired
 	private RecipeMapper recipeMapper;
+	
+	@Autowired
+	private AlarmService alarmService;
 
 	public RecipeDTO process(RecipeRequirements requirements) throws IOException, MavenInvocationException {
 
+		RegisteredUser user = (RegisteredUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
 		this.kieService.releaseRulesSession();
 		KieSession kieSession = kieService.getRulesSession();
 
@@ -86,8 +102,40 @@ public class RecipeService {
 		kieSession.getAgenda().getAgendaGroup("Calculating recipe score").setFocus();
 		kieSession.fireAllRules();
 		Recipe top = (Recipe) kieSession.getGlobal("topRecipe");
-		 
+		
 		kieSession.dispose();
+		
+		PopularRecipeEvent event = new PopularRecipeEvent(user, top);
+		KieSession eventSession = kieService.getEventsSession();
+		eventSession.getAgenda().getAgendaGroup("popular-recipe").setFocus();
+		
+		PopularRecipeAlarm popularAlarm = new PopularRecipeAlarm();
+		popularAlarm.setRecipeId(0L);
+		PopularBadRatedRecipeAlarm popularBadAlarm = new PopularBadRatedRecipeAlarm();
+		popularBadAlarm.setRecipeId(0L);
+		eventSession.setGlobal("popularRecipeAlarm", popularAlarm);
+		eventSession.setGlobal("popularBadRatedRecipeAlarm", popularBadAlarm);
+		eventSession.insert(event);
+		eventSession.fireAllRules();	
+		
+		System.out.println(popularAlarm.getRecipeId());
+		System.out.println(top.getRecipeId());
+		System.out.println(user.getId());
+		
+		if(popularAlarm.getRecipeId() == top.getRecipeId()) {
+			
+			Alarm alarm = new Alarm(String.format("The recipe %s has been recommended to 5 different users in the past 24 hours!", top.getRecipeName()), AlarmType.POPULAR_RECIPE);
+			alarmService.save(alarm);
+			
+		}
+		
+		if(popularBadAlarm.getRecipeId() == top.getRecipeId()) {
+			
+			Alarm alarm = new Alarm(String.format("The recipe %s has been recommended to 5 different users in the past 24 hours, but it's rating is under 2.3! Consider removing or improving this recipe.", top.getRecipeName()), AlarmType.POPULAR_RECIPE_BAD_RATING);
+			alarmService.save(alarm);
+			
+		}
+		
 		return recipeMapper.toDto(top);
 
 	}

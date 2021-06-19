@@ -1,0 +1,29 @@
+template header
+minGrade
+maxGrade
+
+package sbnz.templates;
+
+import java.util.ArrayList;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Recipe;
+import com.ftn.uns.ac.rs.theperfectmeal.model.RecipeGrade;
+
+global ArrayList<Recipe> recipes;
+
+template "recipes-in-grade-range"
+
+
+
+rule "Select recipes with grade in range [@{minGrade} - @{maxGrade}] @{row.rowNumber}"
+no-loop true
+	when
+		$rec: Recipe()
+		$avgGr: Number(doubleValue >= @{minGrade}, doubleValue <= @{maxGrade}) from accumulate(
+		RecipeGrade($g: value) from $rest.getRecipeGrades(),
+		average($g)
+		);
+	then
+		recipes.add($rest);
+		System.out.println($rec.getName() + " " + $avgGr );
+end
+end template

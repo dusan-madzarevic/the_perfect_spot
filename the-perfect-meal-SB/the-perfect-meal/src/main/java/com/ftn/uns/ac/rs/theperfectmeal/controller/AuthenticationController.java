@@ -36,9 +36,12 @@ import com.ftn.uns.ac.rs.theperfectmeal.dto.UserLoginDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.dto.UserTokenStateDTO;
 import com.ftn.uns.ac.rs.theperfectmeal.helper.RegisteredUserMapper;
 import com.ftn.uns.ac.rs.theperfectmeal.helper.UserMapper;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Alarm;
+import com.ftn.uns.ac.rs.theperfectmeal.model.AlarmType;
 import com.ftn.uns.ac.rs.theperfectmeal.model.User;
 import com.ftn.uns.ac.rs.theperfectmeal.repository.UserRepository;
 import com.ftn.uns.ac.rs.theperfectmeal.security.TokenUtils;
+import com.ftn.uns.ac.rs.theperfectmeal.service.AlarmService;
 import com.ftn.uns.ac.rs.theperfectmeal.service.CustomUserDetailsService;
 import com.ftn.uns.ac.rs.theperfectmeal.service.KieStatefulSessionService;
 import com.ftn.uns.ac.rs.theperfectmeal.service.RegisteredUserService;
@@ -74,6 +77,9 @@ public class AuthenticationController {
 	
 	@Autowired
 	KieStatefulSessionService kieSessionService;
+	
+	@Autowired
+	private AlarmService alarmService;
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -135,8 +141,13 @@ public class AuthenticationController {
 				
 				
 				user.setLastLoginAttempt(Instant.now().toEpochMilli());
-				if(loginAlarm.getUserId() == user.getId())
+				if(loginAlarm.getUserId() == user.getId()) {
+					
+					Alarm alarm = new Alarm(String.format("User %s has been blocked due to many unsuccessful login attempts in a short span of time!", user.getEmail()), AlarmType.WRONG_CREDENTIALS);
+					alarmService.save(alarm);
 					user.setLoginCooldown(true);
+					
+				}
 				userRepository.save(user);
 				
 			}

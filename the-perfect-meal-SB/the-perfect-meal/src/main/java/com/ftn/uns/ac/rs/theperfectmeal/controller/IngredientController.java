@@ -23,7 +23,6 @@ public class IngredientController {
 		
 		return ResponseEntity.ok().body(ingredientService.getAll());
 		
-		
 	}
 	
 }

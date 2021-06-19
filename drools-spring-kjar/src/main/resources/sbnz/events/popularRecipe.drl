@@ -24,11 +24,33 @@ end;
 global PopularRecipeAlarm popularRecipeAlarm;
 global PopularBadRatedRecipeAlarm popularBadRatedRecipeAlarm;
 
+rule "Count events"
+	agenda-group "popular-recipe"
+	when
+		$pre1: PopularRecipeEvent($recId: recipe.getRecipeId(), $userId: user.getId(), $rec: recipe)
+		accumulate (
+			$pre2: PopularRecipeEvent(recipe.getRecipeId() == $recId, $uid: user.getId(), $uid != $userId ) over window:time(24h),
+			$ids: collectSet($uid)
+		)
+	then
+        System.out.println("Set size: " + $ids.size());
+        
+end
+
+rule "Count event"
+	agenda-group "popular-recipe"
+	when
+		$pre1: PopularRecipeEvent($recId: recipe.getRecipeId(), $userId: user.getId(), $rec: recipe)
+	then
+        System.out.println("Event " + $recId);
+        
+end
+
 rule "Recipe was recommended to 5 different people in 24h"
 	agenda-group "popular-recipe"
 	when
 		$pre1: PopularRecipeEvent($recId: recipe.getRecipeId(), $userId: user.getId(), $rec: recipe)
-		List(size > 0) from accumulate (
+		accumulate (
 			$pre2: PopularRecipeEvent(recipe.getRecipeId() == $recId, $uid: user.getId(), $uid != $userId ) over window:time(24h),
 			$idSet: collectSet($uid)
 		)
@@ -50,13 +72,13 @@ rule "Recipe was recommended to 5 different people in 24h but is rated less than
 			RecipeGrade($val: value) from $rec.getRecipeGrades(),
 			average($val) 
 		)
-		List(size > 0) from accumulate (
+		accumulate (
 			$pre2: PopularRecipeEvent(recipe.getRecipeId() == $recId, $uid: user.getId(), $uid != $userId ) over window:time(24h),
 			$idSet: collectSet($uid)
 		)
 		eval($idSet.size() >= 4)
 		not (PopularBadRatedEvent(recipe.getRecipeId() == $recId, 
-        	reason == "Recipe was recommended to 5 different people in 24h"))
+        	reason == "Recipe was recommended to 5 different people in 24h but is rated less than 2.3"))
 	then
     	String reason = "Recipe was recommended to 5 different people in 24h but is rated less than 2.3";
         insert(new PopularBadRatedEvent($rec, reason));

@@ -2,6 +2,7 @@ package sbnz.events;
 
 import com.ftn.uns.ac.rs.theperfectmeal.cep.BadRestaurantRatingEvent;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
+import com.ftn.uns.ac.rs.theperfectmeal.model.RestaurantGrade;
 import com.ftn.uns.ac.rs.theperfectmeal.util.BadRatingAlarm;
 
 declare BadRatingEvent
@@ -18,8 +19,7 @@ rule "The rating of restaurant fell bellow 2.3 "
 	when
 		$brre1: BadRestaurantRatingEvent($restId: grade.getRestaurant().getId(), $rest: grade.getRestaurant())
 		Number(doubleValue < 2.3) from accumulate (
-			$brre2: BadRestaurantRatingEvent(
-				grade.getRestaurant().getId() == $restId, $grade: grade.getValue() ),
+			$rg: RestaurantGrade( $grade: value ) from $rest.getGrades(),
 			average($grade)
 		)
 		not (BadRatingEvent(restaurant.getId() == $restId, 
