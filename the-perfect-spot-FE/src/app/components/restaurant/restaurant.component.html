@@ -20,7 +20,10 @@
       <h6 *ngIf="restaurant.hasWifi" class="float-right mr-1"><span class="badge badge-light float-left" title="Has wifi"><mat-icon>wifi</mat-icon></span></h6>
       <h6 *ngIf="restaurant.hasSmokingPart" class="float-right mr-1"><span class="badge badge-light float-left" title="Smoking allowed"><mat-icon>smoking_rooms</mat-icon></span></h6>
       <h6 *ngIf="!restaurant.hasSmokingPart" class="float-right mr-1"><span class="badge badge-light float-left" title="Smoking free"><mat-icon>smoke_free</mat-icon></span></h6>
-      <h6 *ngIf="restaurant.petFriendly" class="float-right mr-1"><span class="badge badge-light float-left " title="Pet friendly"><i class="fas fa-paw"></i> </span></h6>
+      <h6 *ngIf="restaurant.petFriendly" class="float-right mr-1"><span class="badge badge-light float-left " title="Pet friendly"><mat-icon>pets</mat-icon></span></h6>
+      <h6 *ngIf="restaurant.hasPlayground" class="float-right mr-1"><span class="badge badge-light float-left " title="Has playground for kids"><mat-icon>child_care</mat-icon></span></h6>
+      <h6 *ngIf="restaurant.hasAccessForDisabled" class="float-right mr-1"><span class="badge badge-light float-left " title="Has access for disabled"><i class="fas fa-wheelchair"></i> </span></h6>
+      <h6 *ngIf="restaurant.hasBusinessHall" class="float-right mr-1"><span class="badge badge-light float-left " title="Has business hall" ><mat-icon>business_center</mat-icon> </span></h6>
     </div>
     <div class="pl-2">
     <div  class="float-left mb-5" *ngIf="isAdmin()">

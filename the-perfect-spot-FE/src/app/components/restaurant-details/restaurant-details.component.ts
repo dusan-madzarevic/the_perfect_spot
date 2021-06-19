@@ -24,21 +24,23 @@ export class RestaurantDetailsComponent implements OnInit {
   id: string = '';
   restaurant?: RestaurantModel;
   isWorking: boolean = false;
-
+  lat: number;
+  lng: number;
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
     this.restaurantService.getOneById(this.id).subscribe((res)=>{
       this.restaurant = res;
+      this.lat = this.restaurant.lat;
+      this.lng = this.restaurant.lon;
       this.checkIfWorking();
-      this.gradeService.getGradeForRestaurantByLoggedUser(this.restaurant.id).subscribe((res)=>
-      {
-        this.rating = res;
-        console.log(res)
-      })
-      this.starColor = StarRatingColor.primary
+      if(this.isUser()) {
+        this.gradeService.getGradeForRestaurantByLoggedUser(this.restaurant.id).subscribe((res) => {
+          this.rating = res;
+        });
+        this.starColor = StarRatingColor.primary;
+      }
     })
-    console.log(this.restaurant)
 
 
   }

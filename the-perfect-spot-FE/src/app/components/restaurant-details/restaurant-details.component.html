@@ -14,7 +14,7 @@
         <ul class="text">{{this.restaurant?.name}} </ul>
         <div class="text1">
           <mat-star-rating *ngIf="isUser()" [restaurantName]="restaurant?.name" [rating]="rating"  [starCount]=5 [color]="starColor" (ratingUpdated)="onRatingChanged($event)"></mat-star-rating>
-          <i class="fa fa-map-pin"></i>  {{this.restaurant?.address}}
+
           <h6 ><span class="parent" title="Working hours"><mat-icon>alarm</mat-icon> {{restaurant?.workingHours}} </span></h6>
           <h5> <i class="fa fa-star " aria-hidden="true" title="Average grade"> {{restaurant?.grade.toFixed(2)}}</i></h5>
           <h4 class="closed" *ngIf="!isWorking"><span class="ml-2"><mat-icon>lock</mat-icon><b>CLOSED</b></span></h4>
@@ -69,9 +69,40 @@
                   <i class="fa fa-smoking " ></i>  Smoking is allowed
                 </div>
                 <div class="panel-body m-2 " *ngIf="this.restaurant?.hasBusinessHall">
-                  <i class="fa fa-wifi" ></i> Hall for business meetings
+                  <i class="fas fa-briefcase" ></i> Hall for business meetings
+                </div>
+                <div class="panel-body m-2 " *ngIf="this.restaurant?.hasAccessForDisabled">
+                  <i class="fas fa-wheelchair" ></i> Access for disabled
+                </div>
+                <div class="panel-body m-2 " >
+                  <i class="fas fa-music" ></i> {{this.restaurant?.musicGenre}}
+                </div>
+                <div class="panel-body m-2 " *ngIf="this.restaurant?.hasPlayground" >
+                  <i class="fas fa-child" ></i> Playground for kids
+                </div>
+                <div class="panel-body m-2 " *ngIf="this.restaurant?.hasLiveMusic" >
+                  <i class="fas fa-microphone" ></i> Live music
+                </div>
+                <div class="panel-body m-2 " *ngIf="this.restaurant?.isServingAlcohol" >
+                  <i class="fas fa-wine-bottle" ></i> Serving alcohol
                 </div>
               </div>
+            </div>
+          </div>
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingThrese">
+              <h4 class="panel-title">
+                <div class="title btn btn-danger btn-outline btn-lg">WHERE ARE WE LOCATED</div>
+              </h4>
+            </div>
+            <div >
+              <div class="w-100 panel-body m-2">
+                <i class="fa fa-map-pin"></i>  {{this.restaurant?.address}}
+                <agm-map [latitude]="lat" [longitude]="lng" >
+                  <agm-marker  [latitude]="lat" [longitude]="lng"></agm-marker>
+                </agm-map>
+              </div>
+
             </div>
           </div>
           <div class="panel panel-default">

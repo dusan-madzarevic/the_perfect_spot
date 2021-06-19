@@ -137,7 +137,7 @@ rule "Restaurant cousine type not correct"
         not ( CousineScore( restId == $id) )              
     then
     	System.out.println("Restaurant "+$re.getName()+" cousine is NOT correct type");
-    	insert (new CousineScore(0,$id) );
+    	insert (new CousineScore(-7,$id) );
 end
 
 
@@ -151,7 +151,7 @@ rule "Pet friendly"
         not ( PetFriendlyScore( restId == $id) )              
     then
     	System.out.println("Restaurant "+$re.getName()+" is pet friendly.");
-    	insert (new PetFriendlyScore(2,$id));
+    	insert (new PetFriendlyScore(4,$id));
 end
 
 rule "Not Pet friendly"
@@ -164,7 +164,7 @@ rule "Not Pet friendly"
         not ( PetFriendlyScore( restId == $id) )              
     then
     	System.out.println("Restaurant "+$re.getName()+" is not  pet friendly.");
-    	insert (new PetFriendlyScore(2,$id));
+    	insert (new PetFriendlyScore(-7,$id));
 end
 rule "Set pet friendly score to 0"
 	agenda-group "restaurant"
@@ -188,7 +188,7 @@ rule "Prices"
         not ( PricesScore( restId == $id) )              
     then
     	System.out.println("Restaurant "+$re.getName()+" prices is correct type");
-    	insert (new PricesScore(2,$id));
+    	insert (new PricesScore(4,$id));
 end
 
 rule "Prices not right type"
@@ -201,7 +201,7 @@ rule "Prices not right type"
         not ( PricesScore( restId == $id) )              
     then
     	System.out.println("Restaurant "+$re.getName()+" prices is NOT correct type");
-    	insert (new PricesScore(0,$id));
+    	insert (new PricesScore(-7,$id));
 end
 
 rule "Access for disabled"
@@ -214,7 +214,7 @@ rule "Access for disabled"
         not ( DisabledScore( restId == $id) )              
     then
     	System.out.println("Restaurant "+$re.getName()+" has access for disabled.");
-    	insert (new DisabledScore(2,$id));
+    	insert (new DisabledScore(4,$id));
 end
 
 rule "No Access for disabled"
@@ -226,8 +226,8 @@ rule "No Access for disabled"
         $com: RestaurantCompatibility(restId == $id) 
         not ( DisabledScore( restId == $id) )              
     then
-    	System.out.println("Restaurant "+$re.getName()+" has access for disabled.");
-    	insert (new DisabledScore(2,$id));
+        System.out.println("Restaurant "+$re.getName()+" has NOT access for disabled.");
+    	insert (new DisabledScore(-10,$id));
 end
 
 rule "Set access for disabled score to 0"
@@ -255,6 +255,19 @@ rule "Serving alcohol"
     	insert (new AlcoholScore(2,$id));
 end
 
+rule "Not serving alcohol"
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($alc: servingAlcohol, $alc == true)
+	    $re: Restaurant($id: id, servingAlcohol == false)
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( AlcoholScore( restId == $id) )              
+    then
+    	System.out.println("Restaurant "+$re.getName()+" is NOT serving alcohol.");
+    	insert (new AlcoholScore(-2,$id));
+end
+
 rule "Set serving alcohol score to 0"
 	agenda-group "restaurant"
 	salience 2
@@ -264,7 +277,7 @@ rule "Set serving alcohol score to 0"
         $com: RestaurantCompatibility(restId == $id) 
         not ( AlcoholScore( restId == $id) )              
     then
-    	insert (new AlcoholScore(2,$id));
+    	insert (new AlcoholScore(0,$id));
 end
 
 rule "Live music"
@@ -277,6 +290,19 @@ rule "Live music"
         not ( LiveMusicScore( restId == $id) )              
     then
     	System.out.println("Restaurant "+$re.getName()+" has live music.");
+    	insert (new LiveMusicScore(2,$id));
+end
+
+rule "No Live music"
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($live: liveMusic, $live == true)
+	    $re: Restaurant($id: id, liveMusic == false  )
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( LiveMusicScore( restId == $id) )              
+    then
+    	System.out.println("Restaurant "+$re.getName()+" has NOT live music.");
     	insert (new LiveMusicScore(2,$id));
 end
 
@@ -302,7 +328,7 @@ rule "Music genre"
         not ( MusicGenreScore( restId == $id) )              
     then
     	System.out.println("Restaurant "+$re.getName()+" has right music genre.");
-    	insert (new MusicGenreScore(1,$id));
+    	insert (new MusicGenreScore(2,$id));
 end
 
 rule "Music genre set to 0"
@@ -315,7 +341,7 @@ rule "Music genre set to 0"
         not ( MusicGenreScore( restId == $id) )              
     then
     	System.out.println("Restaurant "+$re.getName()+" has NOT right music genre.");
-    	insert (new MusicGenreScore(0,$id));
+    	insert (new MusicGenreScore(-2,$id));
 end
 
 
@@ -367,7 +393,7 @@ rule "No business hall"
         $com: RestaurantCompatibility(restId == $id) 
         not ( BusinessHallScore( restId == $id) )              
     then
-    	insert (new BusinessHallScore(-1,$id));
+    	insert (new BusinessHallScore(-2,$id));
 end
 
 rule "Wifi "
@@ -380,7 +406,20 @@ rule "Wifi "
         not ( WifiScore( restId == $id) )              
     then
     	System.out.println("Restaurant "+$re.getName()+" has wifi.");
-    	insert (new WifiScore(1,$id));
+    	insert (new WifiScore(2,$id));
+end
+
+rule "No Wifi "
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($wifi: hasWifi, $wifi==true)
+	    $re: Restaurant($id: id, hasWifi== false)
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( WifiScore( restId == $id) )              
+    then
+    	System.out.println("Restaurant "+$re.getName()+" has NOT wifi.");
+    	insert (new WifiScore(-2,$id));
 end
 
 rule "Set wifi score to 0 "
@@ -405,7 +444,7 @@ rule "Parking "
         not ( ParkingScore( restId == $id) )              
     then
     	System.out.println("Restaurant "+$re.getName()+" has parking.");
-    	insert (new ParkingScore(1,$id));
+    	insert (new ParkingScore(2,$id));
 end
 
 rule "No Parking "
@@ -418,7 +457,7 @@ rule "No Parking "
         not ( ParkingScore( restId == $id) )              
     then
     	System.out.println("Restaurant "+$re.getName()+" has NOT parking.");
-    	insert (new ParkingScore(1,$id));
+    	insert (new ParkingScore(-1,$id));
 end
 
 rule "Set parking score to 0 "
@@ -443,7 +482,7 @@ rule "Smoking "
         not ( SmokingScore( restId == $id) )              
     then
     	System.out.println("Restaurant "+$re.getName()+" has smoking part.");
-    	insert (new SmokingScore(1,$id));
+    	insert (new SmokingScore(2,$id));
 end
 
 rule "No smoking "
@@ -456,7 +495,7 @@ rule "No smoking "
         not ( SmokingScore( restId == $id) )              
     then
         System.out.println("Restaurant "+$re.getName()+" smoking 0.");
-    	insert (new SmokingScore(0,$id));
+    	insert (new SmokingScore(-2,$id));
 end
 
 rule "Set smoking score to 0 "
@@ -482,7 +521,20 @@ rule "Playground "
         not ( PlaygroundScore( restId == $id) )              
     then
     	System.out.println("Restaurant "+$re.getName()+" has playground.");
-    	insert (new PlaygroundScore(1, $id));
+    	insert (new PlaygroundScore(2, $id));
+end
+
+rule "Not Playground "
+	agenda-group "restaurant"
+	salience 2
+    when
+        $req: RestaurantRequirements($play: hasPlayground, $play==true)
+	    $re: Restaurant($id: id, hasPlayground == false  )
+        $com: RestaurantCompatibility(restId == $id) 
+        not ( PlaygroundScore( restId == $id) )              
+    then
+    	System.out.println("Restaurant "+$re.getName()+" has NOT playground.");
+    	insert (new PlaygroundScore(-2, $id));
 end
 
 rule "Set playground score to 0 "
@@ -514,6 +566,7 @@ rule "Stimulate restaurants with better grade"
 		System.out.println("Restaurant "+$re.getName()+" got grade score. Score: " + $grade);
 		insert (new GradeScore( $grade , $id));
 end;
+
 rule "Restaurants with no grades"
 	agenda-group "restaurant"
 	salience 2
@@ -523,7 +576,7 @@ rule "Restaurants with no grades"
         not ( GradeScore( restId == $id) )          
 	then
 		System.out.println("Restaurant "+$re.getName()+" is not graded yet.");
-		insert (new GradeScore( 0 , $id));
+		insert (new GradeScore(0, $id));
 end;
 
 rule "Stimulate restaurants with better grade this month"
@@ -541,7 +594,7 @@ rule "Stimulate restaurants with better grade this month"
         $com: RestaurantCompatibility(restId == $id) 
         not ( MonthlyBonusScore( restId == $id) )          
 	then
-		System.out.println("Restaurant "+$re.getName()+" got bonus score for last month. Score: 3 " + $grade);
+		System.out.println("Restaurant "+$re.getName()+" got bonus score for last month. Score: +3");
 		insert (new MonthlyBonusScore( 3 , $id));
 		insert (new  MonthlyPenalScore( 0 , $id));
 
@@ -584,12 +637,12 @@ rule "No bonus-no penal for last month"
         $com: RestaurantCompatibility(restId == $id) 
         not ( MonthlyPenalScore( restId == $id) )          
 	then
-	    System.out.println("Restaurant "+$re.getName()+" got penal score 0-NO BONUS NO PENAL");
+	    System.out.println("Restaurant "+$re.getName()+"-NO BONUS NO PENAL");
 		insert (new  MonthlyPenalScore( 0 , $id));
 		insert (new MonthlyBonusScore( 0 , $id));
 end;
 
-rule "No bonus-no penal for last month-not graded last month"
+rule "No bonus-no penal for last month-not graded"
 	agenda-group "restaurant"
 	salience 2
 	when
@@ -605,7 +658,7 @@ rule "No bonus-no penal for last month-not graded last month"
         $com: RestaurantCompatibility(restId == $id) 
         not ( MonthlyPenalScore( restId == $id) )          
 	then
-	    System.out.println("Restaurant "+$re.getName()+" got penal score 0-Not graded last month");
+	    System.out.println("Restaurant "+$re.getName()+" - Not graded last month");
 		insert (new  MonthlyPenalScore( 0 , $id));
 		insert (new MonthlyBonusScore( 0 , $id));
 end;
@@ -666,7 +719,7 @@ rule "Scoring distance-FAR-by car"
 agenda-group "restaurant"
 salience 2
 when	
-	CalculatedDistance(distance > 50.5, $idRes: restId)
+	CalculatedDistance(distance > 15.5, $idRes: restId)
 	$req: RestaurantRequirements(goingByCar == true)
 	$rest: Restaurant($id: id, $id == $idRes)
 	$com: RestaurantCompatibility(restId == $id)
@@ -680,7 +733,7 @@ rule "Scoring distance-NEAR-by car"
 agenda-group "restaurant"
 salience 2
 when	
-	CalculatedDistance(distance < 50.5 && distance > 0, $idRes: restId)
+	CalculatedDistance(distance < 15.5 && distance > 0, $idRes: restId)
 	$req: RestaurantRequirements(goingByCar == true)
 	$rest: Restaurant($id: id, $id == $idRes)
 	$com: RestaurantCompatibility(restId == $id)
