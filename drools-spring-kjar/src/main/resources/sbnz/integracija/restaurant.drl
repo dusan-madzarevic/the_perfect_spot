@@ -665,7 +665,7 @@ end;
 
 
 rule "Calculation distance"
-agenda-group "restaurant"
+agenda-group "restaurant-distance"
 salience 5
 when	
 	$req: RestaurantRequirements($lon2: lon, $lat2: lat, $lat2 != 0.0 && $lon2 != 0.0)
@@ -677,7 +677,7 @@ then
 end;
 
 rule "Distance is not important"
-agenda-group "restaurant"
+agenda-group "restaurant-distance"
 salience 5
 when	
 	$req: RestaurantRequirements($lon2: lon, $lat2: lat, $lat2 == 0 && $lon2 == 0)
@@ -688,7 +688,7 @@ then
 end;
 
 rule "Scoring distance-FAR-on foot"
-agenda-group "restaurant"
+agenda-group "restaurant-distance"
 salience 2
 when	
 	CalculatedDistance(distance > 1.5, $idRes: restId)
@@ -702,7 +702,7 @@ then
 end;
 
 rule "Scoring distance-NEAR-on foot"
-agenda-group "restaurant"
+agenda-group "restaurant-distance"
 salience 2
 when	
 	CalculatedDistance(distance < 1.5 && distance > 0, $idRes: restId)
@@ -716,7 +716,7 @@ then
 end;
 
 rule "Scoring distance-FAR-by car"
-agenda-group "restaurant"
+agenda-group "restaurant-distance"
 salience 2
 when	
 	CalculatedDistance(distance > 15.5, $idRes: restId)
@@ -730,7 +730,7 @@ then
 end;
 
 rule "Scoring distance-NEAR-by car"
-agenda-group "restaurant"
+agenda-group "restaurant-distance"
 salience 2
 when	
 	CalculatedDistance(distance < 15.5 && distance > 0, $idRes: restId)
@@ -744,7 +744,7 @@ then
 end;
 
 rule "Distance is not important score"
-agenda-group "restaurant"
+agenda-group "restaurant-distance"
 salience 2
 when	
 	CalculatedDistance(distance == -1, $idRes: restId)

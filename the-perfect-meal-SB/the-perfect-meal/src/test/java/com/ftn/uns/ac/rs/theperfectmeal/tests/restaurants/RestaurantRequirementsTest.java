@@ -22,19 +22,22 @@ import com.ftn.uns.ac.rs.theperfectmeal.model.MusicGenre;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Occassion;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Prices;
 import com.ftn.uns.ac.rs.theperfectmeal.model.RegisteredUser;
+import com.ftn.uns.ac.rs.theperfectmeal.model.Reservation;
 import com.ftn.uns.ac.rs.theperfectmeal.model.Restaurant;
 import com.ftn.uns.ac.rs.theperfectmeal.model.RestaurantGrade;
+import com.ftn.uns.ac.rs.theperfectmeal.model.RestaurantTable;
 
 public class RestaurantRequirementsTest {
 	
 	private KieSession kieSession;
 	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	private Restaurant rest1;
-	private Restaurant rest2;
+
 	
 	@BeforeEach
 	public void setUp() throws ParseException {
 
+		Restaurant rest1;
+		Restaurant rest2;
 		KieServices ks = KieServices.Factory.get();
 		KieContainer kContainer = ks
 				.newKieContainer(ks.newReleaseId("com.ftn.uns.ac.rs", "drools-spring-kjar", "0.0.1-SNAPSHOT"));
@@ -61,7 +64,7 @@ public class RestaurantRequirementsTest {
 		rest1.setLiveMusic(true);
 		rest1.setId(1);
 		rest1.setWebSite("www.ddd.com");
-		rest1.setWorkingHoursStart("7:00");
+		rest1.setWorkingHoursStart("07:00");
 		rest1.setWorkingHoursEnd("22:00");
 		rest1.setMusicGenre(MusicGenre.PIANO);
 		List<RestaurantGrade> grades1 = new ArrayList<RestaurantGrade>();
@@ -86,9 +89,13 @@ public class RestaurantRequirementsTest {
 		g1.setId(1);
 		grades1.add(g1);
 		rest1.setGrades(grades1);
+		List<RestaurantTable> tables1 = new ArrayList<RestaurantTable>();
+		rest1.setTables(tables1);
+		List<Reservation> res1 = new ArrayList<Reservation>();
+		rest1.setReservations(res1);
 		
-		
-		
+		this.kieSession.insert(rest1);
+
 		rest2.setId(2);
 		rest2.setName("Velvet");
 		rest2.setAccessForDisabled(false);
@@ -117,26 +124,37 @@ public class RestaurantRequirementsTest {
 		g2.setId(1);
 		grades2.add(g2);
 		rest2.setGrades(grades2);
-	
+		List<RestaurantTable> tables2 = new ArrayList<RestaurantTable>();
+		rest2.setTables(tables2);
+		List<Reservation> res2 = new ArrayList<Reservation>();
+		rest2.setReservations(res2);
+		
+		this.kieSession.insert(rest2);
+		RestaurantRequirements req = new RestaurantRequirements(0.0, 0.0, Cuisine.ASIAN, false, Occassion.BUSINESS_MEAL, Prices.AFFORDABLE, false,false);
+		this.kieSession.insert(req);
+		
+		
 	}
 	
 	@Test
 	public void setInputData() throws ParseException {	
-		this.kieSession.insert(rest2);
-		this.kieSession.insert(rest1);
-		RestaurantRequirements req = new RestaurantRequirements(0, 0, Cuisine.ASIAN, false, Occassion.BUSINESS_MEAL, Prices.AFFORDABLE, false,false);
-		this.kieSession.insert(req);
-	
-		this.kieSession.getAgenda().getAgendaGroup("fill-restaurant-requirements").setFocus();
-		int firedRules = this.kieSession.fireAllRules();
+
 		
-		
+		kieSession.getAgenda().getAgendaGroup("fill-restaurant-requirements").setFocus();
+		kieSession.fireAllRules();
+
 		kieSession.getAgenda().getAgendaGroup("restaurant").setFocus();
-		int dva =  kieSession.fireAllRules();
+		kieSession.fireAllRules();
+		kieSession.getAgenda().getAgendaGroup("restaurant-distance").setFocus();
+		kieSession.fireAllRules();
+		kieSession.getAgenda().getAgendaGroup("calculating-restaurant-score").setFocus();
+		int rules = kieSession.fireAllRules();
+
 		Restaurant top = (Restaurant) kieSession.getGlobal("foundRestaurant");
-		System.out.println(dva);
 		
-		assertEquals(4, firedRules);
+
+		
+		assertEquals(1, rules);
 		assertNotNull(top);
 		
 		

@@ -83,7 +83,8 @@ public class RestaurantService {
 
 		kieSession.getAgenda().getAgendaGroup("restaurant").setFocus();
 		kieSession.fireAllRules();
-
+		kieSession.getAgenda().getAgendaGroup("restaurant-distance").setFocus();
+		kieSession.fireAllRules();
 		kieSession.getAgenda().getAgendaGroup("calculating-restaurant-score").setFocus();
 		int rules = kieSession.fireAllRules();
 
